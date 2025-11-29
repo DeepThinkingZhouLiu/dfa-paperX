@@ -1,0 +1,1111 @@
+{
+  "version": "0.2",
+  "canvas": {
+    "width": 1920,
+    "height": 1080,
+    "unit": "px"
+  },
+  "grid": {
+    "rows": 2,
+    "cols": 3,
+    "margin": {
+      "top": 20,
+      "right": 20,
+      "bottom": 20,
+      "left": 20
+    },
+    "gutter": {
+      "row": 12,
+      "col": 12
+    }
+  },
+  "layout": {
+    "flow": "left-to-right",
+    "algorithm": "dagre"
+  },
+  "chunks": [
+    {
+      "chunk_id": "chunk_0_0",
+      "grid_area": {
+        "row": 0,
+        "col": 0
+      }
+    },
+    {
+      "chunk_id": "chunk_0_1",
+      "grid_area": {
+        "row": 0,
+        "col": 1
+      }
+    },
+    {
+      "chunk_id": "chunk_0_2",
+      "grid_area": {
+        "row": 0,
+        "col": 2
+      }
+    },
+    {
+      "chunk_id": "chunk_1_0",
+      "grid_area": {
+        "row": 1,
+        "col": 0,
+        "colspan": 2
+      }
+    },
+    {
+      "chunk_id": "chunk_1_2",
+      "grid_area": {
+        "row": 1,
+        "col": 2
+      }
+    }
+  ],
+  "groups": [
+    {
+      "group_id": "grp_training",
+      "label": "Training at s^th Stage",
+      "title": "(a) Training at s^{th} Stage",
+      "type": "stage",
+      "chunks": [
+        "chunk_0_0"
+      ],
+      "layout_hint": {
+        "arrangement": "horizontal",
+        "weight": 0.6,
+        "area_hint": 0.33
+      },
+      "description": "CCT training core: includes two submodules FMM and KCM to produce compatible features Z_s^o/Z_s^n, and uses balanced distillation BCD and BAD to suppress forgetting and improve compatibility; combine L_new, L_ca, L_er with weights α and 1-α to obtain the total loss."
+    },
+    {
+      "group_id": "grp_transfer",
+      "label": "Transfer at s^th Stage",
+      "title": "(b) Transfer at s^{th} Stage",
+      "type": "stage",
+      "chunks": [
+        "chunk_0_1"
+      ],
+      "layout_hint": {
+        "arrangement": "horizontal",
+        "weight": 0.25,
+        "area_hint": 0.33
+      },
+      "description": "Feature transfer at stage s: F^{s-1} and old gallery features are converted by CCT into a Transferred Feature Set compatible with the new model, forming a new gallery feature set."
+    },
+    {
+      "group_id": "grp_testing",
+      "label": "Testing at s^th Stage",
+      "title": "(c) Testing at s^{th} Stage",
+      "type": "stage",
+      "chunks": [
+        "chunk_0_2"
+      ],
+      "layout_hint": {
+        "arrangement": "horizontal",
+        "weight": 0.15,
+        "area_hint": 0.34
+      },
+      "description": "Testing at stage s: the new model extracts features for the Query and retrieves identity in the current gallery; example output ID: 182."
+    },
+    {
+      "group_id": "grp_strategies",
+      "label": "Re-ID Strategies Comparison",
+      "title": "Re-ID Strategy Comparison",
+      "type": "module",
+      "chunks": [
+        "chunk_1_0"
+      ],
+      "layout_hint": {
+        "arrangement": "vertical",
+        "weight": 0.5,
+        "area_hint": 0.5
+      },
+      "description": "Comparison of three scenarios: Feature Replacing, ReID with Re-indexing, and ReID without Re-indexing. It shows the processing pipelines and compatibility differences between old gallery images and query images under the new model."
+    },
+    {
+      "group_id": "grp_privacy",
+      "label": "Data Privacy Scenario",
+      "title": "Data Privacy",
+      "type": "module",
+      "chunks": [
+        "chunk_1_2"
+      ],
+      "layout_hint": {
+        "arrangement": "vertical",
+        "weight": 0.2,
+        "area_hint": 0.2
+      },
+      "description": "Data privacy constrained scenario: old gallery images are protected by a lock and cannot be reused directly; only the existing old gallery features are used with the new model to match query features, reflecting Re-ID under privacy constraints."
+    }
+  ],
+  "nodes": [
+    {
+      "node_id": "node_data_stream",
+      "label": "Data Stream",
+      "type": "data",
+      "group": "grp_training",
+      "role": "input",
+      "description": "Entry of the data stream, pointing to old/new data to participate in the CCT training stage."
+    },
+    {
+      "node_id": "node_old_data",
+      "label": "Old data",
+      "type": "data",
+      "group": "grp_training",
+      "role": "input",
+      "description": "Data samples collected in previous stages, used to maintain cross-stage feature compatibility and avoid forgetting."
+    },
+    {
+      "node_id": "node_new_data",
+      "label": "New data",
+      "type": "data",
+      "group": "grp_training",
+      "role": "input",
+      "description": "Newly added data samples at the current stage, used to learn new identities and distributions."
+    },
+    {
+      "node_id": "node_old_model",
+      "label": "Old Model",
+      "type": "model",
+      "group": "grp_training",
+      "role": "reference",
+      "description": "The model from the previous stage, used as the source for knowledge distillation and compatibility reference."
+    },
+    {
+      "node_id": "node_new_model",
+      "label": "New Model",
+      "type": "model",
+      "group": "grp_training",
+      "role": "trainable",
+      "description": "The new model backbone/feature extractor being trained at the current stage."
+    },
+    {
+      "node_id": "node_fmm",
+      "label": "Forward Mapping Module (FMM)",
+      "type": "module",
+      "group": "grp_training",
+      "role": "process",
+      "description": "Forward mapping module: maps old/new data features into a compatible representation space; internally includes BN+PReLU x4, MLP, and Softmax."
+    },
+    {
+      "node_id": "node_fmm_bn_prelu",
+      "label": "BN + PReLU x4",
+      "type": "layer",
+      "group": "grp_training",
+      "role": "process",
+      "description": "Four stacks of normalization and activation, for stabilization and non-linear transformation."
+    },
+    {
+      "node_id": "node_fmm_mlp",
+      "label": "MLP",
+      "type": "layer",
+      "group": "grp_training",
+      "role": "process",
+      "description": "A multilayer perceptron that further projects the mapped features."
+    },
+    {
+      "node_id": "node_fmm_softmax",
+      "label": "Softmax",
+      "type": "op",
+      "group": "grp_training",
+      "role": "process",
+      "description": "Normalize the output of FMM to align with the compatible features produced by KCM."
+    },
+    {
+      "node_id": "node_kcm",
+      "label": "Knowledge Capturing Module (KCM)",
+      "type": "module",
+      "group": "grp_training",
+      "role": "process",
+      "description": "Knowledge capturing module: fuses outputs of Old/New Model and mines transferable knowledge via a vector store and subnetwork."
+    },
+    {
+      "node_id": "node_kcm_fc",
+      "label": "FC",
+      "type": "layer",
+      "group": "grp_training",
+      "role": "process",
+      "description": "The fully connected layer in KCM for feature transformation and compression."
+    },
+    {
+      "node_id": "node_kcm_subnet",
+      "label": "Subnet",
+      "type": "module",
+      "group": "grp_training",
+      "role": "process",
+      "description": "KCM subnetwork that learns a non-linear mapping from old/new model outputs to the compatible space."
+    },
+    {
+      "node_id": "node_kcm_ki",
+      "label": "k_i vectors",
+      "type": "data",
+      "group": "grp_training",
+      "role": "parameter",
+      "description": "The set of knowledge vectors k_i that characterize the structured knowledge of the old model."
+    },
+    {
+      "node_id": "node_kcm_ui",
+      "label": "u_i vectors",
+      "type": "data",
+      "group": "grp_training",
+      "role": "parameter",
+      "description": "The set of knowledge vectors u_i that characterize the structured knowledge of the new model."
+    },
+    {
+      "node_id": "node_kcm_sigma",
+      "label": "Σ",
+      "type": "op",
+      "group": "grp_training",
+      "role": "process",
+      "description": "Summation operator that aggregates multiple knowledge components."
+    },
+    {
+      "node_id": "node_kcm_multiply",
+      "label": "Multiply",
+      "type": "op",
+      "group": "grp_training",
+      "role": "process",
+      "description": "Multiplicative gating/weighting to fuse components from different sources."
+    },
+    {
+      "node_id": "node_zso",
+      "label": "Z_s^o",
+      "type": "data",
+      "group": "grp_training",
+      "role": "feature",
+      "description": "Old-domain compatible features at stage s."
+    },
+    {
+      "node_id": "node_zsn",
+      "label": "Z_s^n",
+      "type": "data",
+      "group": "grp_training",
+      "role": "feature",
+      "description": "New-domain compatible features at stage s."
+    },
+    {
+      "node_id": "node_bcd",
+      "label": "Balanced Compatible Distillation (BCD)",
+      "type": "module",
+      "group": "grp_training",
+      "role": "loss_module",
+      "description": "Balanced compatible distillation: models the relationship between Z_s^o/Z_s^n, constrains same/different identity similarities, and yields the compatibility loss L_ca."
+    },
+    {
+      "node_id": "node_mo",
+      "label": "M^o",
+      "type": "data",
+      "group": "grp_training",
+      "role": "metric",
+      "description": "Similarity matrix in the old domain."
+    },
+    {
+      "node_id": "node_mn",
+      "label": "M^n",
+      "type": "data",
+      "group": "grp_training",
+      "role": "metric",
+      "description": "Similarity matrix in the new domain."
+    },
+    {
+      "node_id": "node_sim_same",
+      "label": "Similarity of Same Person",
+      "type": "metric",
+      "group": "grp_training",
+      "role": "reference",
+      "description": "Similarity constraint for samples of the same identity."
+    },
+    {
+      "node_id": "node_sim_diff",
+      "label": "Similarity of Different Person",
+      "type": "metric",
+      "group": "grp_training",
+      "role": "reference",
+      "description": "Separation of similarities across different identities."
+    },
+    {
+      "node_id": "node_bad",
+      "label": "Balanced Anti-forgetting Distillation (BAD)",
+      "type": "module",
+      "group": "grp_training",
+      "role": "loss_module",
+      "description": "Balanced anti-forgetting distillation: aligns output distributions using the old/new classifiers to suppress forgetting of old knowledge, producing L_er."
+    },
+    {
+      "node_id": "node_old_cls",
+      "label": "Old Classifier",
+      "type": "layer",
+      "group": "grp_training",
+      "role": "reference",
+      "description": "The classifier head of the old model, used as the distillation teacher."
+    },
+    {
+      "node_id": "node_new_cls",
+      "label": "New Classifier",
+      "type": "layer",
+      "group": "grp_training",
+      "role": "trainable",
+      "description": "The classifier head of the new model, used as the student for distillation learning."
+    },
+    {
+      "node_id": "node_L_ca",
+      "label": "L_ca",
+      "type": "loss",
+      "group": "grp_training",
+      "role": "output",
+      "description": "Compatibility distillation loss from BCD."
+    },
+    {
+      "node_id": "node_L_er",
+      "label": "L_er",
+      "type": "loss",
+      "group": "grp_training",
+      "role": "output",
+      "description": "Anti-forgetting distillation loss from BAD."
+    },
+    {
+      "node_id": "node_L_new",
+      "label": "L_new",
+      "type": "loss",
+      "group": "grp_training",
+      "role": "output",
+      "description": "Supervised loss on new data for learning new identities."
+    },
+    {
+      "node_id": "node_alpha",
+      "label": "α",
+      "type": "param",
+      "group": "grp_training",
+      "role": "weight",
+      "description": "Loss balancing factor for weighting the compatibility term."
+    },
+    {
+      "node_id": "node_one_minus_alpha",
+      "label": "1-α",
+      "type": "param",
+      "group": "grp_training",
+      "role": "weight",
+      "description": "Balancing factor for the anti-forgetting term."
+    },
+    {
+      "node_id": "node_mult_ca",
+      "label": "Multiply (α·L_ca)",
+      "type": "op",
+      "group": "grp_training",
+      "role": "process",
+      "description": "Apply weight α to the compatibility loss."
+    },
+    {
+      "node_id": "node_mult_er",
+      "label": "Multiply ((1-α)·L_er)",
+      "type": "op",
+      "group": "grp_training",
+      "role": "process",
+      "description": "Apply weight (1-α) to the anti-forgetting loss."
+    },
+    {
+      "node_id": "node_sum_loss",
+      "label": "Sum",
+      "type": "op",
+      "group": "grp_training",
+      "role": "process",
+      "description": "Sum and combine the loss terms."
+    },
+    {
+      "node_id": "node_total_loss",
+      "label": "Total Loss",
+      "type": "loss",
+      "group": "grp_training",
+      "role": "output",
+      "description": "The final optimization objective for training."
+    },
+    {
+      "node_id": "node_prev_feature",
+      "label": "F^{s-1}",
+      "type": "data",
+      "group": "grp_transfer",
+      "role": "input",
+      "description": "Feature representation produced at the previous stage."
+    },
+    {
+      "node_id": "node_old_gallery_set",
+      "label": "Old Gallery Feature Set",
+      "type": "data",
+      "group": "grp_transfer",
+      "role": "input",
+      "description": "The feature set of the historical gallery that needs to be transferred to remain compatible."
+    },
+    {
+      "node_id": "node_cct_transfer",
+      "label": "CCT at s^{th} Stage",
+      "type": "module",
+      "group": "grp_transfer",
+      "role": "process",
+      "description": "Apply CCT at stage s to map previous-stage/old gallery features into representations compatible with the new model."
+    },
+    {
+      "node_id": "node_transferred_set",
+      "label": "Transferred Feature Set",
+      "type": "data",
+      "group": "grp_transfer",
+      "role": "output",
+      "description": "The compatible feature set produced by CCT."
+    },
+    {
+      "node_id": "node_new_gallery_set",
+      "label": "New Gallery Feature Set",
+      "type": "data",
+      "group": "grp_transfer",
+      "role": "output",
+      "description": "The updated gallery feature set for testing at stage s."
+    },
+    {
+      "node_id": "node_fs",
+      "label": "F^s",
+      "type": "data",
+      "group": "grp_testing",
+      "role": "input",
+      "description": "The current feature space/gallery features at stage s."
+    },
+    {
+      "node_id": "node_query",
+      "label": "Query",
+      "type": "data",
+      "group": "grp_testing",
+      "role": "input",
+      "description": "Query person image."
+    },
+    {
+      "node_id": "node_new_model_test",
+      "label": "New Model",
+      "type": "model",
+      "group": "grp_testing",
+      "role": "inference",
+      "description": "The new model at stage s used for feature extraction during testing."
+    },
+    {
+      "node_id": "node_extracted_features",
+      "label": "Extracted Features",
+      "type": "data",
+      "group": "grp_testing",
+      "role": "output",
+      "description": "Query features extracted by the new model."
+    },
+    {
+      "node_id": "node_id182",
+      "label": "ID: 182",
+      "type": "label",
+      "group": "grp_testing",
+      "role": "output",
+      "description": "Example retrieved identity label."
+    },
+    {
+      "node_id": "node_old_gallery_images",
+      "label": "Old Gallery Images",
+      "type": "data",
+      "group": "grp_strategies",
+      "role": "input",
+      "description": "Original images of the historical gallery."
+    },
+    {
+      "node_id": "node_query_images",
+      "label": "Query Images",
+      "type": "data",
+      "group": "grp_strategies",
+      "role": "input",
+      "description": "Query images."
+    },
+    {
+      "node_id": "node_fr_old_gallery_features",
+      "label": "Old Gallery Features",
+      "type": "data",
+      "group": "grp_strategies",
+      "role": "reference",
+      "description": "Old gallery features (unchanged)."
+    },
+    {
+      "node_id": "node_fr_new_model",
+      "label": "New Model",
+      "type": "model",
+      "group": "grp_strategies",
+      "role": "inference",
+      "description": "New model for feature extraction in the Feature Replacing scenario."
+    },
+    {
+      "node_id": "node_fr_query_features",
+      "label": "Query Features",
+      "type": "data",
+      "group": "grp_strategies",
+      "role": "output",
+      "description": "Extracted query features in the Feature Replacing scenario."
+    },
+    {
+      "node_id": "node_fr_note",
+      "label": "Incompatibility Risk Note",
+      "type": "label",
+      "group": "grp_strategies",
+      "role": "note",
+      "description": "Warning: query features may be incompatible with old gallery features."
+    },
+    {
+      "node_id": "node_reidx_module",
+      "label": "Re-indexing",
+      "type": "module",
+      "group": "grp_strategies",
+      "role": "process",
+      "description": "Re-index the old gallery images or re-extract features under the new model."
+    },
+    {
+      "node_id": "node_reidx_gallery_features",
+      "label": "Re-indexed Gallery Features",
+      "type": "data",
+      "group": "grp_strategies",
+      "role": "output",
+      "description": "Gallery features compatible with the new model after re-indexing."
+    },
+    {
+      "node_id": "node_reidx_new_model",
+      "label": "New Model",
+      "type": "model",
+      "group": "grp_strategies",
+      "role": "inference",
+      "description": "New model used to extract query features in the Re-indexing scenario."
+    },
+    {
+      "node_id": "node_reidx_query_features",
+      "label": "Query Features",
+      "type": "data",
+      "group": "grp_strategies",
+      "role": "output",
+      "description": "Extracted query features that match the re-indexed gallery."
+    },
+    {
+      "node_id": "node_wo_old_gallery_features",
+      "label": "Old Gallery Features (No Re-indexing)",
+      "type": "data",
+      "group": "grp_strategies",
+      "role": "reference",
+      "description": "Directly using old gallery features (without re-indexing)."
+    },
+    {
+      "node_id": "node_wo_new_model",
+      "label": "New Model",
+      "type": "model",
+      "group": "grp_strategies",
+      "role": "inference",
+      "description": "New model used to extract query features without re-indexing."
+    },
+    {
+      "node_id": "node_wo_query_features",
+      "label": "Query Features",
+      "type": "data",
+      "group": "grp_strategies",
+      "role": "output",
+      "description": "Extracted query features in the no re-indexing scenario."
+    },
+    {
+      "node_id": "node_wo_note",
+      "label": "Incompatibility Risk Note",
+      "type": "label",
+      "group": "grp_strategies",
+      "role": "note",
+      "description": "Warning: risk of incompatibility between new and old feature spaces."
+    },
+    {
+      "node_id": "node_dp_old_gallery_images_locked",
+      "label": "Locked Old Gallery Images",
+      "type": "data",
+      "group": "grp_privacy",
+      "role": "input",
+      "description": "Old gallery images are locked for privacy protection."
+    },
+    {
+      "node_id": "node_dp_new_model",
+      "label": "New Model",
+      "type": "model",
+      "group": "grp_privacy",
+      "role": "inference",
+      "description": "New model used under the privacy constraint scenario."
+    },
+    {
+      "node_id": "node_privacy_lock",
+      "label": "Privacy Lock",
+      "type": "icon",
+      "group": "grp_privacy",
+      "role": "constraint",
+      "description": "A lock icon indicating privacy constraint."
+    },
+    {
+      "node_id": "node_dp_query_images",
+      "label": "Query Images",
+      "type": "data",
+      "group": "grp_privacy",
+      "role": "input",
+      "description": "Query images under the privacy constraint scenario."
+    },
+    {
+      "node_id": "node_dp_query_features",
+      "label": "Query Features",
+      "type": "data",
+      "group": "grp_privacy",
+      "role": "output",
+      "description": "Output query features (privacy-constrained)."
+    },
+    {
+      "node_id": "node_dp_old_gallery_features",
+      "label": "Old Gallery Features",
+      "type": "data",
+      "group": "grp_privacy",
+      "role": "reference",
+      "description": "Existing old gallery features used for matching."
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "e_old_new_to_fmm",
+      "source": "node_data_stream",
+      "target": "node_fmm",
+      "type": "data",
+      "route_hint": "orthogonal",
+      "direction_hint": "right",
+      "description": "Old/new data are sent into the new model to obtain new-domain features."
+    },
+    {
+      "edge_id": "e_olddata_fmm",
+      "source": "node_old_data",
+      "target": "node_fmm",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "Old data features are fed into FMM for forward mapping."
+    },
+    {
+      "edge_id": "e_newdata_fmm",
+      "source": "node_new_data",
+      "target": "node_fmm",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "New data features are fed into FMM for forward mapping."
+    },
+    {
+      "edge_id": "e_fmm_stack",
+      "source": "node_fmm",
+      "target": "node_fmm_bn_prelu",
+      "type": "dependency",
+      "route_hint": "straight",
+      "description": "BN+PReLU stack inside FMM."
+    },
+    {
+      "edge_id": "e_fmm_mlp",
+      "source": "node_fmm_bn_prelu",
+      "target": "node_fmm_mlp",
+      "type": "dependency",
+      "route_hint": "straight",
+      "description": "Enter MLP after the stack."
+    },
+    {
+      "edge_id": "e_fmm_softmax",
+      "source": "node_fmm_mlp",
+      "target": "node_fmm_softmax",
+      "type": "dependency",
+      "route_hint": "straight",
+      "description": "MLP output is normalized by Softmax."
+    },
+    {
+      "edge_id": "e_fmm_zso",
+      "source": "node_fmm_softmax",
+      "target": "node_zso",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "FMM produces old-domain compatible features Z_s^o."
+    },
+    {
+      "edge_id": "e_fmm_zsn",
+      "source": "node_fmm_softmax",
+      "target": "node_zsn",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "FMM produces new-domain compatible features Z_s^n."
+    },
+    {
+      "edge_id": "e_oldmodel_kcm",
+      "source": "node_old_model",
+      "target": "node_kcm",
+      "type": "data",
+      "route_hint": "orthogonal",
+      "direction_hint": "right",
+      "description": "Old model output is one input to KCM."
+    },
+    {
+      "edge_id": "e_newmodel_kcm",
+      "source": "node_new_model",
+      "target": "node_kcm",
+      "type": "data",
+      "route_hint": "orthogonal",
+      "direction_hint": "right",
+      "description": "New model output is another input to KCM."
+    },
+    {
+      "edge_id": "e_kcm_fc",
+      "source": "node_kcm",
+      "target": "node_kcm_fc",
+      "type": "dependency",
+      "route_hint": "straight",
+      "description": "KCM first passes through a fully connected layer."
+    },
+    {
+      "edge_id": "e_kcm_subnet",
+      "source": "node_kcm_fc",
+      "target": "node_kcm_subnet",
+      "type": "dependency",
+      "route_hint": "straight",
+      "description": "KCM subnetwork performs non-linear transformation."
+    },
+    {
+      "edge_id": "e_kcm_vectors",
+      "source": "node_kcm_ki",
+      "target": "node_kcm_sigma",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "k_i vectors go to the summation module."
+    },
+    {
+      "edge_id": "e_kcm_vectors2",
+      "source": "node_kcm_ui",
+      "target": "node_kcm_sigma",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "u_i vectors go to the summation module."
+    },
+    {
+      "edge_id": "e_kcm_sigma_mul",
+      "source": "node_kcm_sigma",
+      "target": "node_kcm_multiply",
+      "type": "dependency",
+      "route_hint": "straight",
+      "description": "Aggregated components go to the multiplicative gating."
+    },
+    {
+      "edge_id": "e_kcm_to_zso",
+      "source": "node_kcm_multiply",
+      "target": "node_zso",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "KCM outputs old-domain compatible features Z_s^o."
+    },
+    {
+      "edge_id": "e_kcm_to_zsn",
+      "source": "node_kcm_multiply",
+      "target": "node_zsn",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "KCM outputs new-domain compatible features Z_s^n."
+    },
+    {
+      "edge_id": "e_bcd_in_o",
+      "source": "node_zso",
+      "target": "node_bcd",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "Z_s^o is fed into BCD."
+    },
+    {
+      "edge_id": "e_bcd_in_n",
+      "source": "node_zsn",
+      "target": "node_bcd",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "Z_s^n is fed into BCD."
+    },
+    {
+      "edge_id": "e_bcd_mo",
+      "source": "node_bcd",
+      "target": "node_mo",
+      "type": "dependency",
+      "route_hint": "straight",
+      "description": "Compute old-domain similarity matrix M^o."
+    },
+    {
+      "edge_id": "e_bcd_mn",
+      "source": "node_bcd",
+      "target": "node_mn",
+      "type": "dependency",
+      "route_hint": "straight",
+      "description": "Compute new-domain similarity matrix M^n."
+    },
+    {
+      "edge_id": "e_bcd_same",
+      "source": "node_mo",
+      "target": "node_sim_same",
+      "type": "dependency",
+      "route_hint": "orthogonal",
+      "direction_hint": "down",
+      "description": "Similarity reference of the same identity based on M^o."
+    },
+    {
+      "edge_id": "e_bcd_diff",
+      "source": "node_mn",
+      "target": "node_sim_diff",
+      "type": "dependency",
+      "route_hint": "orthogonal",
+      "direction_hint": "down",
+      "description": "Similarity reference of different identities based on M^n."
+    },
+    {
+      "edge_id": "e_bcd_lca",
+      "source": "node_bcd",
+      "target": "node_L_ca",
+      "type": "loss",
+      "route_hint": "straight",
+      "description": "BCD outputs the compatibility loss L_ca."
+    },
+    {
+      "edge_id": "e_bad_in_o",
+      "source": "node_zso",
+      "target": "node_old_cls",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "Old-domain compatible features go to the old classifier."
+    },
+    {
+      "edge_id": "e_bad_in_n",
+      "source": "node_zsn",
+      "target": "node_new_cls",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "New-domain compatible features go to the new classifier."
+    },
+    {
+      "edge_id": "e_bad_cls_bad",
+      "source": "node_old_cls",
+      "target": "node_bad",
+      "type": "dependency",
+      "route_hint": "straight",
+      "description": "Output of the old classifier participates in BAD distillation."
+    },
+    {
+      "edge_id": "e_bad_cls2_bad",
+      "source": "node_new_cls",
+      "target": "node_bad",
+      "type": "dependency",
+      "route_hint": "straight",
+      "description": "Output of the new classifier participates in BAD distillation."
+    },
+    {
+      "edge_id": "e_bad_ler",
+      "source": "node_bad",
+      "target": "node_L_er",
+      "type": "loss",
+      "route_hint": "straight",
+      "description": "BAD outputs the anti-forgetting loss L_er."
+    },
+    {
+      "edge_id": "e_new_sup",
+      "source": "node_new_model",
+      "target": "node_L_new",
+      "type": "dependency",
+      "route_hint": "orthogonal",
+      "direction_hint": "down",
+      "description": "The new model produces a supervised loss on new data."
+    },
+    {
+      "edge_id": "e_fr_images2features_old",
+      "source": "node_old_gallery_images",
+      "target": "node_fr_old_gallery_features",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "Feature Replacing: old gallery images correspond to old features (unchanged)."
+    },
+    {
+      "edge_id": "e_fr_query2model",
+      "source": "node_query_images",
+      "target": "node_fr_new_model",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "Feature Replacing: send query image to the new model."
+    },
+    {
+      "edge_id": "e_fr_model2qfeat",
+      "source": "node_fr_new_model",
+      "target": "node_fr_query_features",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "Feature Replacing: generate query features."
+    },
+    {
+      "edge_id": "e_fr_warn",
+      "source": "node_fr_query_features",
+      "target": "node_fr_note",
+      "type": "dependency",
+      "route_hint": "orthogonal",
+      "direction_hint": "down",
+      "description": "Note: query features may be incompatible with old gallery features."
+    },
+    {
+      "edge_id": "e_reidx_images",
+      "source": "node_old_gallery_images",
+      "target": "node_reidx_module",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "Re-indexing: old gallery images are re-indexed / re-extracted."
+    },
+    {
+      "edge_id": "e_reidx_out",
+      "source": "node_reidx_module",
+      "target": "node_reidx_gallery_features",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "Re-indexing: obtain gallery features compatible with the new model."
+    },
+    {
+      "edge_id": "e_reidx_query2model",
+      "source": "node_query_images",
+      "target": "node_reidx_new_model",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "Re-indexing: send query image to the new model."
+    },
+    {
+      "edge_id": "e_reidx_model2qfeat",
+      "source": "node_reidx_new_model",
+      "target": "node_reidx_query_features",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "Re-indexing: generate query features and match the re-indexed gallery."
+    },
+    {
+      "edge_id": "e_wo_images2features_old",
+      "source": "node_old_gallery_images",
+      "target": "node_wo_old_gallery_features",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "w/o Re-indexing: directly use old gallery features."
+    },
+    {
+      "edge_id": "e_wo_query2model",
+      "source": "node_query_images",
+      "target": "node_wo_new_model",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "w/o Re-indexing: send query image to the new model."
+    },
+    {
+      "edge_id": "e_wo_model2qfeat",
+      "source": "node_wo_new_model",
+      "target": "node_wo_query_features",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "w/o Re-indexing: generate query features."
+    },
+    {
+      "edge_id": "e_wo_warn",
+      "source": "node_wo_query_features",
+      "target": "node_wo_note",
+      "type": "dependency",
+      "route_hint": "orthogonal",
+      "direction_hint": "down",
+      "description": "Note: risk of incompatibility between new and old feature spaces."
+    },
+    {
+      "edge_id": "e_privacy_forbid",
+      "source": "node_dp_old_gallery_images_locked",
+      "target": "node_dp_new_model",
+      "type": "forbidden",
+      "route_hint": "straight",
+      "description": "Privacy limitation: old gallery images are forbidden to be directly used for training/feature extraction by the new model."
+    },
+    {
+      "edge_id": "e_privacy_lock_bind",
+      "source": "node_privacy_lock",
+      "target": "node_dp_old_gallery_images_locked",
+      "type": "constraint",
+      "route_hint": "straight",
+      "description": "The lock icon constrains access to the old gallery images."
+    },
+    {
+      "edge_id": "e_privacy_query2model",
+      "source": "node_dp_query_images",
+      "target": "node_dp_new_model",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "Privacy scenario: the query image can be sent to the new model for feature extraction."
+    },
+    {
+      "edge_id": "e_privacy_model2qfeat",
+      "source": "node_dp_new_model",
+      "target": "node_dp_query_features",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "Output the query features (privacy-constrained)."
+    },
+    {
+      "edge_id": "e_privacy_match",
+      "source": "node_dp_query_features",
+      "target": "node_dp_old_gallery_features",
+      "type": "dependency",
+      "route_hint": "orthogonal",
+      "direction_hint": "right",
+      "description": "Use the existing old gallery features to match, avoiding access to raw images."
+    }
+  ],
+  "positions": {
+    "groups": [
+      {
+        "group_id": "grp_training",
+        "bbox": {
+          "left": 40,
+          "top": 40,
+          "width": 580,
+          "height": 460
+        },
+        "chunk_id": "chunk_0_0"
+      },
+      {
+        "group_id": "grp_transfer",
+        "bbox": {
+          "left": 660,
+          "top": 40,
+          "width": 580,
+          "height": 460
+        },
+        "chunk_id": "chunk_0_1"
+      },
+      {
+        "group_id": "grp_testing",
+        "bbox": {
+          "left": 1280,
+          "top": 40,
+          "width": 600,
+          "height": 460
+        },
+        "chunk_id": "chunk_0_2"
+      },
+      {
+        "group_id": "grp_strategies",
+        "bbox": {
+          "left": 40,
+          "top": 540,
+          "width": 1180,
+          "height": 500
+        },
+        "chunk_id": "chunk_1_0"
+      },
+      {
+        "group_id": "grp_privacy",
+        "bbox": {
+          "left": 1240,
+          "top": 540,
+          "width": 640,
+          "height": 500
+        },
+        "chunk_id": "chunk_1_2"
+      }
+    ]
+  },
+  "layout_runtime_meta": {
+    "algorithm": "dagre",
+    "version": "1.0",
+    "timestamp": "2025-11-10T00:00:00Z",
+    "notes": "Auto-placed group bounding boxes; node positions to be solved at render-time."
+  }
+}
+

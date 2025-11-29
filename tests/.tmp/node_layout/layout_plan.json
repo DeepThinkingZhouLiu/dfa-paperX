@@ -1,0 +1,82 @@
+{
+  "global": {
+    "grid_rows": 3,
+    "grid_cols": 3,
+    "flow_direction": "left-to-right",
+    "notes": "采用3x3网格。第一行用于总览与概念标签；第二行展示数据构建主流程；第三行展示双分支训练与策略更新闭环。"
+  },
+  "chunks": [
+    {
+      "chunk_id": "c1",
+      "row": 0,
+      "col": 0,
+      "span_row": 1,
+      "span_col": 2,
+      "size_hint": "large",
+      "relation_note": "位于顶部左侧及中间，作为全图的标题和高层概览。"
+    },
+    {
+      "chunk_id": "c8",
+      "row": 0,
+      "col": 2,
+      "span_row": 1,
+      "span_col": 1,
+      "size_hint": "small",
+      "relation_note": "位于顶部右侧，作为IL与RL概念衔接的背景标签或图例。"
+    },
+    {
+      "chunk_id": "c2",
+      "row": 1,
+      "col": 0,
+      "span_row": 1,
+      "span_col": 1,
+      "size_hint": "medium",
+      "relation_note": "主流程起点，位于中层左侧，包含专家数据与初始策略交互。"
+    },
+    {
+      "chunk_id": "c3",
+      "row": 1,
+      "col": 1,
+      "span_row": 1,
+      "span_col": 1,
+      "size_hint": "medium",
+      "relation_note": "主流程中段，位于中层核心位置，展示无奖励Rollout数据的构建。"
+    },
+    {
+      "chunk_id": "c4",
+      "row": 1,
+      "col": 2,
+      "span_row": 1,
+      "span_col": 1,
+      "size_hint": "small",
+      "relation_note": "位于中层右侧，作为数据流向双分支的分叉节点。"
+    },
+    {
+      "chunk_id": "c5",
+      "row": 2,
+      "col": 0,
+      "span_row": 1,
+      "span_col": 1,
+      "size_hint": "medium",
+      "relation_note": "位于底层左侧，IWM分支，接收来自上方的数据并产生训练信号。"
+    },
+    {
+      "chunk_id": "c6",
+      "row": 2,
+      "col": 1,
+      "span_row": 1,
+      "span_col": 1,
+      "size_hint": "large",
+      "relation_note": "位于底层中间，SR分支，包含反思与解释生成，内容较多。"
+    },
+    {
+      "chunk_id": "c7",
+      "row": 2,
+      "col": 2,
+      "span_row": 1,
+      "span_col": 1,
+      "size_hint": "medium",
+      "relation_note": "位于底层右侧，汇合两个分支的信号更新策略，并指回起点形成闭环。"
+    }
+  ]
+}

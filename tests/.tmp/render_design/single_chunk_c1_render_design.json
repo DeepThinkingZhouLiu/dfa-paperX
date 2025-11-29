@@ -1,0 +1,34 @@
+{
+  "chunk_id": "c1",
+  "nodes": [
+    {
+      "node_id": "n1",
+      "render_method": "pptx",
+      "pptx_desc": "Title text box with centered alignment, bold 24pt font, dark blue color (#1a365d)",
+      "reasoning": "This is a simple title text that can be effectively rendered with native text formatting"
+    },
+    {
+      "node_id": "n2",
+      "render_method": "pptx",
+      "pptx_desc": "Large rectangle shape with a thick border, labeled 'Early Experience Framework' at the top, border color #4A90D9, no fill color",
+      "reasoning": "The node serves as a container frame, which is best rendered using simple geometric shapes in PowerPoint"
+    },
+    {
+      "node_id": "n3",
+      "render_method": "pptx",
+      "pptx_desc": "Side annotation text box with italic 12pt font, light gray color (#7f8c8d), positioned to the side of the main content",
+      "reasoning": "This is a simple annotation that can be effectively rendered with native text formatting"
+    },
+    {
+      "node_id": "n4",
+      "render_method": "pptx",
+      "pptx_desc": "Callout shape with text, using 12pt font, dark blue color (#1a365d), positioned between IL and RL sections, arrow pointing to the bridge area",
+      "reasoning": "The node is an annotation indicating a conceptual bridge, which can be effectively rendered using a callout shape in PowerPoint"
+    }
+  ],
+  "chunk_style_hints": {
+    "dominant_color": "#4A90D9",
+    "visual_weight": "medium",
+    "style_notes": "Clean scientific illustration style consistent with academic papers"
+  }
+}

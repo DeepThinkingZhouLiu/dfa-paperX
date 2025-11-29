@@ -75,7 +75,29 @@ class VisionLLMCaller(BaseLLMCaller):
             "max_tokens": self.max_tokens,
         }
         response_data = await self._post_chat_completions(payload)
-        content = response_data["choices"][0]["message"]["content"]
+        
+        # 调试：记录响应结构
+        log.debug(f"API响应结构: {type(response_data)}, keys: {response_data.keys() if isinstance(response_data, dict) else 'N/A'}")
+        
+        # 提取内容，添加错误处理
+        if "choices" not in response_data:
+            log.error(f"API响应缺少 'choices' 字段。响应内容: {response_data}")
+            raise ValueError(f"API响应格式错误: 缺少 'choices' 字段。响应: {response_data}")
+        
+        if not response_data["choices"]:
+            log.error(f"API响应中 'choices' 为空。响应内容: {response_data}")
+            raise ValueError(f"API响应格式错误: 'choices' 为空。响应: {response_data}")
+        
+        message = response_data["choices"][0].get("message", {})
+        content = message.get("content")
+        
+        if content is None:
+            log.error(f"API响应中 'content' 为 None。响应内容: {response_data}")
+            raise ValueError(f"API响应格式错误: 'content' 为 None。响应: {response_data}")
+        
+        if not content.strip():
+            log.warning(f"API响应中 'content' 为空字符串。响应内容: {response_data}")
+        
         return AIMessage(content=content)
     
     # async def _call_image_understanding(self, messages: List[BaseMessage]) -> AIMessage:
@@ -174,71 +196,160 @@ class VisionLLMCaller(BaseLLMCaller):
         """调用chat completions API"""
         import httpx
         
-        url = f"{self.state.request.chat_api_url}/chat/completions".rstrip("/")
+        base_url = self.state.request.chat_api_url.rstrip("/")
+        
+        # 检查是否是 Google AI Studio API（generativelanguage.googleapis.com）
+        # 如果是，URL 已经是完整端点，不需要添加 /chat/completions
+        if "generativelanguage.googleapis.com" in base_url:
+            url = base_url
+        elif base_url.endswith("/v1") or base_url.endswith("/v1beta"):
+            # OpenAI 兼容格式，需要添加 /chat/completions
+            url = f"{base_url}/chat/completions"
+        else:
+            # URL 已经是完整端点，直接使用
+            url = base_url
+        
         headers = {
             "Authorization": f"Bearer {self.state.request.api_key}",
             "Content-Type": "application/json",
         }
         
         timeout = self.vlm_config.get("timeout", 120)
-        async with httpx.AsyncClient(timeout=httpx.Timeout(timeout)) as client:
+        # 对于大图片和长时间处理，需要设置更详细的超时参数
+        # connect: 连接超时（较短）
+        # read: 读取超时（最重要，需要足够长以处理大图片和推理）
+        # write: 写入超时（发送大图片时需要较长）
+        # pool: 连接池超时
+        timeout_config = httpx.Timeout(
+            connect=30.0,  # 连接超时 30 秒
+            read=float(timeout),  # 读取超时使用配置的值
+            write=float(timeout),  # 写入超时（发送大图片需要时间）
+            pool=30.0  # 连接池超时 30 秒
+        )
+        async with httpx.AsyncClient(timeout=timeout_config) as client:
             resp = await client.post(url, headers=headers, json=payload)
             resp.raise_for_status()
             return resp.json()
         
 
 # ======================================================================
-# 快速自测：python vision.py <image_path>
+# CLI：支持生图 / 编辑 / 图像理解
 # ======================================================================
 if __name__ == "__main__":
-    """
-    用法:
-        python vision.py /path/to/your/image.png
-    """
     import os
     import sys
     import asyncio
+    import argparse
     from types import SimpleNamespace
     from pathlib import Path
     from langchain_core.messages import HumanMessage
 
-    async def _quick_test(img_path: str):
-        # 1. 环境变量检查
+    def _build_parser() -> argparse.ArgumentParser:
+        p = argparse.ArgumentParser(
+            description="VisionLLMCaller: generation | edit | understanding"
+        )
+        p.add_argument(
+            "--mode",
+            choices=["generation", "edit", "understanding"],
+            default="generation",
+            help="模式：生图(generation)、编辑(edit)、图像理解(understanding)"
+        )
+        p.add_argument(
+            "--prompt",
+            type=str,
+            default=None,
+            help="提示词；generation/edit 推荐必填，understanding 可选"
+        )
+        p.add_argument(
+            "--input-image",
+            type=str,
+            default=None,
+            help="输入图像路径（edit/understanding 需要）"
+        )
+        p.add_argument(
+            "--output-image",
+            type=str,
+            default="./out/generated_image_2.png",
+            help="输出图像保存路径（generation/edit 有效)"
+        )
+        p.add_argument(
+            "--model",
+            type=str,
+            default=None,
+            help="模型名称，默认读取环境变量 DF_MODEL 或使用内置默认"
+        )
+        p.add_argument(
+            "--timeout",
+            type=int,
+            default=120,
+            help="请求超时（秒）"
+        )
+        return p
+
+    async def _run_with_args(args: argparse.Namespace) -> int:
         api_url = os.getenv("DF_API_URL")
         api_key = os.getenv("DF_API_KEY")
         if not api_url or not api_key:
-            print("❌  请先设置环境变量 DF_API_URL / DF_API_KEY")
-            sys.exit(1)
+            print("❌ 请先设置环境变量 DF_API_URL / DF_API_KEY")
+            return 2
 
-        # 2. 检查图片
-        img_path = Path(img_path).expanduser().resolve()
-        if not img_path.exists():
-            print(f"❌  图片不存在: {img_path}")
-            sys.exit(1)
+        model = args.model or os.getenv("DF_MODEL", "gemini-3-pro-image-preview") 
+        #gemini-3-pro-image-preview  gemini-2.5-flash-image-preview
 
-        # 3. 构造极简 MainState
-        request = SimpleNamespace(chat_api_url=api_url.rstrip("/"), api_key=api_key, model = "gemini-2.5-flash-image-preview")
-        state = SimpleNamespace(request=request)
+        # 参数校验
+        if args.mode in ("edit", "understanding"):
+            if not args.input_image:
+                print("❌ 该模式需要 --input-image")
+                return 2
+            img_path = Path(args.input_image).expanduser().resolve()
+            if not img_path.exists():
+                print(f"❌ 图片不存在: {img_path}")
+                return 2
+            input_image = str(img_path)
+        else:
+            input_image = None
 
-        # 4. 实例化并调用
-        caller = VisionLLMCaller(
-            state=state,
-            vlm_config={
-                "mode": "understanding",
-                "input_image": str(img_path),
-                "timeout": 60,
-            }
-        )
+        if args.mode in ("generation", "edit"):
+            if not args.prompt:
+                print("ℹ️ 未提供 --prompt，将使用一个占位提示词。")
+        prompt = args.prompt or ("描述这个图像" if args.mode == "understanding" else "请生成一张图像")
+
+        # 构造 state
+        state = SimpleNamespace(request=SimpleNamespace(
+            chat_api_url=api_url.rstrip("/"),
+            api_key=api_key,
+            model=model,
+        ))
+
+        # 组装配置
+        vlm_cfg = {
+            "mode": args.mode,
+            "timeout": args.timeout,
+        }
+        if args.mode in ("generation", "edit"):
+            vlm_cfg["output_image"] = args.output_image
+        if args.mode in ("edit", "understanding") and input_image:
+            vlm_cfg["input_image"] = input_image
+
+        caller = VisionLLMCaller(state=state, vlm_config=vlm_cfg)
+
         print("🚀 正在请求模型，请稍候 …")
-        ai_msg = await caller.call([HumanMessage(content="描述这个img!")])
+        ai_msg = await caller.call([HumanMessage(content=prompt)])
 
-        print("\n================  结果  ================")
-        print(ai_msg.content)
-        print("========================================")
+        # 输出结果
+        if args.mode in ("generation", "edit"):
+            print(ai_msg.content)
+            print("image_path=", ai_msg.additional_kwargs.get("image_path"))
+        else:
+            print("\n================  文本结果  ================")
+            print(ai_msg.content)
+            print("==========================================")
+        return 0
 
-    # -------- 入口 --------
-    if len(sys.argv) < 2:
-        print("用法: python vision.py <image_path>")
-        sys.exit(0)
-
-    asyncio.run(_quick_test(sys.argv[1]))
+    parser = _build_parser()
+    ns = parser.parse_args()
+    try:
+        exit_code = asyncio.run(_run_with_args(ns))
+    except KeyboardInterrupt:
+        exit_code = 130
+    sys.exit(exit_code)

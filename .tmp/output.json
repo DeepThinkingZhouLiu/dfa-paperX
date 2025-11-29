@@ -1,0 +1,433 @@
+{
+  "version": "0.4",
+  "nodes": [
+    {
+      "node_id": "node-1",
+      "label": "Input Data",
+      "type": "data",
+      "role": "input",
+      "group_id": "group-1"
+    },
+    {
+      "node_id": "node-2",
+      "label": "Tokenizer",
+      "type": "operation",
+      "role": "preprocess",
+      "group_id": "group-1"
+    },
+    {
+      "node_id": "node-3",
+      "label": "Transformer Encoder",
+      "type": "module",
+      "role": "encoder",
+      "group_id": "group-2"
+    },
+    {
+      "node_id": "node-4",
+      "label": "MLP Head",
+      "type": "module",
+      "role": "head",
+      "group_id": "group-2"
+    },
+    {
+      "node_id": "node-5",
+      "label": "Softmax Output",
+      "type": "result",
+      "role": "output",
+      "group_id": "group-3"
+    },
+    {
+      "node_id": "node-6",
+      "label": "Cross-Entropy Loss",
+      "type": "loss",
+      "role": "loss",
+      "group_id": "group-3"
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "edge-1",
+      "source": "node-1",
+      "target": "node-2",
+      "type": "data_flow"
+    },
+    {
+      "edge_id": "edge-2",
+      "source": "node-2",
+      "target": "node-3",
+      "type": "data_flow"
+    },
+    {
+      "edge_id": "edge-3",
+      "source": "node-3",
+      "target": "node-4",
+      "type": "data_flow"
+    },
+    {
+      "edge_id": "edge-4",
+      "source": "node-4",
+      "target": "node-5",
+      "type": "data_flow"
+    },
+    {
+      "edge_id": "edge-5",
+      "source": "node-5",
+      "target": "node-6",
+      "type": "dependency"
+    }
+  ],
+  "groups": [
+    {
+      "group_id": "group-1",
+      "title": "Input Processing",
+      "description": "Raw data and tokenization"
+    },
+    {
+      "group_id": "group-2",
+      "title": "Core Model",
+      "description": "Encoder and head"
+    },
+    {
+      "group_id": "group-3",
+      "title": "Output & Loss",
+      "description": "Predictions and objective"
+    }
+  ],
+  "canvas": {
+    "width": 1600,
+    "height": 900,
+    "margin": 40
+  },
+  "grid": {},
+  "layout": {
+    "flow": "left-to-right"
+  },
+  "chunks": null,
+  "taxonomy": {
+    "node_types": [
+      "data",
+      "module",
+      "operation",
+      "loss",
+      "metric",
+      "result"
+    ],
+    "edge_types": [
+      "data_flow",
+      "control_flow",
+      "dependency"
+    ],
+    "roles": [
+      "input",
+      "preprocess",
+      "encoder",
+      "decoder",
+      "backbone",
+      "block",
+      "head",
+      "output",
+      "loss",
+      "metric"
+    ]
+  },
+  "positions": {
+    "nodes": [
+      {
+        "node_id": "node-1",
+        "bbox": {
+          "left": 40,
+          "top": 40,
+          "width": 160,
+          "height": 100
+        },
+        "zindex": 0,
+        "group_id": "group-1"
+      },
+      {
+        "node_id": "node-2",
+        "bbox": {
+          "left": 280,
+          "top": 40,
+          "width": 160,
+          "height": 100
+        },
+        "zindex": 0,
+        "group_id": "group-1"
+      },
+      {
+        "node_id": "node-3",
+        "bbox": {
+          "left": 520,
+          "top": 40,
+          "width": 160,
+          "height": 100
+        },
+        "zindex": 0,
+        "group_id": "group-2"
+      },
+      {
+        "node_id": "node-4",
+        "bbox": {
+          "left": 760,
+          "top": 40,
+          "width": 160,
+          "height": 100
+        },
+        "zindex": 0,
+        "group_id": "group-2"
+      },
+      {
+        "node_id": "node-5",
+        "bbox": {
+          "left": 1000,
+          "top": 40,
+          "width": 160,
+          "height": 100
+        },
+        "zindex": 0,
+        "group_id": "group-3"
+      },
+      {
+        "node_id": "node-6",
+        "bbox": {
+          "left": 1240,
+          "top": 40,
+          "width": 160,
+          "height": 100
+        },
+        "zindex": 0,
+        "group_id": "group-3"
+      }
+    ],
+    "edges": [
+      {
+        "edge_id": "edge-1",
+        "route_points": [
+          {
+            "x": 200,
+            "y": 90
+          },
+          {
+            "x": 240,
+            "y": 90
+          },
+          {
+            "x": 240,
+            "y": 90
+          },
+          {
+            "x": 280,
+            "y": 90
+          }
+        ],
+        "route_style": "orthogonal",
+        "corner_radius": 6
+      },
+      {
+        "edge_id": "edge-2",
+        "route_points": [
+          {
+            "x": 440,
+            "y": 90
+          },
+          {
+            "x": 480,
+            "y": 90
+          },
+          {
+            "x": 480,
+            "y": 90
+          },
+          {
+            "x": 520,
+            "y": 90
+          }
+        ],
+        "route_style": "orthogonal",
+        "corner_radius": 6
+      },
+      {
+        "edge_id": "edge-3",
+        "route_points": [
+          {
+            "x": 680,
+            "y": 90
+          },
+          {
+            "x": 720,
+            "y": 90
+          },
+          {
+            "x": 720,
+            "y": 90
+          },
+          {
+            "x": 760,
+            "y": 90
+          }
+        ],
+        "route_style": "orthogonal",
+        "corner_radius": 6
+      },
+      {
+        "edge_id": "edge-4",
+        "route_points": [
+          {
+            "x": 920,
+            "y": 90
+          },
+          {
+            "x": 960,
+            "y": 90
+          },
+          {
+            "x": 960,
+            "y": 90
+          },
+          {
+            "x": 1000,
+            "y": 90
+          }
+        ],
+        "route_style": "orthogonal",
+        "corner_radius": 6
+      },
+      {
+        "edge_id": "edge-5",
+        "route_points": [
+          {
+            "x": 1160,
+            "y": 90
+          },
+          {
+            "x": 1200,
+            "y": 90
+          },
+          {
+            "x": 1200,
+            "y": 90
+          },
+          {
+            "x": 1240,
+            "y": 90
+          }
+        ],
+        "route_style": "orthogonal",
+        "corner_radius": 6
+      }
+    ],
+    "groups": [
+      {
+        "group_id": "group-1",
+        "bbox": {
+          "left": 20,
+          "top": -4,
+          "width": 440,
+          "height": 164
+        },
+        "title_bbox": {
+          "left": 20,
+          "top": -4,
+          "width": 440,
+          "height": 24
+        }
+      },
+      {
+        "group_id": "group-2",
+        "bbox": {
+          "left": 500,
+          "top": -4,
+          "width": 440,
+          "height": 164
+        },
+        "title_bbox": {
+          "left": 500,
+          "top": -4,
+          "width": 440,
+          "height": 24
+        }
+      },
+      {
+        "group_id": "group-3",
+        "bbox": {
+          "left": 980,
+          "top": -4,
+          "width": 440,
+          "height": 164
+        },
+        "title_bbox": {
+          "left": 980,
+          "top": -4,
+          "width": 440,
+          "height": 24
+        }
+      }
+    ]
+  },
+  "layout_runtime_meta": {
+    "algorithm": "fallback_ltr_v0",
+    "canvas": {
+      "width": 1600,
+      "height": 900,
+      "margin": 40
+    },
+    "flow": "left-to-right",
+    "stats": {
+      "num_nodes": 6,
+      "num_edges": 5
+    }
+  },
+  "style_sheet": {
+    "globals": {
+      "font_family": "Inter, Roboto, Arial",
+      "palette": {
+        "primary": "#2E6BFF",
+        "accent": "#FFB020",
+        "muted": "#EEF2F7"
+      },
+      "default_node_engine": "compositor"
+    },
+    "rules": [
+      {
+        "selector": {
+          "element": "node",
+          "type": "data"
+        },
+        "properties": {
+          "fill": "#E8F1FF",
+          "stroke": "#2E6BFF",
+          "radius": 8
+        }
+      },
+      {
+        "selector": {
+          "element": "node",
+          "role": "encoder"
+        },
+        "properties": {
+          "fill": "#EAF7EE",
+          "stroke": "#22A06B"
+        }
+      },
+      {
+        "selector": {
+          "element": "edge",
+          "type": "data_flow"
+        },
+        "properties": {
+          "stroke": "#6B7280",
+          "arrow": "triangle"
+        }
+      },
+      {
+        "selector": {
+          "element": "group"
+        },
+        "properties": {
+          "title_font_size": 14,
+          "padding": 16
+        }
+      }
+    ]
+  }
+}

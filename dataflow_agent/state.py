@@ -2,7 +2,17 @@ from dataclasses import dataclass, field
 import os
 from pathlib import Path
 from typing import Any, Dict, List
-from dataflow.cli_funcs.paths import DataFlowPath
+try:
+    from dataflow.cli_funcs.paths import DataFlowPath
+except Exception:
+    class DataFlowPath:
+        @staticmethod
+        def get_dataflow_dir():
+            return Path(__file__).resolve().parent
+
+        @staticmethod
+        def get_dataflow_statics_dir():
+            return Path(__file__).resolve().parent.parent / "static"
 current_file = Path(__file__).resolve()
 
 BASE_DIR = DataFlowPath.get_dataflow_dir()
@@ -199,3 +209,46 @@ class WebCrawlState(MainState):
         self.url_queue = []
         self.current_cycle = 0
         self.download_successful_for_current_task = False
+
+
+# ==================== Paper2Graph  Request ====================
+@dataclass
+class Paper2GraphRequest(MainRequest):      
+    target: str = ""
+    # 供下游 Agent 使用的约束与说明（若上游未提供，可为空，Agent 内置 fallback）
+    header_json_desc: Dict[str, Any] = field(default_factory=dict)
+    semantic_json_desc: Dict[str, Any] = field(default_factory=dict)
+    layout_json_desc: Dict[str, Any] = field(default_factory=dict)
+    design_json_desc: Dict[str, Any] = field(default_factory=dict)
+    
+    semantic_json_schema: Dict[str, Any] = field(default_factory=dict)
+    layout_json_schema: Dict[str, Any] = field(default_factory=dict)
+    design_json_schema: Dict[str, Any] = field(default_factory=dict)
+
+
+# ==================== Paper2Graph State ====================
+@dataclass
+class Paper2GraphState(MainState):
+    request: Paper2GraphRequest = field(default_factory=Paper2GraphRequest)
+
+    # enriched_description 为结构化对象，包含 semantic_desc 与 layout_desc
+    enriched_description: Dict[str, Any] = field(default_factory=dict)
+
+    # 各阶段 JSON 的承载结构：语义/布局/美学设计及最终 PaperGraph JSON
+    header_json: Dict[str, Any] = field(default_factory=dict)
+    semantic_json: Dict[str, Any] = field(default_factory=dict)
+    layout_plan: Dict[str, Any] = field(default_factory=dict)  # 布局规划（grid级别）
+    # node 级布局规划结果，由 p2g_node_layout_planner_agent 生成
+    node_layout_plan: Dict[str, Any] = field(default_factory=dict)
+    # 最终的 layout_json，包含 chunks/nodes 的像素级 bbox
+    layout_json: Dict[str, Any] = field(default_factory=dict)
+    design_json: Dict[str, Any] = field(default_factory=dict)
+    final_json: Dict[str, Any] = field(default_factory=dict)
+
+    # Checker 相关字段
+    layout_error_info: str = ""
+    wireframe_url: str = ""
+    semantic_gap: str = ""
+    
+    # Node 渲染设计结果，由 p2g_node_render_design_agent 生成
+    node_render_design: Dict[str, Any] = field(default_factory=dict)

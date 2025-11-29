@@ -1,0 +1,559 @@
+{
+  "chunks": [
+    {
+      "chunk_id": "c1",
+      "title": "Early Experience Overview & Background",
+      "title_bbox": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0
+      },
+      "summary": "Top-level overview of the Early Experience framework, explaining its goal of connecting imitation learning (IL) and reinforcement learning (RL) via reward-free rollouts and self-reflection. This block conceptually frames Early Experience as a bridge between expert-supervised IL and environment-interacting RL.",
+      "node_ids": [
+        "n1",
+        "n2",
+        "n3",
+        "n4"
+      ]
+    },
+    {
+      "chunk_id": "c2",
+      "title": "Expert Dataset & Basic Inputs",
+      "title_bbox": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0
+      },
+      "summary": "Input/data starting block showing the expert demonstration dataset D_expert = {(s_i, a_i)}, where s_i are expert states and a_i are expert actions. This is the traditional IL data and the origin for constructing Early Experience rollouts.",
+      "node_ids": [
+        "n5",
+        "n6",
+        "n7",
+        "n8"
+      ]
+    },
+    {
+      "chunk_id": "c3",
+      "title": "Initial LLM Policy & Non-Expert Action Sampling",
+      "title_bbox": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0
+      },
+      "summary": "Processing block that uses the initial LLM policy π_0 to sample multiple non-expert candidate actions {a_i^1, …, a_i^K} conditioned on expert states s_i, creating diverse alternatives to the expert action a_i.",
+      "node_ids": [
+        "n9",
+        "n10",
+        "n11",
+        "n12"
+      ]
+    },
+    {
+      "chunk_id": "c4",
+      "title": "Environment Interaction & Rollout Construction",
+      "title_bbox": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0
+      },
+      "summary": "Core data-construction block where expert and non-expert actions are executed in the environment to obtain future states. These interactions form the rollout dataset D_rollout = {(s_i, a_i^j, s_i^j)} and also record expert next states s_{i+1}, using future states as reward-free supervision signals.",
+      "node_ids": [
+        "n13",
+        "n14",
+        "n15",
+        "n16",
+        "n17",
+        "n18"
+      ]
+    },
+    {
+      "chunk_id": "c5",
+      "title": "Dual Core Methods Branching (IWM & SR)",
+      "title_bbox": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0
+      },
+      "summary": "Branching block indicating that from the rollout dataset, the Early Experience framework splits into two core method branches: Implicit World Modeling (IWM) and Self-Reflection (SR).",
+      "node_ids": [
+        "n19",
+        "n20",
+        "n21"
+      ]
+    },
+    {
+      "chunk_id": "c6",
+      "title": "Implicit World Modeling (IWM) Branch",
+      "title_bbox": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0
+      },
+      "summary": "Branch A of the Early Experience framework. The policy is trained to predict future states s_i^j given (s_i, a_i^j), turning rollout data into a next-token prediction style task. The loss is NLL of future state tokens, enabling the LLM to learn an implicit dynamics/world model without using rewards.",
+      "node_ids": [
+        "n22",
+        "n23",
+        "n24",
+        "n25",
+        "n26",
+        "n27"
+      ]
+    },
+    {
+      "chunk_id": "c7",
+      "title": "Self-Reflection (SR) Branch",
+      "title_bbox": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0
+      },
+      "summary": "Branch B of the Early Experience framework. Expert and non-expert rollouts are compared to highlight differences in resulting future states, prompting the LLM to generate natural language explanations c_i^j about why the expert action is better. These reflections form D_refl and are used jointly with D_expert to train the policy to imitate expert behavior and explain its superiority.",
+      "node_ids": [
+        "n28",
+        "n29",
+        "n30",
+        "n31",
+        "n32",
+        "n33",
+        "n34",
+        "n35"
+      ]
+    },
+    {
+      "chunk_id": "c8",
+      "title": "Policy Training, Update & Early Experience Summary",
+      "title_bbox": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0
+      },
+      "summary": "Output and summary block where signals from the IWM and SR branches are combined to update the policy π_θ. It conceptually aggregates world-model-informed loss (future state NLL) and expert imitation plus explanation loss into a joint objective L_total, highlighting how Early Experience unifies IL-like supervision with RL-like dynamics modeling via reward-free rollouts and self-reflection.",
+      "node_ids": [
+        "n36",
+        "n37",
+        "n38",
+        "n39"
+      ]
+    },
+    {
+      "chunk_id": "c9",
+      "title": "IL–RL Bridging & Paradigm Positioning",
+      "title_bbox": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0
+      },
+      "summary": "Side annotation block emphasizing that Early Experience sits between IL and RL. It uses environment rollouts (an RL ingredient) without rewards, while still relying on expert demonstrations and explanations (an IL ingredient), thereby conceptually bridging the two paradigms.",
+      "node_ids": [
+        "n40",
+        "n41",
+        "n42"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "node_id": "n1",
+      "node_type": "text_block",
+      "chunk_id": "c1",
+      "desc": "Title text: \"Early Experience: Connecting IL and RL via Rollouts and Self-Reflection\" summarizing the framework goal."
+    },
+    {
+      "node_id": "n2",
+      "node_type": "shape",
+      "chunk_id": "c1",
+      "desc": "Large enclosing frame labeled \"Early Experience Framework\" that visually groups the entire pipeline."
+    },
+    {
+      "node_id": "n3",
+      "node_type": "annotation",
+      "chunk_id": "c1",
+      "desc": "Side annotation explaining IL as expert-supervised learning using D_expert and RL as environment-interacting learning with rewards."
+    },
+    {
+      "node_id": "n4",
+      "node_type": "annotation",
+      "chunk_id": "c1",
+      "desc": "Annotation or callout indicating that Early Experience acts as a bridge between IL (expert data) and RL (environment interaction) using reward-free rollouts and self-reflection."
+    },
+    {
+      "node_id": "n5",
+      "node_type": "shape",
+      "chunk_id": "c2",
+      "desc": "Module box labeled \"Expert Dataset D_expert = {(s_i, a_i)}\" representing the collection of expert demonstrations."
+    },
+    {
+      "node_id": "n6",
+      "node_type": "annotation",
+      "chunk_id": "c2",
+      "desc": "Text explaining that s_i denotes expert states and a_i denotes expert actions in the expert trajectories."
+    },
+    {
+      "node_id": "n7",
+      "node_type": "image_placeholder",
+      "chunk_id": "c2",
+      "desc": "Illustrative placeholder showing multiple expert trajectories as sequences of state–action pairs."
+    },
+    {
+      "node_id": "n8",
+      "node_type": "annotation",
+      "chunk_id": "c2",
+      "desc": "Note that D_expert is the traditional imitation learning data and also the starting point for Early Experience data construction."
+    },
+    {
+      "node_id": "n9",
+      "node_type": "shape",
+      "chunk_id": "c3",
+      "desc": "Module box labeled \"Initial LLM Policy π_0\" representing the starting policy used for sampling non-expert actions."
+    },
+    {
+      "node_id": "n10",
+      "node_type": "shape",
+      "chunk_id": "c3",
+      "desc": "Input connector indicating that expert states s_i from D_expert are fed into the initial policy π_0."
+    },
+    {
+      "node_id": "n11",
+      "node_type": "shape",
+      "chunk_id": "c3",
+      "desc": "Fan-out shape or grouped arrows representing sampled non-expert candidate actions {a_i^1, …, a_i^K} from π_0."
+    },
+    {
+      "node_id": "n12",
+      "node_type": "annotation",
+      "chunk_id": "c3",
+      "desc": "Text annotation clarifying that the sampled actions a_i^j are non-expert candidates contrasted with the expert action a_i for the same state s_i."
+    },
+    {
+      "node_id": "n13",
+      "node_type": "shape",
+      "chunk_id": "c4",
+      "desc": "Module box labeled \"Environment / Env\" representing the environment with which actions interact."
+    },
+    {
+      "node_id": "n14",
+      "node_type": "shape",
+      "chunk_id": "c4",
+      "desc": "Arrow/connector from expert action a_i into the environment, outputting the expert next state s_{i+1}."
+    },
+    {
+      "node_id": "n15",
+      "node_type": "shape",
+      "chunk_id": "c4",
+      "desc": "Arrows/connectors from each non-expert action a_i^j into the environment, each producing a corresponding future state s_i^j."
+    },
+    {
+      "node_id": "n16",
+      "node_type": "shape",
+      "chunk_id": "c4",
+      "desc": "Aggregation box labeled \"Rollout Dataset D_rollout = {(s_i, a_i^j, s_i^j)}\" representing triplets of state, non-expert action, and resulting future state."
+    },
+    {
+      "node_id": "n17",
+      "node_type": "annotation",
+      "chunk_id": "c4",
+      "desc": "Text emphasizing that future states are used as reward-free supervision signals in Early Experience."
+    },
+    {
+      "node_id": "n18",
+      "node_type": "annotation",
+      "chunk_id": "c4",
+      "desc": "Annotation noting that expert next states s_{i+1} are kept for comparison with non-expert futures in the SR branch."
+    },
+    {
+      "node_id": "n19",
+      "node_type": "shape",
+      "chunk_id": "c5",
+      "desc": "Branching node labeled \"Dual Branches: IWM & SR\" indicating the split of processing into two core methods."
+    },
+    {
+      "node_id": "n20",
+      "node_type": "shape",
+      "chunk_id": "c5",
+      "desc": "Connector arrow from the branching node toward the IWM branch, labeled to indicate it carries D_rollout triplets."
+    },
+    {
+      "node_id": "n21",
+      "node_type": "shape",
+      "chunk_id": "c5",
+      "desc": "Connector arrow from the branching node toward the SR branch, labeled to indicate it carries D_rollout and expert next states information."
+    },
+    {
+      "node_id": "n22",
+      "node_type": "shape",
+      "chunk_id": "c6",
+      "desc": "Main module box labeled \"Implicit World Modeling (IWM)\" representing branch A."
+    },
+    {
+      "node_id": "n23",
+      "node_type": "shape",
+      "chunk_id": "c6",
+      "desc": "Input node describing that (s_i, a_i^j) from D_rollout are fed as inputs into the policy for prediction."
+    },
+    {
+      "node_id": "n24",
+      "node_type": "shape",
+      "chunk_id": "c6",
+      "desc": "Input/target node describing that future states s_i^j from D_rollout are used as supervision targets."
+    },
+    {
+      "node_id": "n25",
+      "node_type": "shape",
+      "chunk_id": "c6",
+      "desc": "LLM policy box labeled \"Policy π_θ\" within the IWM branch, performing future state prediction."
+    },
+    {
+      "node_id": "n26",
+      "node_type": "text_block",
+      "chunk_id": "c6",
+      "desc": "Formula-style text: \"Predict s_i^j given (s_i, a_i^j): (s_i, a_i^j) → π_θ → ŝ_i^j\" explaining the prediction mapping."
+    },
+    {
+      "node_id": "n27",
+      "node_type": "annotation",
+      "chunk_id": "c6",
+      "desc": "Loss explanation text: \"L_IWM = -log p_θ(s_i^j | s_i, a_i^j); no rewards, only future states used; LLM learns an implicit dynamics model.\""
+    },
+    {
+      "node_id": "n28",
+      "node_type": "shape",
+      "chunk_id": "c7",
+      "desc": "Main module box labeled \"Self-Reflection (SR)\" representing branch B."
+    },
+    {
+      "node_id": "n29",
+      "node_type": "shape",
+      "chunk_id": "c7",
+      "desc": "Input node for expert path: (s_i, a_i, s_{i+1}) obtained from D_expert and environment interaction."
+    },
+    {
+      "node_id": "n30",
+      "node_type": "shape",
+      "chunk_id": "c7",
+      "desc": "Input node for non-expert path: (s_i, a_i^j, s_i^j) obtained from the rollout dataset D_rollout."
+    },
+    {
+      "node_id": "n31",
+      "node_type": "shape",
+      "chunk_id": "c7",
+      "desc": "Comparison node visualizing the contrast between expert future state s_{i+1} and non-expert futures s_i^j for the same state s_i, e.g., \"Compare (s_{i+1} vs s_i^j)\"."
+    },
+    {
+      "node_id": "n32",
+      "node_type": "shape",
+      "chunk_id": "c7",
+      "desc": "LLM module within SR labeled \"LLM generates explanation c_i^j\" that takes comparison context and produces natural language reflections on why expert action is better."
+    },
+    {
+      "node_id": "n33",
+      "node_type": "shape",
+      "chunk_id": "c7",
+      "desc": "Dataset box labeled \"Reflection Dataset D_refl = {(s_i, a_i^j, c_i^j)}\" collecting states, non-expert actions, and generated explanations."
+    },
+    {
+      "node_id": "n34",
+      "node_type": "annotation",
+      "chunk_id": "c7",
+      "desc": "Annotation showing an example explanation bubble: \"c_i^j: Taking a_i leads to safer or more goal-directed outcomes than a_i^j because ...\""
+    },
+    {
+      "node_id": "n35",
+      "node_type": "annotation",
+      "chunk_id": "c7",
+      "desc": "Text describing that the LLM is trained to jointly predict expert action a_i and explanation c_i^j using D_expert and D_refl (\"Joint training with D_expert and D_refl\")."
+    },
+    {
+      "node_id": "n36",
+      "node_type": "shape",
+      "chunk_id": "c8",
+      "desc": "Aggregation module labeled \"Policy Training & Update under Early Experience\" where signals from IWM and SR are combined to update the policy π_θ."
+    },
+    {
+      "node_id": "n37",
+      "node_type": "annotation",
+      "chunk_id": "c8",
+      "desc": "Incoming arrow annotation from the IWM branch labeled \"world-model-informed loss / NLL on future states\"."
+    },
+    {
+      "node_id": "n38",
+      "node_type": "annotation",
+      "chunk_id": "c8",
+      "desc": "Incoming arrow annotation from the SR branch labeled \"expert imitation + explanation prediction loss\"."
+    },
+    {
+      "node_id": "n39",
+      "node_type": "text_block",
+      "chunk_id": "c8",
+      "desc": "Text summarizing the joint objective, e.g., \"L_total = L_IWM + λ · L_SR\" and statement that Early Experience bridges IL and RL by leveraging reward-free rollouts and self-reflective explanations."
+    },
+    {
+      "node_id": "n40",
+      "node_type": "shape",
+      "chunk_id": "c9",
+      "desc": "Conceptual mini-diagram with left side labeled \"IL (Expert Supervision)\", right side labeled \"RL (Environment Interaction / Reward)\", and center labeled \"Early Experience\"."
+    },
+    {
+      "node_id": "n41",
+      "node_type": "annotation",
+      "chunk_id": "c9",
+      "desc": "Text noting that Early Experience uses environment rollouts, a typical RL component, but does not require reward signals."
+    },
+    {
+      "node_id": "n42",
+      "node_type": "annotation",
+      "chunk_id": "c9",
+      "desc": "Text noting that Early Experience still relies on expert demonstrations and explanations, characteristic of IL, thereby bridging IL and RL; optionally connected back to the policy training summary."
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "e1",
+      "from": "n1",
+      "to": "n5"
+    },
+    {
+      "edge_id": "e2",
+      "from": "n5",
+      "to": "n9"
+    },
+    {
+      "edge_id": "e3",
+      "from": "n5",
+      "to": "n13"
+    },
+    {
+      "edge_id": "e4",
+      "from": "n9",
+      "to": "n11"
+    },
+    {
+      "edge_id": "e5",
+      "from": "n10",
+      "to": "n9"
+    },
+    {
+      "edge_id": "e6",
+      "from": "n11",
+      "to": "n15"
+    },
+    {
+      "edge_id": "e7",
+      "from": "n14",
+      "to": "n18"
+    },
+    {
+      "edge_id": "e8",
+      "from": "n13",
+      "to": "n16"
+    },
+    {
+      "edge_id": "e9",
+      "from": "n16",
+      "to": "n19"
+    },
+    {
+      "edge_id": "e10",
+      "from": "n19",
+      "to": "n22"
+    },
+    {
+      "edge_id": "e11",
+      "from": "n19",
+      "to": "n28"
+    },
+    {
+      "edge_id": "e12",
+      "from": "n16",
+      "to": "n23"
+    },
+    {
+      "edge_id": "e13",
+      "from": "n16",
+      "to": "n24"
+    },
+    {
+      "edge_id": "e14",
+      "from": "n23",
+      "to": "n25"
+    },
+    {
+      "edge_id": "e15",
+      "from": "n25",
+      "to": "n26"
+    },
+    {
+      "edge_id": "e16",
+      "from": "n22",
+      "to": "n36"
+    },
+    {
+      "edge_id": "e17",
+      "from": "n24",
+      "to": "n27"
+    },
+    {
+      "edge_id": "e18",
+      "from": "n5",
+      "to": "n29"
+    },
+    {
+      "edge_id": "e19",
+      "from": "n14",
+      "to": "n29"
+    },
+    {
+      "edge_id": "e20",
+      "from": "n16",
+      "to": "n30"
+    },
+    {
+      "edge_id": "e21",
+      "from": "n29",
+      "to": "n31"
+    },
+    {
+      "edge_id": "e22",
+      "from": "n30",
+      "to": "n31"
+    },
+    {
+      "edge_id": "e23",
+      "from": "n31",
+      "to": "n32"
+    },
+    {
+      "edge_id": "e24",
+      "from": "n32",
+      "to": "n33"
+    },
+    {
+      "edge_id": "e25",
+      "from": "n28",
+      "to": "n36"
+    },
+    {
+      "edge_id": "e26",
+      "from": "n36",
+      "to": "n39"
+    },
+    {
+      "edge_id": "e27",
+      "from": "n36",
+      "to": "n9"
+    },
+    {
+      "edge_id": "e28",
+      "from": "n40",
+      "to": "n36"
+    }
+  ]
+}

@@ -1,0 +1,357 @@
+{
+  "chunks": [
+    {
+      "chunk_id": "c1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "render_method": "pptx",
+          "pptx_desc": "Title text box with centered alignment, bold 24pt font, dark blue color (#1a365d)",
+          "reasoning": "This is a simple title text that can be effectively rendered with native text formatting"
+        },
+        {
+          "node_id": "n2",
+          "render_method": "pptx",
+          "pptx_desc": "Large rectangular frame with a border labeled 'Early Experience Framework', no fill, dark blue border color (#1a365d), used to group elements",
+          "reasoning": "This is a simple container frame with a label, suitable for pptx rendering"
+        },
+        {
+          "node_id": "n3",
+          "render_method": "pptx",
+          "pptx_desc": "Side annotation text box with left alignment, italic 12pt font, gray color (#666666), explaining IL and RL concepts",
+          "reasoning": "This is a simple text annotation that can be rendered using native text formatting"
+        },
+        {
+          "node_id": "n4",
+          "render_method": "vlm",
+          "vlm_prompt": "A visual callout diagram illustrating the concept of Early Experience as a bridge between IL (expert data) and RL (environment interaction), featuring arrows and labels for 'reward-free rollouts' and 'self-reflection', clean scientific illustration style, white background",
+          "reasoning": "This annotation describes a conceptual bridge with multiple components, benefiting from a visual metaphor that is best rendered as an image"
+        }
+      ],
+      "chunk_style_hints": {
+        "dominant_color": "#4A90D9",
+        "visual_weight": "medium",
+        "style_notes": "Clean scientific illustration style consistent with academic papers"
+      }
+    },
+    {
+      "chunk_id": "c2",
+      "nodes": [
+        {
+          "node_id": "n5",
+          "render_method": "vlm",
+          "vlm_prompt": "A detailed module box labeled 'Expert Dataset D_expert = {(s_i, a_i)}' representing a collection of expert demonstrations. The box should have a structured appearance with visual elements indicating data collection, such as small icons of state-action pairs. Use a clean scientific illustration style with a white background, suitable for academic presentations.",
+          "reasoning": "The node represents a module with internal structure and labeled content, which benefits from a detailed visual representation beyond simple text or shapes."
+        },
+        {
+          "node_id": "n6",
+          "render_method": "pptx",
+          "pptx_desc": "Text box with left-aligned text, 12pt font size, black color, explaining the meaning of s_i and a_i in expert trajectories. Positioned near the module box for clarity.",
+          "reasoning": "This is a simple annotation explaining terms, which can be effectively rendered using native text formatting."
+        },
+        {
+          "node_id": "n7",
+          "render_method": "vlm",
+          "vlm_prompt": "An illustrative placeholder showing multiple expert trajectories as sequences of state-action pairs. The design should include arrows connecting circular state nodes (labeled s_i) to rectangular action nodes (labeled a_i), in a minimalist flat design style with a white background, suitable for academic paper figures.",
+          "reasoning": "This node requires a visual representation of trajectory data with specific node-edge structure, which is best achieved through generated imagery."
+        },
+        {
+          "node_id": "n8",
+          "render_method": "pptx",
+          "pptx_desc": "Note text box with italicized text, 10pt font size, gray color, explaining the role of D_expert in imitation learning and early experience data construction. Positioned below the main module box.",
+          "reasoning": "This is a simple annotation note that can be effectively rendered using native text formatting."
+        }
+      ],
+      "chunk_style_hints": {
+        "dominant_color": "#4A90D9",
+        "visual_weight": "medium",
+        "style_notes": "Clean scientific illustration style consistent with academic papers"
+      }
+    },
+    {
+      "chunk_id": "c3",
+      "nodes": [
+        {
+          "node_id": "n9",
+          "render_method": "vlm",
+          "vlm_prompt": "A module box labeled 'Initial LLM Policy π_0', representing a starting policy module. The box should have a clear label and be visually distinct, with input and output connectors. Style should be a clean scientific illustration with a white background, suitable for academic diagrams.",
+          "reasoning": "The node represents a module with a specific label and function, which benefits from a detailed visual representation that includes connectors and a clear label."
+        },
+        {
+          "node_id": "n10",
+          "render_method": "pptx",
+          "pptx_desc": "Simple arrow shape pointing towards the 'Initial LLM Policy π_0' module, representing input from expert states. Use a solid line with a medium thickness, dark blue color (#1a365d).",
+          "reasoning": "This is a simple connector arrow indicating input, which can be effectively rendered using native PowerPoint shapes."
+        },
+        {
+          "node_id": "n11",
+          "render_method": "vlm",
+          "vlm_prompt": "A fan-out shape or grouped arrows representing multiple sampled non-expert candidate actions {a_i^1, …, a_i^K} emerging from the 'Initial LLM Policy π_0'. The design should show multiple diverging paths, in a clean scientific illustration style with a white background.",
+          "reasoning": "The node involves a complex visual metaphor of diverging paths, which is best represented with a generated image to capture the concept effectively."
+        },
+        {
+          "node_id": "n12",
+          "render_method": "pptx",
+          "pptx_desc": "Text annotation box with the text 'Sampled actions a_i^j are non-expert candidates contrasted with the expert action a_i for the same state s_i'. Use italic 12pt font, dark gray color (#4a4a4a), placed near the relevant visual elements.",
+          "reasoning": "This is a simple text annotation that can be effectively rendered using native text formatting in PowerPoint."
+        }
+      ],
+      "chunk_style_hints": {
+        "dominant_color": "#4A90D9",
+        "visual_weight": "medium",
+        "style_notes": "Clean scientific illustration style consistent with academic papers"
+      }
+    },
+    {
+      "chunk_id": "c4",
+      "nodes": [
+        {
+          "node_id": "n13",
+          "render_method": "vlm",
+          "vlm_prompt": "A detailed illustration of a module box labeled 'Environment / Env', depicting an interactive environment where actions are executed. Include visual elements that suggest interaction, such as arrows or dynamic lines entering and exiting the box. Style should be clean scientific illustration with a white background, suitable for academic presentations.",
+          "reasoning": "The node represents a conceptual module with interaction elements, which benefits from a detailed visual representation beyond simple shapes."
+        },
+        {
+          "node_id": "n14",
+          "render_method": "pptx",
+          "pptx_desc": "Simple arrow connector from expert action to environment, using a straight arrow shape with a medium thickness, dark blue color (#1a365d), pointing towards the environment module.",
+          "reasoning": "This is a straightforward connector arrow, which can be effectively rendered using native PowerPoint shapes."
+        },
+        {
+          "node_id": "n15",
+          "render_method": "pptx",
+          "pptx_desc": "Multiple simple arrow connectors from non-expert actions to environment, using straight arrow shapes with medium thickness, dark blue color (#1a365d), each pointing towards the environment module.",
+          "reasoning": "These are simple connector arrows, suitable for rendering with native PowerPoint shapes."
+        },
+        {
+          "node_id": "n16",
+          "render_method": "vlm",
+          "vlm_prompt": "An aggregation box labeled 'Rollout Dataset D_rollout = {(s_i, a_i^j, s_i^j)}', visually representing the collection of triplets of state, non-expert action, and resulting future state. Include elements that suggest data aggregation, such as grouped icons or symbols. Style should be clean scientific illustration with a white background, suitable for academic papers.",
+          "reasoning": "The node represents a complex data aggregation concept, which benefits from a detailed visual representation beyond simple text."
+        },
+        {
+          "node_id": "n17",
+          "render_method": "pptx",
+          "pptx_desc": "Text annotation emphasizing the use of future states as reward-free supervision signals, using italicized font, dark blue color (#1a365d), placed near the relevant module.",
+          "reasoning": "This is a simple text annotation, suitable for rendering with native PowerPoint text formatting."
+        },
+        {
+          "node_id": "n18",
+          "render_method": "pptx",
+          "pptx_desc": "Text annotation noting the comparison of expert next states with non-expert futures, using italicized font, dark blue color (#1a365d), placed near the relevant module.",
+          "reasoning": "This is a simple text annotation, suitable for rendering with native PowerPoint text formatting."
+        }
+      ],
+      "chunk_style_hints": {
+        "dominant_color": "#4A90D9",
+        "visual_weight": "medium",
+        "style_notes": "Clean scientific illustration style consistent with academic papers"
+      }
+    },
+    {
+      "chunk_id": "c5",
+      "nodes": [
+        {
+          "node_id": "n19",
+          "render_method": "vlm",
+          "vlm_prompt": "A branching node labeled 'Dual Branches: IWM & SR' showing a split into two core methods. The node should visually represent a decision point with two distinct paths diverging from a central point. Use a clean scientific illustration style with clear labels for each branch, white background, suitable for academic paper figures.",
+          "reasoning": "The node represents a conceptual diagram with a branching structure, which benefits from a visual metaphor that is best rendered using AI-generated imagery."
+        },
+        {
+          "node_id": "n20",
+          "render_method": "pptx",
+          "pptx_desc": "A simple connector arrow pointing from the branching node to the IWM branch, labeled 'D_rollout triplets'. Use a straight arrow shape with a medium thickness, dark blue color (#1a365d), and a text box with 12pt font for the label.",
+          "reasoning": "This is a simple connector arrow with a label, which can be effectively rendered using native PowerPoint shapes and text."
+        },
+        {
+          "node_id": "n21",
+          "render_method": "pptx",
+          "pptx_desc": "A simple connector arrow pointing from the branching node to the SR branch, labeled 'D_rollout and expert next states'. Use a straight arrow shape with a medium thickness, dark blue color (#1a365d), and a text box with 12pt font for the label.",
+          "reasoning": "This is a simple connector arrow with a label, which can be effectively rendered using native PowerPoint shapes and text."
+        }
+      ],
+      "chunk_style_hints": {
+        "dominant_color": "#4A90D9",
+        "visual_weight": "medium",
+        "style_notes": "Clean scientific illustration style consistent with academic papers"
+      }
+    },
+    {
+      "chunk_id": "c6",
+      "nodes": [
+        {
+          "node_id": "n22",
+          "render_method": "vlm",
+          "vlm_prompt": "A detailed illustration of a main module box labeled 'Implicit World Modeling (IWM)', representing branch A of a scientific framework. The box should have a clear label and be visually distinct, with input and output arrows indicating data flow. The style should be a clean scientific illustration with a white background, suitable for academic presentations.",
+          "reasoning": "The node represents a complex module with internal structure and data flow, which benefits from a detailed visual representation."
+        },
+        {
+          "node_id": "n23",
+          "render_method": "vlm",
+          "vlm_prompt": "An illustration showing an input node where (s_i, a_i^j) from D_rollout are fed as inputs into a policy for prediction. The design should include arrows indicating input flow, with a clean and minimalist style, white background, suitable for scientific diagrams.",
+          "reasoning": "The node describes a data flow process, which is best represented with a visual diagram to show the input connections."
+        },
+        {
+          "node_id": "n24",
+          "render_method": "vlm",
+          "vlm_prompt": "An illustration of an input/target node showing future states s_i^j from D_rollout used as supervision targets. The design should include visual elements indicating target data flow, with a clean scientific style and white background.",
+          "reasoning": "The node involves a conceptual representation of data flow and supervision targets, which is best visualized with a generated image."
+        },
+        {
+          "node_id": "n25",
+          "render_method": "vlm",
+          "vlm_prompt": "A detailed illustration of an LLM policy box labeled 'Policy π_θ' within the IWM branch, performing future state prediction. The design should include visual elements indicating prediction processes, with a clean and professional style, white background.",
+          "reasoning": "The node represents a complex policy module with prediction functionality, which benefits from a detailed visual representation."
+        },
+        {
+          "node_id": "n26",
+          "render_method": "pptx",
+          "pptx_desc": "Text box with formula-style text: 'Predict s_i^j given (s_i, a_i^j): (s_i, a_i^j) → π_θ → ŝ_i^j', using a monospaced font, 12pt size, black color, left-aligned.",
+          "reasoning": "This is a simple formula-style text that can be effectively rendered with native text formatting."
+        },
+        {
+          "node_id": "n27",
+          "render_method": "pptx",
+          "pptx_desc": "Text box with annotation text: 'L_IWM = -log p_θ(s_i^j | s_i, a_i^j); no rewards, only future states used; LLM learns an implicit dynamics model.', using a sans-serif font, 10pt size, dark gray color, left-aligned.",
+          "reasoning": "This is a simple annotation text that can be effectively rendered with native text formatting."
+        }
+      ],
+      "chunk_style_hints": {
+        "dominant_color": "#4A90D9",
+        "visual_weight": "medium",
+        "style_notes": "Clean scientific illustration style consistent with academic papers"
+      }
+    },
+    {
+      "chunk_id": "c7",
+      "nodes": [
+        {
+          "node_id": "n28",
+          "render_method": "vlm",
+          "vlm_prompt": "A conceptual diagram of a module labeled 'Self-Reflection (SR)' representing branch B of a framework. The module should have a clear label and be visually distinct, with a clean scientific illustration style, white background, and a focus on clarity and academic presentation.",
+          "reasoning": "The node represents a main module with a specific label and conceptual significance, which benefits from a visually distinct and clear representation."
+        },
+        {
+          "node_id": "n29",
+          "render_method": "vlm",
+          "vlm_prompt": "A diagram showing an input node for expert path data, labeled with (s_i, a_i, s_{i+1}), representing data obtained from D_expert and environment interaction. The design should include arrows and labels, with a clean scientific illustration style and a white background.",
+          "reasoning": "The node involves a structured representation of data flow, which is best captured through a generated diagram."
+        },
+        {
+          "node_id": "n30",
+          "render_method": "vlm",
+          "vlm_prompt": "A diagram showing an input node for non-expert path data, labeled with (s_i, a_i^j, s_i^j), representing data from the rollout dataset D_rollout. The design should include arrows and labels, with a clean scientific illustration style and a white background.",
+          "reasoning": "Similar to n29, this node involves structured data representation, which is best visualized through a generated diagram."
+        },
+        {
+          "node_id": "n31",
+          "render_method": "vlm",
+          "vlm_prompt": "A comparison node visualizing the contrast between expert future state s_{i+1} and non-expert futures s_i^j for the same state s_i. The design should include a clear comparison layout, with labels and arrows, in a clean scientific illustration style on a white background.",
+          "reasoning": "The node involves a comparison visualization, which benefits from a clear and structured diagrammatic representation."
+        },
+        {
+          "node_id": "n32",
+          "render_method": "vlm",
+          "vlm_prompt": "A module diagram labeled 'LLM generates explanation c_i^j', showing the process of taking comparison context and producing natural language reflections. The design should include a representation of the LLM and the explanation generation process, with a clean scientific illustration style and a white background.",
+          "reasoning": "The node represents a complex process involving an LLM, which is best visualized through a detailed and clear diagram."
+        },
+        {
+          "node_id": "n33",
+          "render_method": "vlm",
+          "vlm_prompt": "A dataset box labeled 'Reflection Dataset D_refl = {(s_i, a_i^j, c_i^j)}', showing the collection of states, non-expert actions, and generated explanations. The design should include a clear label and a structured layout, with a clean scientific illustration style and a white background.",
+          "reasoning": "The node represents a dataset with specific components, which benefits from a structured and clear visual representation."
+        },
+        {
+          "node_id": "n34",
+          "render_method": "vlm",
+          "vlm_prompt": "An annotation showing an example explanation bubble: 'c_i^j: Taking a_i leads to safer or more goal-directed outcomes than a_i^j because ...'. The design should include a speech bubble or callout style, with a clean scientific illustration style and a white background.",
+          "reasoning": "The node involves a visual element (explanation bubble) that is best represented through a generated image."
+        },
+        {
+          "node_id": "n35",
+          "render_method": "pptx",
+          "pptx_desc": "Text box with left-aligned text, 12pt font, black color, describing the joint training of the LLM with D_expert and D_refl.",
+          "reasoning": "This is a simple text annotation that can be effectively rendered with native text formatting."
+        }
+      ],
+      "chunk_style_hints": {
+        "dominant_color": "#4A90D9",
+        "visual_weight": "medium",
+        "style_notes": "Clean scientific illustration style consistent with academic papers"
+      }
+    },
+    {
+      "chunk_id": "c8",
+      "nodes": [
+        {
+          "node_id": "n36",
+          "render_method": "vlm",
+          "vlm_prompt": "An aggregation module labeled 'Policy Training & Update under Early Experience', visually combining signals from two branches labeled 'IWM' and 'SR' to update the policy π_θ. The module should depict a conceptual aggregation of world-model-informed loss and expert imitation plus explanation loss into a joint objective. Style should be a clean scientific illustration with a white background, suitable for academic paper figures.",
+          "reasoning": "The node describes a complex aggregation module with multiple components and labels, which benefits from a detailed visual representation that can be best achieved through AI-generated imagery."
+        },
+        {
+          "node_id": "n37",
+          "render_method": "pptx",
+          "pptx_desc": "Arrow with annotation text 'world-model-informed loss / NLL on future states', using a simple straight arrow shape with a label in italic 12pt font, dark gray color (#333333).",
+          "reasoning": "This is a simple annotation with text that can be effectively rendered using native PowerPoint shapes and text formatting."
+        },
+        {
+          "node_id": "n38",
+          "render_method": "pptx",
+          "pptx_desc": "Arrow with annotation text 'expert imitation + explanation prediction loss', using a simple straight arrow shape with a label in italic 12pt font, dark gray color (#333333).",
+          "reasoning": "This is a simple annotation with text that can be effectively rendered using native PowerPoint shapes and text formatting."
+        },
+        {
+          "node_id": "n39",
+          "render_method": "pptx",
+          "pptx_desc": "Text block summarizing the joint objective, with text 'L_total = L_IWM + λ · L_SR' and a statement about Early Experience bridging IL and RL. Use a 14pt font, left-aligned, dark blue color (#1a365d).",
+          "reasoning": "This node is primarily text-based, summarizing a formula and a statement, which can be effectively rendered using native PowerPoint text formatting."
+        }
+      ],
+      "chunk_style_hints": {
+        "dominant_color": "#4A90D9",
+        "visual_weight": "medium",
+        "style_notes": "Clean scientific illustration style consistent with academic papers"
+      }
+    },
+    {
+      "chunk_id": "c9",
+      "nodes": [
+        {
+          "node_id": "n40",
+          "render_method": "vlm",
+          "vlm_prompt": "A conceptual mini-diagram illustrating the relationship between IL (Imitation Learning) and RL (Reinforcement Learning) with a central label 'Early Experience'. The left side is labeled 'IL (Expert Supervision)', the right side is labeled 'RL (Environment Interaction / Reward)', and the center is labeled 'Early Experience'. The diagram should visually represent the bridging concept between IL and RL, using a clean scientific illustration style with a white background.",
+          "reasoning": "The node describes a conceptual mini-diagram with labeled sections, which benefits from a visual representation to effectively convey the bridging concept between IL and RL."
+        },
+        {
+          "node_id": "n41",
+          "render_method": "pptx",
+          "pptx_desc": "Text box with left-aligned text, 12pt font size, black color (#000000), describing the use of environment rollouts in Early Experience without reward signals.",
+          "reasoning": "This is a simple annotation text that can be effectively rendered using native text formatting in PowerPoint."
+        },
+        {
+          "node_id": "n42",
+          "render_method": "pptx",
+          "pptx_desc": "Text box with left-aligned text, 12pt font size, black color (#000000), explaining the reliance on expert demonstrations and explanations in Early Experience, bridging IL and RL.",
+          "reasoning": "This is a simple annotation text that can be effectively rendered using native text formatting in PowerPoint."
+        }
+      ],
+      "chunk_style_hints": {
+        "dominant_color": "#4A90D9",
+        "visual_weight": "medium",
+        "style_notes": "Clean scientific illustration style consistent with academic papers"
+      }
+    }
+  ],
+  "global_style": {
+    "theme": "NeurIPS-style clean diagram with light background",
+    "color_palette": [
+      "#4A90D9",
+      "#7B68EE",
+      "#50C878",
+      "#FFB347"
+    ],
+    "font_family": "Arial",
+    "background": "white"
+  }
+}

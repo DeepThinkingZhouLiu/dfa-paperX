@@ -1,0 +1,1273 @@
+{
+  "version": "0.2",
+  "canvas": {
+    "width": 1920,
+    "height": 1080,
+    "unit": "px"
+  },
+  "grid": {
+    "rows": 2,
+    "cols": 3,
+    "margin": {
+      "top": 20,
+      "right": 20,
+      "bottom": 20,
+      "left": 20
+    },
+    "gutter": {
+      "row": 12,
+      "col": 12
+    }
+  },
+  "layout": {
+    "flow": "left-to-right",
+    "algorithm": "dagre"
+  },
+  "chunks": [
+    {
+      "chunk_id": "chunk_0_0",
+      "grid_area": {
+        "row": 0,
+        "col": 0
+      }
+    },
+    {
+      "chunk_id": "chunk_0_1",
+      "grid_area": {
+        "row": 0,
+        "col": 1
+      }
+    },
+    {
+      "chunk_id": "chunk_0_2",
+      "grid_area": {
+        "row": 0,
+        "col": 2
+      }
+    },
+    {
+      "chunk_id": "chunk_1_0",
+      "grid_area": {
+        "row": 1,
+        "col": 0,
+        "colspan": 2
+      }
+    },
+    {
+      "chunk_id": "chunk_1_2",
+      "grid_area": {
+        "row": 1,
+        "col": 2
+      }
+    }
+  ],
+  "groups": [
+    {
+      "group_id": "grp_training",
+      "label": "Training at s^th Stage",
+      "title": "(a) Training at s^{th} Stage",
+      "type": "stage",
+      "chunks": [
+        "chunk_0_0"
+      ],
+      "layout_hint": {
+        "arrangement": "horizontal",
+        "weight": 0.6,
+        "area_hint": 0.33
+      },
+      "description": "CCT 训练核心：包含 FMM 与 KCM 两个子模块生成兼容特征 Z_s^o/Z_s^n，并通过 BCD 与 BAD 两种平衡蒸馏抑制遗忘、提升兼容性；结合 L_new、L_ca、L_er 与权重 α、1-α 得到总损失。"
+    },
+    {
+      "group_id": "grp_transfer",
+      "label": "Transfer at s^th Stage",
+      "title": "(b) Transfer at s^{th} Stage",
+      "type": "stage",
+      "chunks": [
+        "chunk_0_1"
+      ],
+      "layout_hint": {
+        "arrangement": "horizontal",
+        "weight": 0.25,
+        "area_hint": 0.33
+      },
+      "description": "阶段 s 的特征迁移：将 F^{s-1} 与旧图库特征经 CCT 转换为与新模型兼容的 Transferred Feature Set，形成新的 Gallery 特征集合。"
+    },
+    {
+      "group_id": "grp_testing",
+      "label": "Testing at s^th Stage",
+      "title": "(c) Testing at s^{th} Stage",
+      "type": "stage",
+      "chunks": [
+        "chunk_0_2"
+      ],
+      "layout_hint": {
+        "arrangement": "horizontal",
+        "weight": 0.15,
+        "area_hint": 0.34
+      },
+      "description": "阶段 s 的测试：新模型对 Query 提取特征并在当前图库中检索身份，示例输出 ID: 182。"
+    },
+    {
+      "group_id": "grp_strategies",
+      "label": "Re-ID Strategies Comparison",
+      "title": "Re-ID 策略对比",
+      "type": "module",
+      "chunks": [
+        "chunk_1_0"
+      ],
+      "layout_hint": {
+        "arrangement": "vertical",
+        "weight": 0.5,
+        "area_hint": 0.5
+      },
+      "description": "三个场景对比：Feature Replacing、ReID with Re-indexing、ReID without Re-indexing。展示旧图库图像与查询图像在新模型下的处理流程与兼容性差异。"
+    },
+    {
+      "group_id": "grp_privacy",
+      "label": "Data Privacy Scenario",
+      "title": "Data Privacy",
+      "type": "module",
+      "chunks": [
+        "chunk_1_2"
+      ],
+      "layout_hint": {
+        "arrangement": "vertical",
+        "weight": 0.2,
+        "area_hint": 0.2
+      },
+      "description": "数据隐私受限场景：旧图库图像被锁保护，禁止直接复用；仅利用已存在的旧图库特征与新模型对查询特征进行匹配，体现隐私约束下的 Re-ID。"
+    }
+  ],
+  "nodes": [
+    {
+      "node_id": "node_data_stream",
+      "label": "Data Stream",
+      "type": "data",
+      "group": "grp_training",
+      "role": "input",
+      "description": "数据流入口，指向旧/新数据以参与 CCT 训练阶段。"
+    },
+    {
+      "node_id": "node_old_data",
+      "label": "Old data",
+      "type": "data",
+      "group": "grp_training",
+      "role": "input",
+      "description": "历史阶段采集的数据样本，用于保持跨阶段特征兼容与避免遗忘。"
+    },
+    {
+      "node_id": "node_new_data",
+      "label": "New data",
+      "type": "data",
+      "group": "grp_training",
+      "role": "input",
+      "description": "当前阶段新增的数据样本，用于学习新身份与新分布。"
+    },
+    {
+      "node_id": "node_old_model",
+      "label": "Old Model",
+      "type": "model",
+      "group": "grp_training",
+      "role": "reference",
+      "description": "上一阶段的模型，用作知识蒸馏与兼容参考来源。"
+    },
+    {
+      "node_id": "node_new_model",
+      "label": "New Model",
+      "type": "model",
+      "group": "grp_training",
+      "role": "trainable",
+      "description": "当前阶段正在训练的新模型骨干/特征提取器。"
+    },
+    {
+      "node_id": "node_fmm",
+      "label": "Forward Mapping Module (FMM)",
+      "type": "module",
+      "group": "grp_training",
+      "role": "process",
+      "description": "前向映射模块：将旧/新数据特征映射到兼容表征空间，内部含 BN+PReLU x4、MLP 与 Softmax。"
+    },
+    {
+      "node_id": "node_fmm_bn_prelu",
+      "label": "BN + PReLU x4",
+      "type": "layer",
+      "group": "grp_training",
+      "role": "process",
+      "description": "四组归一化与激活堆叠，用于稳定与非线性变换。"
+    },
+    {
+      "node_id": "node_fmm_mlp",
+      "label": "MLP",
+      "type": "layer",
+      "group": "grp_training",
+      "role": "process",
+      "description": "多层感知机，将映射后的特征进一步投影。"
+    },
+    {
+      "node_id": "node_fmm_softmax",
+      "label": "Softmax",
+      "type": "op",
+      "group": "grp_training",
+      "role": "process",
+      "description": "对 FMM 输出进行归一化，以便与 KCM 输出的兼容特征对齐。"
+    },
+    {
+      "node_id": "node_kcm",
+      "label": "Knowledge Capturing Module (KCM)",
+      "type": "module",
+      "group": "grp_training",
+      "role": "process",
+      "description": "知识捕获模块：融合 Old/New Model 的输出，通过向量库与子网络挖掘可转移知识。"
+    },
+    {
+      "node_id": "node_kcm_fc",
+      "label": "FC",
+      "type": "layer",
+      "group": "grp_training",
+      "role": "process",
+      "description": "KCM 中的全连接层，用于特征变换与压缩。"
+    },
+    {
+      "node_id": "node_kcm_subnet",
+      "label": "Subnet",
+      "type": "module",
+      "group": "grp_training",
+      "role": "process",
+      "description": "KCM 子网络，学习从旧/新模型输出到兼容空间的非线性映射。"
+    },
+    {
+      "node_id": "node_kcm_ki",
+      "label": "k_i vectors",
+      "type": "data",
+      "group": "grp_training",
+      "role": "parameter",
+      "description": "知识向量集合 k_i，刻画旧模型的结构化知识。"
+    },
+    {
+      "node_id": "node_kcm_ui",
+      "label": "u_i vectors",
+      "type": "data",
+      "group": "grp_training",
+      "role": "parameter",
+      "description": "知识向量集合 u_i，刻画新模型的结构化知识。"
+    },
+    {
+      "node_id": "node_kcm_sigma",
+      "label": "Σ",
+      "type": "op",
+      "group": "grp_training",
+      "role": "process",
+      "description": "求和操作，聚合多路知识分量。"
+    },
+    {
+      "node_id": "node_kcm_multiply",
+      "label": "Multiply",
+      "type": "op",
+      "group": "grp_training",
+      "role": "process",
+      "description": "乘法门控/加权操作，融合不同来源的知识分量。"
+    },
+    {
+      "node_id": "node_zso",
+      "label": "Z_s^o",
+      "type": "data",
+      "group": "grp_training",
+      "role": "feature",
+      "description": "阶段 s 的旧域兼容特征。"
+    },
+    {
+      "node_id": "node_zsn",
+      "label": "Z_s^n",
+      "type": "data",
+      "group": "grp_training",
+      "role": "feature",
+      "description": "阶段 s 的新域兼容特征。"
+    },
+    {
+      "node_id": "node_bcd",
+      "label": "Balanced Compatible Distillation (BCD)",
+      "type": "module",
+      "group": "grp_training",
+      "role": "loss_module",
+      "description": "平衡兼容蒸馏：对 Z_s^o/Z_s^n 关系建模，约束同人/异人相似性，得到兼容性损失 L_ca。"
+    },
+    {
+      "node_id": "node_mo",
+      "label": "M^o",
+      "type": "data",
+      "group": "grp_training",
+      "role": "metric",
+      "description": "旧域特征相似度矩阵。"
+    },
+    {
+      "node_id": "node_mn",
+      "label": "M^n",
+      "type": "data",
+      "group": "grp_training",
+      "role": "metric",
+      "description": "新域特征相似度矩阵。"
+    },
+    {
+      "node_id": "node_sim_same",
+      "label": "Similarity of Same Person",
+      "type": "metric",
+      "group": "grp_training",
+      "role": "reference",
+      "description": "同一身份样本的相似性约束。"
+    },
+    {
+      "node_id": "node_sim_diff",
+      "label": "Similarity of Different Person",
+      "type": "metric",
+      "group": "grp_training",
+      "role": "reference",
+      "description": "不同身份样本的相似性区分。"
+    },
+    {
+      "node_id": "node_bad",
+      "label": "Balanced Anti-forgetting Distillation (BAD)",
+      "type": "module",
+      "group": "grp_training",
+      "role": "loss_module",
+      "description": "平衡抗遗忘蒸馏：利用旧/新分类器对齐输出分布，抑制对旧知识的遗忘，得到 L_er。"
+    },
+    {
+      "node_id": "node_old_cls",
+      "label": "Old Classifier",
+      "type": "layer",
+      "group": "grp_training",
+      "role": "reference",
+      "description": "旧模型的分类头，用作蒸馏教师。"
+    },
+    {
+      "node_id": "node_new_cls",
+      "label": "New Classifier",
+      "type": "layer",
+      "group": "grp_training",
+      "role": "trainable",
+      "description": "新模型的分类头，用作学生进行蒸馏学习。"
+    },
+    {
+      "node_id": "node_L_ca",
+      "label": "L_ca",
+      "type": "loss",
+      "group": "grp_training",
+      "role": "output",
+      "description": "兼容性蒸馏损失，来自 BCD。"
+    },
+    {
+      "node_id": "node_L_er",
+      "label": "L_er",
+      "type": "loss",
+      "group": "grp_training",
+      "role": "output",
+      "description": "抗遗忘蒸馏损失，来自 BAD。"
+    },
+    {
+      "node_id": "node_L_new",
+      "label": "L_new",
+      "type": "loss",
+      "group": "grp_training",
+      "role": "output",
+      "description": "新数据监督损失，用于学习新身份。"
+    },
+    {
+      "node_id": "node_alpha",
+      "label": "α",
+      "type": "param",
+      "group": "grp_training",
+      "role": "weight",
+      "description": "损失平衡因子，用于加权兼容性项。"
+    },
+    {
+      "node_id": "node_one_minus_alpha",
+      "label": "1-α",
+      "type": "param",
+      "group": "grp_training",
+      "role": "weight",
+      "description": "损失平衡因子，抑制遗忘项的权重。"
+    },
+    {
+      "node_id": "node_mult_ca",
+      "label": "Multiply (α·L_ca)",
+      "type": "op",
+      "group": "grp_training",
+      "role": "process",
+      "description": "对兼容性损失进行 α 加权。"
+    },
+    {
+      "node_id": "node_mult_er",
+      "label": "Multiply ((1-α)·L_er)",
+      "type": "op",
+      "group": "grp_training",
+      "role": "process",
+      "description": "对抗遗忘损失进行 (1-α) 加权。"
+    },
+    {
+      "node_id": "node_sum_loss",
+      "label": "Sum",
+      "type": "op",
+      "group": "grp_training",
+      "role": "process",
+      "description": "对各项损失进行求和组合。"
+    },
+    {
+      "node_id": "node_total_loss",
+      "label": "Total Loss",
+      "type": "loss",
+      "group": "grp_training",
+      "role": "output",
+      "description": "训练阶段的最终优化目标。"
+    },
+    {
+      "node_id": "node_prev_feature",
+      "label": "F^{s-1}",
+      "type": "data",
+      "group": "grp_transfer",
+      "role": "input",
+      "description": "上一阶段生成的特征表示。"
+    },
+    {
+      "node_id": "node_old_gallery_set",
+      "label": "Old Gallery Feature Set",
+      "type": "data",
+      "group": "grp_transfer",
+      "role": "input",
+      "description": "历史图库的特征集合，需要被迁移以保持兼容。"
+    },
+    {
+      "node_id": "node_cct_transfer",
+      "label": "CCT at s^{th} Stage",
+      "type": "module",
+      "group": "grp_transfer",
+      "role": "process",
+      "description": "在阶段 s 应用 CCT，将旧阶段/旧图库特征映射为与新模型兼容的表征。"
+    },
+    {
+      "node_id": "node_transferred_set",
+      "label": "Transferred Feature Set",
+      "type": "data",
+      "group": "grp_transfer",
+      "role": "output",
+      "description": "通过 CCT 变换后的兼容特征集合。"
+    },
+    {
+      "node_id": "node_new_gallery_set",
+      "label": "New Gallery Feature Set",
+      "type": "data",
+      "group": "grp_transfer",
+      "role": "output",
+      "description": "更新后的图库特征集合，供阶段 s 测试使用。"
+    },
+    {
+      "node_id": "node_fs",
+      "label": "F^s",
+      "type": "data",
+      "group": "grp_testing",
+      "role": "input",
+      "description": "阶段 s 的当前特征空间/图库特征。"
+    },
+    {
+      "node_id": "node_query",
+      "label": "Query",
+      "type": "data",
+      "group": "grp_testing",
+      "role": "input",
+      "description": "查询行人图像。"
+    },
+    {
+      "node_id": "node_new_model_test",
+      "label": "New Model",
+      "type": "model",
+      "group": "grp_testing",
+      "role": "inference",
+      "description": "阶段 s 的新模型，用于测试期特征提取。"
+    },
+    {
+      "node_id": "node_extracted_features",
+      "label": "Extracted Features",
+      "type": "data",
+      "group": "grp_testing",
+      "role": "output",
+      "description": "由新模型提取的查询特征。"
+    },
+    {
+      "node_id": "node_id182",
+      "label": "ID: 182",
+      "type": "label",
+      "group": "grp_testing",
+      "role": "output",
+      "description": "示例检索结果身份标签。"
+    },
+    {
+      "node_id": "node_old_gallery_images",
+      "label": "Old Gallery Images",
+      "type": "data",
+      "group": "grp_strategies",
+      "role": "input",
+      "description": "历史图库原始图像集合。"
+    },
+    {
+      "node_id": "node_query_images",
+      "label": "Query Images",
+      "type": "data",
+      "group": "grp_strategies",
+      "role": "input",
+      "description": "用于检索的查询图像集合。"
+    },
+    {
+      "node_id": "node_fr_old_gallery_features",
+      "label": "Old Gallery Features",
+      "type": "data",
+      "group": "grp_strategies",
+      "role": "reference",
+      "description": "Feature Replacing 策略中保持不变的旧图库特征。"
+    },
+    {
+      "node_id": "node_fr_new_model",
+      "label": "New Model",
+      "type": "model",
+      "group": "grp_strategies",
+      "role": "inference",
+      "description": "用于 Feature Replacing 策略的查询特征提取。"
+    },
+    {
+      "node_id": "node_fr_query_features",
+      "label": "Query Features",
+      "type": "data",
+      "group": "grp_strategies",
+      "role": "output",
+      "description": "由新模型提取的查询特征（Feature Replacing）。"
+    },
+    {
+      "node_id": "node_fr_note",
+      "label": "Compatibility Issue",
+      "type": "note",
+      "group": "grp_strategies",
+      "role": "warning",
+      "description": "新旧特征空间不兼容的风险提示（Feature Replacing）。"
+    },
+    {
+      "node_id": "node_reidx_module",
+      "label": "Re-indexing",
+      "type": "module",
+      "group": "grp_strategies",
+      "role": "process",
+      "description": "对旧图库图像进行重新索引/重提特征以适配新模型。"
+    },
+    {
+      "node_id": "node_reidx_gallery_features",
+      "label": "Re-indexed Gallery Features",
+      "type": "data",
+      "group": "grp_strategies",
+      "role": "output",
+      "description": "经重新索引后的图库特征，与新模型兼容。"
+    },
+    {
+      "node_id": "node_reidx_new_model",
+      "label": "New Model",
+      "type": "model",
+      "group": "grp_strategies",
+      "role": "inference",
+      "description": "用于 Re-indexing 策略中提取查询特征。"
+    },
+    {
+      "node_id": "node_reidx_query_features",
+      "label": "Query Features",
+      "type": "data",
+      "group": "grp_strategies",
+      "role": "output",
+      "description": "查询图像在 Re-indexing 策略下的特征表示。"
+    },
+    {
+      "node_id": "node_wo_old_gallery_features",
+      "label": "Old Gallery Features",
+      "type": "data",
+      "group": "grp_strategies",
+      "role": "reference",
+      "description": "未重新索引情况下直接使用的旧图库特征。"
+    },
+    {
+      "node_id": "node_wo_new_model",
+      "label": "New Model",
+      "type": "model",
+      "group": "grp_strategies",
+      "role": "inference",
+      "description": "用于 w/o Re-indexing 策略的查询特征提取。"
+    },
+    {
+      "node_id": "node_wo_query_features",
+      "label": "Query Features",
+      "type": "data",
+      "group": "grp_strategies",
+      "role": "output",
+      "description": "未重新索引策略下的查询特征。"
+    },
+    {
+      "node_id": "node_wo_note",
+      "label": "Compatibility Issue",
+      "type": "note",
+      "group": "grp_strategies",
+      "role": "warning",
+      "description": "新旧特征空间不兼容的风险提示（w/o Re-indexing）。"
+    },
+    {
+      "node_id": "node_privacy_lock",
+      "label": "Lock",
+      "type": "icon",
+      "group": "grp_privacy",
+      "role": "constraint",
+      "description": "红色锁图标，表示数据隐私保护与访问限制。"
+    },
+    {
+      "node_id": "node_dp_old_gallery_images_locked",
+      "label": "Old Gallery Images (Locked)",
+      "type": "data",
+      "group": "grp_privacy",
+      "role": "input",
+      "description": "受隐私保护的旧图库图像，禁止直接使用。"
+    },
+    {
+      "node_id": "node_dp_new_model",
+      "label": "New Model",
+      "type": "model",
+      "group": "grp_privacy",
+      "role": "inference",
+      "description": "在隐私约束下对查询图像提取特征。"
+    },
+    {
+      "node_id": "node_dp_query_images",
+      "label": "Query Images",
+      "type": "data",
+      "group": "grp_privacy",
+      "role": "input",
+      "description": "隐私场景下的查询图像输入。"
+    },
+    {
+      "node_id": "node_dp_query_features",
+      "label": "Query Features",
+      "type": "data",
+      "group": "grp_privacy",
+      "role": "output",
+      "description": "由新模型提取的查询特征（隐私受限）。"
+    },
+    {
+      "node_id": "node_dp_old_gallery_features",
+      "label": "Old Gallery Features",
+      "type": "data",
+      "group": "grp_privacy",
+      "role": "reference",
+      "description": "已存在的旧图库特征（来源受限），可用于检索但不可反向追溯到原始图像。"
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "e_ds_old",
+      "source": "node_data_stream",
+      "target": "node_old_data",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "数据流指向旧数据。"
+    },
+    {
+      "edge_id": "e_ds_new",
+      "source": "node_data_stream",
+      "target": "node_new_data",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "数据流指向新数据。"
+    },
+    {
+      "edge_id": "e_olddata_oldmodel",
+      "source": "node_old_data",
+      "target": "node_old_model",
+      "type": "data",
+      "route_hint": "orthogonal",
+      "direction_hint": "right",
+      "description": "旧数据输入旧模型得到旧域特征。"
+    },
+    {
+      "edge_id": "e_newdata_newmodel",
+      "source": "node_new_data",
+      "target": "node_new_model",
+      "type": "data",
+      "route_hint": "orthogonal",
+      "direction_hint": "right",
+      "description": "新数据输入新模型得到新域特征。"
+    },
+    {
+      "edge_id": "e_olddata_fmm",
+      "source": "node_old_data",
+      "target": "node_fmm",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "旧数据特征送入 FMM 进行前向映射。"
+    },
+    {
+      "edge_id": "e_newdata_fmm",
+      "source": "node_new_data",
+      "target": "node_fmm",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "新数据特征送入 FMM 进行前向映射。"
+    },
+    {
+      "edge_id": "e_fmm_stack",
+      "source": "node_fmm",
+      "target": "node_fmm_bn_prelu",
+      "type": "dependency",
+      "route_hint": "straight",
+      "description": "FMM 内部的 BN+PReLU 堆叠。"
+    },
+    {
+      "edge_id": "e_fmm_mlp",
+      "source": "node_fmm_bn_prelu",
+      "target": "node_fmm_mlp",
+      "type": "dependency",
+      "route_hint": "straight",
+      "description": "堆叠后进入 MLP。"
+    },
+    {
+      "edge_id": "e_fmm_softmax",
+      "source": "node_fmm_mlp",
+      "target": "node_fmm_softmax",
+      "type": "dependency",
+      "route_hint": "straight",
+      "description": "MLP 输出经 Softmax 归一化。"
+    },
+    {
+      "edge_id": "e_fmm_zso",
+      "source": "node_fmm_softmax",
+      "target": "node_zso",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "FMM 生成旧域兼容特征 Z_s^o。"
+    },
+    {
+      "edge_id": "e_fmm_zsn",
+      "source": "node_fmm_softmax",
+      "target": "node_zsn",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "FMM 生成新域兼容特征 Z_s^n。"
+    },
+    {
+      "edge_id": "e_oldmodel_kcm",
+      "source": "node_old_model",
+      "target": "node_kcm",
+      "type": "data",
+      "route_hint": "orthogonal",
+      "direction_hint": "right",
+      "description": "旧模型输出作为 KCM 的一支输入。"
+    },
+    {
+      "edge_id": "e_newmodel_kcm",
+      "source": "node_new_model",
+      "target": "node_kcm",
+      "type": "data",
+      "route_hint": "orthogonal",
+      "direction_hint": "right",
+      "description": "新模型输出作为 KCM 的另一支输入。"
+    },
+    {
+      "edge_id": "e_kcm_fc",
+      "source": "node_kcm",
+      "target": "node_kcm_fc",
+      "type": "dependency",
+      "route_hint": "straight",
+      "description": "KCM 内部先经全连接层。"
+    },
+    {
+      "edge_id": "e_kcm_subnet",
+      "source": "node_kcm_fc",
+      "target": "node_kcm_subnet",
+      "type": "dependency",
+      "route_hint": "straight",
+      "description": "KCM 子网络进行非线性变换。"
+    },
+    {
+      "edge_id": "e_kcm_vectors",
+      "source": "node_kcm_ki",
+      "target": "node_kcm_sigma",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "k_i 向量输入到求和模块。"
+    },
+    {
+      "edge_id": "e_kcm_vectors2",
+      "source": "node_kcm_ui",
+      "target": "node_kcm_sigma",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "u_i 向量输入到求和模块。"
+    },
+    {
+      "edge_id": "e_kcm_sigma_mul",
+      "source": "node_kcm_sigma",
+      "target": "node_kcm_multiply",
+      "type": "dependency",
+      "route_hint": "straight",
+      "description": "聚合后的分量进入乘法门控。"
+    },
+    {
+      "edge_id": "e_kcm_to_zso",
+      "source": "node_kcm_multiply",
+      "target": "node_zso",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "KCM 输出旧域兼容特征 Z_s^o。"
+    },
+    {
+      "edge_id": "e_kcm_to_zsn",
+      "source": "node_kcm_multiply",
+      "target": "node_zsn",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "KCM 输出新域兼容特征 Z_s^n。"
+    },
+    {
+      "edge_id": "e_bcd_in_o",
+      "source": "node_zso",
+      "target": "node_bcd",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "Z_s^o 送入 BCD。"
+    },
+    {
+      "edge_id": "e_bcd_in_n",
+      "source": "node_zsn",
+      "target": "node_bcd",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "Z_s^n 送入 BCD。"
+    },
+    {
+      "edge_id": "e_bcd_mo",
+      "source": "node_bcd",
+      "target": "node_mo",
+      "type": "dependency",
+      "route_hint": "straight",
+      "description": "计算旧域相似度矩阵 M^o。"
+    },
+    {
+      "edge_id": "e_bcd_mn",
+      "source": "node_bcd",
+      "target": "node_mn",
+      "type": "dependency",
+      "route_hint": "straight",
+      "description": "计算新域相似度矩阵 M^n。"
+    },
+    {
+      "edge_id": "e_bcd_same",
+      "source": "node_mo",
+      "target": "node_sim_same",
+      "type": "dependency",
+      "route_hint": "orthogonal",
+      "direction_hint": "down",
+      "description": "基于 M^o 的同人相似性参考。"
+    },
+    {
+      "edge_id": "e_bcd_diff",
+      "source": "node_mn",
+      "target": "node_sim_diff",
+      "type": "dependency",
+      "route_hint": "orthogonal",
+      "direction_hint": "down",
+      "description": "基于 M^n 的异人相似性参考。"
+    },
+    {
+      "edge_id": "e_bcd_lca",
+      "source": "node_bcd",
+      "target": "node_L_ca",
+      "type": "loss",
+      "route_hint": "straight",
+      "description": "BCD 输出兼容性损失 L_ca。"
+    },
+    {
+      "edge_id": "e_bad_in_o",
+      "source": "node_zso",
+      "target": "node_old_cls",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "旧域兼容特征输送至旧分类器。"
+    },
+    {
+      "edge_id": "e_bad_in_n",
+      "source": "node_zsn",
+      "target": "node_new_cls",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "新域兼容特征输送至新分类器。"
+    },
+    {
+      "edge_id": "e_bad_cls_bad",
+      "source": "node_old_cls",
+      "target": "node_bad",
+      "type": "dependency",
+      "route_hint": "straight",
+      "description": "旧分类器输出参与 BAD 蒸馏。"
+    },
+    {
+      "edge_id": "e_bad_cls2_bad",
+      "source": "node_new_cls",
+      "target": "node_bad",
+      "type": "dependency",
+      "route_hint": "straight",
+      "description": "新分类器输出参与 BAD 蒸馏。"
+    },
+    {
+      "edge_id": "e_bad_ler",
+      "source": "node_bad",
+      "target": "node_L_er",
+      "type": "loss",
+      "route_hint": "straight",
+      "description": "BAD 输出抗遗忘损失 L_er。"
+    },
+    {
+      "edge_id": "e_new_sup",
+      "source": "node_new_model",
+      "target": "node_L_new",
+      "type": "dependency",
+      "route_hint": "orthogonal",
+      "direction_hint": "down",
+      "description": "新模型在新数据上产生监督损失。"
+    },
+    {
+      "edge_id": "e_newdata_sup",
+      "source": "node_new_data",
+      "target": "node_L_new",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "新数据作为监督信号的来源之一。"
+    },
+    {
+      "edge_id": "e_alpha_lca",
+      "source": "node_alpha",
+      "target": "node_mult_ca",
+      "type": "control",
+      "route_hint": "straight",
+      "description": "α 作为权重输入兼容性损失的加权模块。"
+    },
+    {
+      "edge_id": "e_lca_mult",
+      "source": "node_L_ca",
+      "target": "node_mult_ca",
+      "type": "loss",
+      "route_hint": "straight",
+      "description": "L_ca 输入加权模块。"
+    },
+    {
+      "edge_id": "e_1ma_ler",
+      "source": "node_one_minus_alpha",
+      "target": "node_mult_er",
+      "type": "control",
+      "route_hint": "straight",
+      "description": "1-α 作为权重输入抗遗忘损失的加权模块。"
+    },
+    {
+      "edge_id": "e_ler_mult",
+      "source": "node_L_er",
+      "target": "node_mult_er",
+      "type": "loss",
+      "route_hint": "straight",
+      "description": "L_er 输入加权模块。"
+    },
+    {
+      "edge_id": "e_multca_sum",
+      "source": "node_mult_ca",
+      "target": "node_sum_loss",
+      "type": "loss",
+      "route_hint": "straight",
+      "description": "加权后的兼容性损失汇入求和。"
+    },
+    {
+      "edge_id": "e_multer_sum",
+      "source": "node_mult_er",
+      "target": "node_sum_loss",
+      "type": "loss",
+      "route_hint": "straight",
+      "description": "加权后的抗遗忘损失汇入求和。"
+    },
+    {
+      "edge_id": "e_lnew_sum",
+      "source": "node_L_new",
+      "target": "node_sum_loss",
+      "type": "loss",
+      "route_hint": "straight",
+      "description": "新数据监督损失汇入求和。"
+    },
+    {
+      "edge_id": "e_sum_total",
+      "source": "node_sum_loss",
+      "target": "node_total_loss",
+      "type": "loss",
+      "route_hint": "straight",
+      "description": "得到最终训练目标，总损失用于反向传播优化新模型。"
+    },
+    {
+      "edge_id": "e_transfer_in1",
+      "source": "node_prev_feature",
+      "target": "node_cct_transfer",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "上一阶段特征输入 CCT。"
+    },
+    {
+      "edge_id": "e_transfer_in2",
+      "source": "node_old_gallery_set",
+      "target": "node_cct_transfer",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "旧图库特征集合输入 CCT。"
+    },
+    {
+      "edge_id": "e_transfer_out1",
+      "source": "node_cct_transfer",
+      "target": "node_transferred_set",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "CCT 输出迁移后的兼容特征集合。"
+    },
+    {
+      "edge_id": "e_transfer_out2",
+      "source": "node_transferred_set",
+      "target": "node_new_gallery_set",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "构建阶段 s 的新图库特征集合。"
+    },
+    {
+      "edge_id": "e_test_query",
+      "source": "node_query",
+      "target": "node_new_model_test",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "查询图像输入新模型进行特征提取。"
+    },
+    {
+      "edge_id": "e_test_extract",
+      "source": "node_new_model_test",
+      "target": "node_extracted_features",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "输出查询特征。"
+    },
+    {
+      "edge_id": "e_test_match",
+      "source": "node_extracted_features",
+      "target": "node_id182",
+      "type": "dependency",
+      "route_hint": "orthogonal",
+      "direction_hint": "right",
+      "description": "在当前图库中检索，示例结果 ID: 182。"
+    },
+    {
+      "edge_id": "e_test_gallery_ref",
+      "source": "node_fs",
+      "target": "node_new_gallery_set",
+      "type": "data",
+      "route_hint": "orthogonal",
+      "direction_hint": "left",
+      "description": "阶段 s 的图库特征与新图库集合对应。"
+    },
+    {
+      "edge_id": "e_fr_images2features_old",
+      "source": "node_old_gallery_images",
+      "target": "node_fr_old_gallery_features",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "Feature Replacing：旧图库图像对应的旧特征（不变）。"
+    },
+    {
+      "edge_id": "e_fr_query2model",
+      "source": "node_query_images",
+      "target": "node_fr_new_model",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "Feature Replacing：查询图像输入新模型。"
+    },
+    {
+      "edge_id": "e_fr_model2qfeat",
+      "source": "node_fr_new_model",
+      "target": "node_fr_query_features",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "Feature Replacing：生成查询特征。"
+    },
+    {
+      "edge_id": "e_fr_warn",
+      "source": "node_fr_query_features",
+      "target": "node_fr_note",
+      "type": "dependency",
+      "route_hint": "orthogonal",
+      "direction_hint": "down",
+      "description": "提示：查询特征与旧图库特征可能不兼容。"
+    },
+    {
+      "edge_id": "e_reidx_images",
+      "source": "node_old_gallery_images",
+      "target": "node_reidx_module",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "Re-indexing：旧图库图像进行重新索引/重提特征。"
+    },
+    {
+      "edge_id": "e_reidx_out",
+      "source": "node_reidx_module",
+      "target": "node_reidx_gallery_features",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "Re-indexing：得到新模型兼容的图库特征。"
+    },
+    {
+      "edge_id": "e_reidx_query2model",
+      "source": "node_query_images",
+      "target": "node_reidx_new_model",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "Re-indexing：查询图像输入新模型。"
+    },
+    {
+      "edge_id": "e_reidx_model2qfeat",
+      "source": "node_reidx_new_model",
+      "target": "node_reidx_query_features",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "Re-indexing：生成查询特征并与重索引图库匹配。"
+    },
+    {
+      "edge_id": "e_wo_images2features_old",
+      "source": "node_old_gallery_images",
+      "target": "node_wo_old_gallery_features",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "w/o Re-indexing：直接使用旧图库特征。"
+    },
+    {
+      "edge_id": "e_wo_query2model",
+      "source": "node_query_images",
+      "target": "node_wo_new_model",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "w/o Re-indexing：查询图像输入新模型。"
+    },
+    {
+      "edge_id": "e_wo_model2qfeat",
+      "source": "node_wo_new_model",
+      "target": "node_wo_query_features",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "w/o Re-indexing：生成查询特征。"
+    },
+    {
+      "edge_id": "e_wo_warn",
+      "source": "node_wo_query_features",
+      "target": "node_wo_note",
+      "type": "dependency",
+      "route_hint": "orthogonal",
+      "direction_hint": "down",
+      "description": "提示：新旧特征空间不兼容风险。"
+    },
+    {
+      "edge_id": "e_privacy_forbid",
+      "source": "node_dp_old_gallery_images_locked",
+      "target": "node_dp_new_model",
+      "type": "forbidden",
+      "route_hint": "straight",
+      "description": "隐私限制：禁止旧图库图像直接用于新模型训练/特征提取。"
+    },
+    {
+      "edge_id": "e_privacy_lock_bind",
+      "source": "node_privacy_lock",
+      "target": "node_dp_old_gallery_images_locked",
+      "type": "constraint",
+      "route_hint": "straight",
+      "description": "锁定图标约束旧图库图像访问。"
+    },
+    {
+      "edge_id": "e_privacy_query2model",
+      "source": "node_dp_query_images",
+      "target": "node_dp_new_model",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "隐私场景：查询图像可在新模型上提特征。"
+    },
+    {
+      "edge_id": "e_privacy_model2qfeat",
+      "source": "node_dp_new_model",
+      "target": "node_dp_query_features",
+      "type": "data",
+      "route_hint": "straight",
+      "description": "输出查询特征（隐私受限）。"
+    },
+    {
+      "edge_id": "e_privacy_match",
+      "source": "node_dp_query_features",
+      "target": "node_dp_old_gallery_features",
+      "type": "dependency",
+      "route_hint": "orthogonal",
+      "direction_hint": "right",
+      "description": "使用已存在的旧图库特征进行匹配，避免访问原始图像。"
+    }
+  ],
+  "positions": {
+    "groups": [
+      {
+        "group_id": "grp_training",
+        "bbox": {
+          "left": 40,
+          "top": 40,
+          "width": 580,
+          "height": 460
+        },
+        "chunk_id": "chunk_0_0"
+      },
+      {
+        "group_id": "grp_transfer",
+        "bbox": {
+          "left": 660,
+          "top": 40,
+          "width": 580,
+          "height": 460
+        },
+        "chunk_id": "chunk_0_1"
+      },
+      {
+        "group_id": "grp_testing",
+        "bbox": {
+          "left": 1280,
+          "top": 40,
+          "width": 600,
+          "height": 460
+        },
+        "chunk_id": "chunk_0_2"
+      },
+      {
+        "group_id": "grp_strategies",
+        "bbox": {
+          "left": 40,
+          "top": 540,
+          "width": 1180,
+          "height": 500
+        },
+        "chunk_id": "chunk_1_0"
+      },
+      {
+        "group_id": "grp_privacy",
+        "bbox": {
+          "left": 1240,
+          "top": 540,
+          "width": 640,
+          "height": 500
+        },
+        "chunk_id": "chunk_1_2"
+      }
+    ]
+  },
+  "layout_runtime_meta": {
+    "algorithm": "dagre",
+    "version": "1.0",
+    "timestamp": "2025-11-10T00:00:00Z",
+    "notes": "Auto-placed group bounding boxes; node positions to be solved at render-time."
+  }
+}

@@ -1,0 +1,511 @@
+{
+  "chunks": [
+    {
+      "chunk_id": "c1",
+      "nodes": [
+        {
+          "node_id": "n2",
+          "role": "container",
+          "rel_bbox": {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0
+          },
+          "reasoning": "作为该 chunk 的背景容器框，视觉上包裹标题和概览信息"
+        },
+        {
+          "node_id": "n1",
+          "role": "title",
+          "rel_bbox": {
+            "x": 0.1,
+            "y": 0.1,
+            "w": 0.8,
+            "h": 0.2
+          },
+          "reasoning": "主标题文本，置于顶部居中位置，统领全图内容"
+        },
+        {
+          "node_id": "n3",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.1,
+            "y": 0.4,
+            "w": 0.35,
+            "h": 0.4
+          },
+          "reasoning": "左侧注释，解释 IL 和 RL 的基本定义，为右侧的桥接概念做铺垫"
+        },
+        {
+          "node_id": "n4",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.55,
+            "y": 0.4,
+            "w": 0.35,
+            "h": 0.4
+          },
+          "reasoning": "右侧注释，说明 Early Experience 如何作为桥梁连接 IL 和 RL"
+        }
+      ]
+    },
+    {
+      "chunk_id": "c2",
+      "nodes": [
+        {
+          "node_id": "n5",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.1,
+            "y": 0.05,
+            "w": 0.8,
+            "h": 0.2
+          },
+          "reasoning": "作为该 chunk 的核心模块框，放置在顶部，标示专家数据集 D_expert，作为后续流程的数据源头。"
+        },
+        {
+          "node_id": "n7",
+          "role": "image_placeholder",
+          "rel_bbox": {
+            "x": 0.1,
+            "y": 0.3,
+            "w": 0.5,
+            "h": 0.4
+          },
+          "reasoning": "位于主模块框下方，直观展示专家轨迹的形态（状态-动作序列），辅助理解数据集内容。"
+        },
+        {
+          "node_id": "n6",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.65,
+            "y": 0.3,
+            "w": 0.3,
+            "h": 0.4
+          },
+          "reasoning": "放置在示意图右侧，对图中的符号 s_i 和 a_i 进行具体解释，与图像形成对照。"
+        },
+        {
+          "node_id": "n8",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.1,
+            "y": 0.75,
+            "w": 0.8,
+            "h": 0.2
+          },
+          "reasoning": "位于底部，作为补充说明，强调该数据集在 IL 和 Early Experience 构建中的基础地位。"
+        }
+      ]
+    },
+    {
+      "chunk_id": "c3",
+      "nodes": [
+        {
+          "node_id": "n10",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.02,
+            "y": 0.4,
+            "w": 0.18,
+            "h": 0.2
+          },
+          "reasoning": "作为输入连接器，放置在左侧，表示专家状态 s_i 进入流程的起点。"
+        },
+        {
+          "node_id": "n9",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.25,
+            "y": 0.25,
+            "w": 0.35,
+            "h": 0.5
+          },
+          "reasoning": "核心处理模块 'Initial LLM Policy'，置于中心位置，承接左侧输入并向右产生输出。"
+        },
+        {
+          "node_id": "n11",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.65,
+            "y": 0.2,
+            "w": 0.25,
+            "h": 0.6
+          },
+          "reasoning": "表示采样出的多个非专家动作的发散形状，置于策略模块右侧，高度较大以体现'多样性采样'。"
+        },
+        {
+          "node_id": "n12",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.65,
+            "y": 0.82,
+            "w": 0.3,
+            "h": 0.15
+          },
+          "reasoning": "对采样动作的文本说明，放置在动作发散形状的下方，辅助解释非专家候选的概念。"
+        }
+      ]
+    },
+    {
+      "chunk_id": "c4",
+      "nodes": [
+        {
+          "node_id": "n13",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.1,
+            "y": 0.05,
+            "w": 0.8,
+            "h": 0.45
+          },
+          "reasoning": "作为环境交互的核心容器，置于上方，接收来自上一模块的动作输入"
+        },
+        {
+          "node_id": "n14",
+          "role": "shape",
+          "rel_bbox": {
+            "x": 0.15,
+            "y": 0.15,
+            "w": 0.25,
+            "h": 0.25
+          },
+          "reasoning": "位于环境模块内部左侧，表示专家动作的执行路径与结果产生"
+        },
+        {
+          "node_id": "n15",
+          "role": "shape",
+          "rel_bbox": {
+            "x": 0.5,
+            "y": 0.15,
+            "w": 0.35,
+            "h": 0.25
+          },
+          "reasoning": "位于环境模块内部右侧，表示多个非专家动作的采样执行路径"
+        },
+        {
+          "node_id": "n16",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.15,
+            "y": 0.6,
+            "w": 0.7,
+            "h": 0.25
+          },
+          "reasoning": "位于环境下方，汇总生成的 Rollout 数据集，承接上方的交互结果"
+        },
+        {
+          "node_id": "n17",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.55,
+            "y": 0.88,
+            "w": 0.4,
+            "h": 0.1
+          },
+          "reasoning": "位于数据集右下方，补充说明无奖励监督信号的特性"
+        },
+        {
+          "node_id": "n18",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.05,
+            "y": 0.88,
+            "w": 0.45,
+            "h": 0.1
+          },
+          "reasoning": "位于数据集左下方，强调专家后续状态被保留用于后续 SR 分支的对比"
+        }
+      ]
+    },
+    {
+      "chunk_id": "c5",
+      "nodes": [
+        {
+          "node_id": "n19",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.05,
+            "y": 0.35,
+            "w": 0.25,
+            "h": 0.3
+          },
+          "reasoning": "作为分叉节点位于左侧中部，接收上一阶段的输入并作为分支起点。"
+        },
+        {
+          "node_id": "n20",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.35,
+            "y": 0.1,
+            "w": 0.6,
+            "h": 0.2
+          },
+          "reasoning": "指向 IWM 分支的连接箭头，位于右上方，引导数据流向 IWM 模块。"
+        },
+        {
+          "node_id": "n21",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.35,
+            "y": 0.7,
+            "w": 0.6,
+            "h": 0.2
+          },
+          "reasoning": "指向 SR 分支的连接箭头，位于右下方，引导数据流向 SR 模块，与 IWM 分支形成并行结构。"
+        }
+      ]
+    },
+    {
+      "chunk_id": "c6",
+      "nodes": [
+        {
+          "node_id": "n22",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0
+          },
+          "reasoning": "作为 IWM 分支的主容器框，覆盖整个 chunk 区域，作为背景和边界。"
+        },
+        {
+          "node_id": "n23",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.05,
+            "y": 0.15,
+            "w": 0.22,
+            "h": 0.25
+          },
+          "reasoning": "输入节点 (s_i, a_i^j)，置于左上侧，作为前向传播的起点。"
+        },
+        {
+          "node_id": "n25",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.35,
+            "y": 0.15,
+            "w": 0.25,
+            "h": 0.25
+          },
+          "reasoning": "策略节点 π_θ，置于上方中部，接收输入并进行处理。"
+        },
+        {
+          "node_id": "n26",
+          "role": "text_block",
+          "rel_bbox": {
+            "x": 0.68,
+            "y": 0.15,
+            "w": 0.27,
+            "h": 0.25
+          },
+          "reasoning": "预测公式说明，置于右上侧，紧随策略节点之后，表示输出结果。"
+        },
+        {
+          "node_id": "n24",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.05,
+            "y": 0.55,
+            "w": 0.22,
+            "h": 0.25
+          },
+          "reasoning": "目标节点 s_i^j (未来状态)，置于左下侧，作为监督信号源，与上方输入对齐。"
+        },
+        {
+          "node_id": "n27",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.35,
+            "y": 0.55,
+            "w": 0.6,
+            "h": 0.35
+          },
+          "reasoning": "Loss 解释文本，置于右下侧大片区域，说明如何利用上方的预测和左侧的目标计算 NLL 损失。"
+        }
+      ]
+    },
+    {
+      "chunk_id": "c7",
+      "nodes": [
+        {
+          "node_id": "n28",
+          "role": "title",
+          "rel_bbox": {
+            "x": 0.05,
+            "y": 0.02,
+            "w": 0.9,
+            "h": 0.1
+          },
+          "reasoning": "作为该 chunk 的主标题/容器标签，置于顶部以标识 Self-Reflection (SR) 分支。"
+        },
+        {
+          "node_id": "n29",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.1,
+            "y": 0.15,
+            "w": 0.35,
+            "h": 0.15
+          },
+          "reasoning": "专家路径输入节点，置于左上方，作为对比流程的左侧输入。"
+        },
+        {
+          "node_id": "n30",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.55,
+            "y": 0.15,
+            "w": 0.35,
+            "h": 0.15
+          },
+          "reasoning": "非专家路径输入节点，置于右上方，与专家路径并列以形成对比。"
+        },
+        {
+          "node_id": "n31",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.3,
+            "y": 0.35,
+            "w": 0.4,
+            "h": 0.12
+          },
+          "reasoning": "对比节点，位于两个输入节点下方正中，汇聚两者信息进行状态对比。"
+        },
+        {
+          "node_id": "n32",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.3,
+            "y": 0.52,
+            "w": 0.4,
+            "h": 0.15
+          },
+          "reasoning": "LLM 生成解释模块，位于对比节点下方，接收对比上下文并生成文本。"
+        },
+        {
+          "node_id": "n34",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.72,
+            "y": 0.52,
+            "w": 0.25,
+            "h": 0.15
+          },
+          "reasoning": "解释文本的气泡示例，置于 LLM 模块右侧，直观展示生成的自然语言内容。"
+        },
+        {
+          "node_id": "n33",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.25,
+            "y": 0.72,
+            "w": 0.5,
+            "h": 0.15
+          },
+          "reasoning": "反思数据集节点，位于生成模块下方，表示最终收集的数据产物。"
+        },
+        {
+          "node_id": "n35",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.1,
+            "y": 0.9,
+            "w": 0.8,
+            "h": 0.08
+          },
+          "reasoning": "联合训练说明文本，置于底部，总结该分支数据如何用于后续策略更新。"
+        }
+      ]
+    },
+    {
+      "chunk_id": "c8",
+      "nodes": [
+        {
+          "node_id": "n36",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.3,
+            "y": 0.1,
+            "w": 0.4,
+            "h": 0.45
+          },
+          "reasoning": "作为核心聚合模块，放置在上方中央，接收来自左右两侧分支的信号。"
+        },
+        {
+          "node_id": "n37",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.02,
+            "y": 0.2,
+            "w": 0.26,
+            "h": 0.25
+          },
+          "reasoning": "作为来自 IWM 分支（通常在左侧）的输入注释，放置在主模块左侧。"
+        },
+        {
+          "node_id": "n38",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.72,
+            "y": 0.2,
+            "w": 0.26,
+            "h": 0.25
+          },
+          "reasoning": "作为来自 SR 分支（通常在右侧）的输入注释，放置在主模块右侧。"
+        },
+        {
+          "node_id": "n39",
+          "role": "text_block",
+          "rel_bbox": {
+            "x": 0.1,
+            "y": 0.65,
+            "w": 0.8,
+            "h": 0.3
+          },
+          "reasoning": "作为联合目标函数与范式总结的文本，放置在聚合模块下方，横跨较宽区域以承载详细说明。"
+        }
+      ]
+    },
+    {
+      "chunk_id": "c9",
+      "nodes": [
+        {
+          "node_id": "n40",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.05,
+            "y": 0.05,
+            "w": 0.9,
+            "h": 0.4
+          },
+          "reasoning": "作为该 chunk 的核心视觉概览图，放置在顶部，展示 IL、Early Experience 和 RL 的关系。"
+        },
+        {
+          "node_id": "n42",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.05,
+            "y": 0.5,
+            "w": 0.9,
+            "h": 0.2
+          },
+          "reasoning": "紧随概览图下方，解释 Early Experience 保留了 IL 的专家演示特性。"
+        },
+        {
+          "node_id": "n41",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.05,
+            "y": 0.75,
+            "w": 0.9,
+            "h": 0.2
+          },
+          "reasoning": "位于底部，解释 Early Experience 引入了 RL 的 rollout 机制但无奖励，补充说明桥接作用。"
+        }
+      ]
+    }
+  ]
+}
