@@ -1,0 +1,440 @@
+{
+  "chunks": [
+    {
+      "chunk_id": "c1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "role": "title",
+          "rel_bbox": {
+            "x": 0.05,
+            "y": 0.05,
+            "w": 0.9,
+            "h": 0.1
+          },
+          "reasoning": "作为主标题放置在顶部，占据主要宽度以突显主题。"
+        },
+        {
+          "node_id": "n2",
+          "role": "subtitle",
+          "rel_bbox": {
+            "x": 0.05,
+            "y": 0.18,
+            "w": 0.9,
+            "h": 0.15
+          },
+          "reasoning": "作为对标题的补充说明，紧随标题下方，提供背景信息。"
+        },
+        {
+          "node_id": "n3",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.05,
+            "y": 0.45,
+            "w": 0.25,
+            "h": 0.4
+          },
+          "reasoning": "流程起点，放置在左侧，代表专家数据输入阶段。"
+        },
+        {
+          "node_id": "n4",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.375,
+            "y": 0.45,
+            "w": 0.25,
+            "h": 0.4
+          },
+          "reasoning": "流程核心，放置在中间，代表双方法训练阶段，承接输入并指向输出。"
+        },
+        {
+          "node_id": "n5",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.7,
+            "y": 0.45,
+            "w": 0.25,
+            "h": 0.4
+          },
+          "reasoning": "流程终点，放置在右侧，代表策略更新及闭环回流。"
+        }
+      ]
+    },
+    {
+      "chunk_id": "c2",
+      "nodes": [
+        {
+          "node_id": "n6",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.02,
+            "y": 0.25,
+            "w": 0.2,
+            "h": 0.35
+          },
+          "reasoning": "作为流程起点的专家数据集，放置在最左侧，作为后续所有操作的输入源。"
+        },
+        {
+          "node_id": "n7",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.02,
+            "y": 0.62,
+            "w": 0.2,
+            "h": 0.15
+          },
+          "reasoning": "紧随专家数据集下方，补充说明数据集的具体定义和公式。"
+        },
+        {
+          "node_id": "n8",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.28,
+            "y": 0.1,
+            "w": 0.24,
+            "h": 0.25
+          },
+          "reasoning": "初始策略模块，位于中间上方，接收专家状态输入以进行采样。"
+        },
+        {
+          "node_id": "n9",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.28,
+            "y": 0.38,
+            "w": 0.24,
+            "h": 0.12
+          },
+          "reasoning": "位于策略模块和采样动作之间，解释采样过程的数学含义。"
+        },
+        {
+          "node_id": "n10",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.28,
+            "y": 0.55,
+            "w": 0.24,
+            "h": 0.25
+          },
+          "reasoning": "采样得到的非专家动作集合，位于策略下方，准备输入环境。"
+        },
+        {
+          "node_id": "n11",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.58,
+            "y": 0.25,
+            "w": 0.2,
+            "h": 0.35
+          },
+          "reasoning": "环境模块，位于右侧，汇聚来自左侧的专家动作和中间的非专家动作进行执行。"
+        },
+        {
+          "node_id": "n12",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.8,
+            "y": 0.25,
+            "w": 0.18,
+            "h": 0.35
+          },
+          "reasoning": "位于环境模块右侧，详细说明环境执行后产生的两种不同结果（专家状态 vs 非专家状态）。"
+        }
+      ]
+    },
+    {
+      "chunk_id": "c3",
+      "nodes": [
+        {
+          "node_id": "n13",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.15,
+            "y": 0.1,
+            "w": 0.7,
+            "h": 0.6
+          },
+          "reasoning": "作为当前 chunk 的核心容器，表示 D_rollout 数据集，占据主要上方空间。"
+        },
+        {
+          "node_id": "n14",
+          "role": "text_block",
+          "rel_bbox": {
+            "x": 0.2,
+            "y": 0.3,
+            "w": 0.6,
+            "h": 0.3
+          },
+          "reasoning": "作为 D_rollout 的具体定义文本，放置在 n13 容器内部中央，展示数据集的数学形式。"
+        },
+        {
+          "node_id": "n15",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.15,
+            "y": 0.75,
+            "w": 0.7,
+            "h": 0.2
+          },
+          "reasoning": "作为对数据集性质的重要补充（无奖励），放置在主模块下方，起到强调和解释作用。"
+        }
+      ]
+    },
+    {
+      "chunk_id": "c4",
+      "nodes": [
+        {
+          "node_id": "n16",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.3,
+            "y": 0.1,
+            "w": 0.4,
+            "h": 0.3
+          },
+          "reasoning": "作为核心的分叉节点，放置在 Chunk 上方居中位置，接收上游数据并准备向下分流。"
+        },
+        {
+          "node_id": "n17",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.05,
+            "y": 0.5,
+            "w": 0.4,
+            "h": 0.25
+          },
+          "reasoning": "作为指向 IWM 分支的说明标签，放置在左下方，指示左侧的数据流向。"
+        },
+        {
+          "node_id": "n18",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.55,
+            "y": 0.5,
+            "w": 0.4,
+            "h": 0.25
+          },
+          "reasoning": "作为指向 SR 分支的说明标签，放置在右下方，指示右侧的数据流向，与 IWM 分支形成对称。"
+        }
+      ]
+    },
+    {
+      "chunk_id": "c5",
+      "nodes": [
+        {
+          "node_id": "n19",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.02,
+            "y": 0.02,
+            "w": 0.96,
+            "h": 0.96
+          },
+          "reasoning": "作为IWM分支的主体容器框，覆盖整个chunk区域，为内部流程提供背景和边界。"
+        },
+        {
+          "node_id": "n20",
+          "role": "subtitle",
+          "rel_bbox": {
+            "x": 0.1,
+            "y": 0.12,
+            "w": 0.8,
+            "h": 0.2
+          },
+          "reasoning": "位于容器顶部，说明IWM的输入条件(s_i, a_i^j)和预测目标，作为流程起点。"
+        },
+        {
+          "node_id": "n21",
+          "role": "content",
+          "rel_bbox": {
+            "x": 0.1,
+            "y": 0.38,
+            "w": 0.8,
+            "h": 0.25
+          },
+          "reasoning": "位于中部，展示核心的Loss公式(Next-token prediction)，承接输入并定义优化目标。"
+        },
+        {
+          "node_id": "n22",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.1,
+            "y": 0.68,
+            "w": 0.8,
+            "h": 0.2
+          },
+          "reasoning": "位于底部，解释Loss产生的梯度信号含义(环境动力学内化)，指向后续的策略更新模块。"
+        }
+      ]
+    },
+    {
+      "chunk_id": "c6",
+      "nodes": [
+        {
+          "node_id": "n23",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.05,
+            "y": 0.02,
+            "w": 0.9,
+            "h": 0.08
+          },
+          "reasoning": "作为 SR 分支的标题/总容器标签，置于顶部，覆盖较宽区域以统领下方内容。"
+        },
+        {
+          "node_id": "n24",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.3,
+            "y": 0.15,
+            "w": 0.4,
+            "h": 0.12
+          },
+          "reasoning": "流程的第一步，对比专家与非专家结果，置于标题下方，居中排列。"
+        },
+        {
+          "node_id": "n25",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.3,
+            "y": 0.32,
+            "w": 0.4,
+            "h": 0.15
+          },
+          "reasoning": "承接对比结果生成解释，位于对比模块正下方，保持垂直流线。"
+        },
+        {
+          "node_id": "n26",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.72,
+            "y": 0.32,
+            "w": 0.25,
+            "h": 0.15
+          },
+          "reasoning": "对生成的解释内容进行文本说明，置于生成模块右侧，作为辅助信息。"
+        },
+        {
+          "node_id": "n27",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.3,
+            "y": 0.52,
+            "w": 0.4,
+            "h": 0.15
+          },
+          "reasoning": "生成的反思数据集，承接解释生成模块，位于流程中下部。"
+        },
+        {
+          "node_id": "n28",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.2,
+            "y": 0.72,
+            "w": 0.6,
+            "h": 0.18
+          },
+          "reasoning": "最终的训练模块，汇聚数据进行策略更新，置于底部，宽度较宽以暗示接收多方输入。"
+        },
+        {
+          "node_id": "n29",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.2,
+            "y": 0.92,
+            "w": 0.6,
+            "h": 0.06
+          },
+          "reasoning": "对训练损失函数的公式说明，紧贴训练模块下方。"
+        }
+      ]
+    },
+    {
+      "chunk_id": "c7",
+      "nodes": [
+        {
+          "node_id": "n30",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.1,
+            "y": 0.05,
+            "w": 0.8,
+            "h": 0.35
+          },
+          "reasoning": "作为策略更新模块的主体，置于 chunk 顶部，接收来自上方 IWM 和 SR 分支的信号。"
+        },
+        {
+          "node_id": "n31",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.42,
+            "y": 0.43,
+            "w": 0.16,
+            "h": 0.12
+          },
+          "reasoning": "作为连接更新模块与结果策略的中间节点，表示梯度/损失的合并操作，位于两者之间。"
+        },
+        {
+          "node_id": "n32",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.2,
+            "y": 0.58,
+            "w": 0.6,
+            "h": 0.25
+          },
+          "reasoning": "表示更新后的策略 π_EE，是该阶段的核心产出，位于合并操作的下方。"
+        },
+        {
+          "node_id": "n33",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.1,
+            "y": 0.86,
+            "w": 0.8,
+            "h": 0.12
+          },
+          "reasoning": "表示闭环回流的箭头注释，位于最底部，指示策略将反馈回数据构建阶段。"
+        }
+      ]
+    },
+    {
+      "chunk_id": "c8",
+      "nodes": [
+        {
+          "node_id": "n34",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.02,
+            "y": 0.15,
+            "w": 0.3,
+            "h": 0.7
+          },
+          "reasoning": "代表模仿学习(IL)区域的标签，通常对应流程起点的专家数据部分，因此放置在左侧区域。"
+        },
+        {
+          "node_id": "n36",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.34,
+            "y": 0.25,
+            "w": 0.32,
+            "h": 0.5
+          },
+          "reasoning": "作为连接 IL 和 RL 的概念说明，放置在中间位置，起到桥梁和过渡的视觉作用。"
+        },
+        {
+          "node_id": "n35",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.68,
+            "y": 0.15,
+            "w": 0.3,
+            "h": 0.7
+          },
+          "reasoning": "代表类强化学习(RL-like)区域的标签，对应流程后段的环境交互与滚动部分，放置在右侧区域。"
+        }
+      ]
+    }
+  ]
+}

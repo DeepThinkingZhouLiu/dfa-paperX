@@ -1,0 +1,189 @@
+这是一张复杂的科研绘图，主要展示了一个名为“Continual Compatible Transfer (CCT)”的持续学习框架，用于解决行人重识别（Re-ID）任务中的遗忘问题和兼容性问题。图片整体布局清晰，通过不同的子图和模块详细阐述了该框架的训练、迁移和测试过程，以及其核心组件和解决的数据隐私问题。
+
+## 1. 整体布局
+
+图片整体分为上下两大部分，上部分是核心的CCT框架，下部分是该框架在不同Re-ID场景下的应用和对比。
+
+*   **上部分**：主要由三个子图组成，横向排列。
+    *   **(a) Training at $s^{th}$ Stage**：位于左侧，是整个框架的核心训练阶段，详细展示了CCT、BCD和BAD三个主要模块的内部结构和相互作用。
+    *   **(b) Transfer at $s^{th}$ Stage**：位于中间偏右，展示了在第s阶段的特征迁移过程。
+    *   **(c) Testing at $s^{th}$ Stage**：位于最右侧，展示了在第s阶段的测试过程。
+
+*   **下部分**：主要由两个并列的场景图组成，展示了Re-ID的几种不同处理方式。
+    *   **左下部分**：展示了“Feature Replacing”、“ReID w/ Re-indexing”和“ReID w/o Re-indexing”三种Re-ID策略的对比。
+    *   **右下部分**：展示了在数据隐私保护下的Re-ID流程。
+
+*   **主要视觉元素**：
+    *   **模块框**：矩形或圆角矩形，代表不同的功能模块或数据块。
+    *   **连接线和箭头**：表示数据流、信息传递或依赖关系。
+    *   **图像示例**：小图展示了行人图像，用于说明输入、输出或特征提取。
+    *   **数学符号和公式**：用于表示损失函数、操作或变量。
+    *   **文本标签**：对模块、数据、过程进行说明。
+
+## 2. 模块和组件
+
+### 2.1 上部分：核心框架
+
+#### (a) Training at $s^{th}$ Stage
+
+这个子图是整个框架的核心，包含了三个主要模块：Continual Compatible Transfer (CCT)、Balanced Compatible Distillation (BCD) 和 Balanced Anti-forgetting Distillation (BAD)。
+
+*   **Continual Compatible Transfer (CCT)**：
+    *   **输入**：`Old data` (旧数据) 和 `New data` (新数据)，以及 `Old Model` (旧模型) 和 `New Model` (新模型)。
+    *   **Forward Mapping Module (FMM)**：
+        *   由多个 `BN` (Batch Normalization) 和 `PReLU` (Parametric Rectified Linear Unit) 层组成，后面跟着一个 `MLP` (Multi-Layer Perceptron) 和 `Softmax` 层。
+        *   接收 `Old data` 和 `New data` 的特征，并输出 `Z_s^o` 和 `Z_s^n`。
+        *   `x4` 标记表示该模块可能被重复使用或包含4个类似的子模块。
+    *   **Knowledge Capturing Module (KCM)**：
+        *   接收 `Old Model` 和 `New Model` 的输出特征。
+        *   包含 `FC` (Fully Connected) 层、`Subnet` (子网络) 和多个 `k_i`、`u_i` 向量。
+        *   通过 `Σ` (求和) 和 `Multiply` (乘法) 操作，捕获旧模型和新模型的知识。
+        *   输出 `Z_s^o` 和 `Z_s^n`。
+    *   **核心思想**：通过FMM和KCM，实现旧知识到新模型的兼容性迁移，同时保持新旧特征的兼容性。
+
+*   **Balanced Compatible Distillation (BCD)**：
+    *   **输入**：`Z_s^o` 和 `Z_s^n`。
+    *   **内部结构**：展示了特征 `Z_s^o` 和 `Z_s^n` 之间的相似性计算。
+        *   `M^o` 和 `M^n` 矩阵表示特征之间的相似性。
+        *   `Similarity of Same Person` (同一个人相似性) 和 `Similarity of Different Person` (不同人相似性) 的概念。
+    *   **
+功能**：通过蒸馏损失 `L_ca`，平衡新旧模型在兼容性上的学习，确保新模型能够识别旧数据中的个体。
+
+*   **Balanced Anti-forgetting Distillation (BAD)**：
+    *   **输入**：`Z_s^o` 和 `Z_s^n`。
+    *   **内部结构**：展示了 `Old Classifier` (旧分类器) 和 `New Classifier` (新分类器) 的输出。
+    *   **功能**：通过蒸馏损失 `L_er`，防止新模型在学习新数据时遗忘旧数据的知识。
+
+*   **损失函数**：
+    *   `L_er`：遗忘损失，用于BAD模块。
+    *   `L_ca`：兼容性损失，用于BCD模块。
+    *   `L_new`：新数据损失，用于新模型的训练。
+    *   `1-α` 和 `α`：权重因子，用于平衡不同损失的重要性。
+    *   `Sum` 和 `Multiply`：表示损失的组合方式。
+
+#### (b) Transfer at $s^{th}$ Stage
+
+*   **输入**：`F^{s-1}` (前一阶段的特征) 和 `Old Gallery Feature Set` (旧图库特征集)。
+*   **CCT at $s^{th}$ Stage**：表示在当前阶段应用CCT模块。
+*   **输出**：`Transferred Feature Set` (迁移后的特征集)，以及 `New Gallery Feature Set` (新图库特征集)。
+*   **功能**：将旧阶段的特征通过CCT模块进行迁移，生成与新模型兼容的新图库特征。
+
+#### (c) Testing at $s^{th}$ Stage
+
+*   **输入**：`F^s` (当前阶段的特征) 和 `Query` (查询图像)。
+*   **New Model**：使用新模型提取查询图像的特征。
+*   **输出**：`Extracted Features` (提取的特征) 和 `ID: 182` (识别出的ID)。
+*   **功能**：在当前阶段，使用训练好的新模型对查询图像进行特征提取和身份识别。
+
+### 2.2 下部分：Re-ID场景应用
+
+#### 左下部分：Re-ID策略对比
+
+展示了三种Re-ID策略，均以 `Old Gallery Images` (旧图库图像) 和 `Query Images` (查询图像) 为输入。
+
+*   **Feature Replacing**：
+    *   直接用 `New Model` 提取 `Query Features`。
+    *   `Old Gallery Features` 保持不变。
+    *   **问题**：可能导致新旧特征不兼容。
+
+*   **ReID w/ Re-indexing**：
+    *   `Old Gallery Images` 经过 `Re-indexing` (重新索引) 得到 `Re-indexed Gallery Features`。
+    *   `Query Images` 经过 `New Model` 得到 `Query Features`。
+    *   **功能**：通过重新索引，使旧图库特征与新模型兼容。
+
+*   **ReID w/o Re-indexing**：
+    *   `Old Gallery Images` 直接作为 `Old Gallery Features`。
+    *   `Query Images` 经过 `New Model` 得到 `Query Features`。
+    *   **问题**：可能存在兼容性问题。
+
+#### 右下部分：Data Privacy
+
+*   **核心概念**：`Data Privacy` (数据隐私)。
+*   **场景**：在数据隐私保护下，`Old Gallery Images` 不直接用于训练或特征提取。
+*   **流程**：
+    *   `Old Gallery Images` 被一个带锁的图标遮挡，表示数据隐私保护。
+    *   `Query Images` 经过 `New Model` 得到 `Query Features`。
+    *   `Old Gallery Features` 仍然存在，但其来源和处理方式可能受到限制。
+*   **功能**：强调在Re-ID任务中，如何在保护旧数据隐私的前提下进行识别。
+
+## 3. 连接关系
+
+*   **数据流**：
+    *   `Data Stream` (数据流) 指向 `Old data` 和 `New data`，表示数据输入。
+    *   `Old data` 和 `New data` 分别输入 `Old Model` 和 `New Model`。
+    *   `Old Model` 和 `New Model` 的输出特征输入 `KCM`。
+    *   `Old data` 和 `New data
+` 的特征也输入 `FMM`。
+    *   `FMM` 和 `KCM` 的输出 `Z_s^o` 和 `Z_s^n` 输入 `BCD` 和 `BAD`。
+    *   `BCD` 和 `BAD` 的损失 `L_ca` 和 `L_er` 与 `L_new` 共同构成总损失。
+    *   在迁移和测试阶段，特征和查询图像通过箭头流向相应的模块和输出。
+
+*   **控制流/依赖关系**：
+    *   损失函数通过 `Sum` 和 `Multiply` 操作影响模型的训练。
+    *   `Old Model` 和 `New Model` 之间存在知识传递和兼容性要求。
+    *   `CCT` 模块在训练和迁移阶段都发挥作用。
+
+*   **连接线类型**：
+    *   实线箭头：表示数据流或信息传递的方向。
+    *   虚线箭头：在某些情况下可能表示蒸馏或辅助信息流。
+
+## 4. 文本和标签
+
+*   **标题**：
+    *   `(a) Training at $s^{th}$ Stage`
+    *   `(b) Transfer at $s^{th}$ Stage`
+    *   `(c) Testing at $s^{th}$ Stage`
+    *   `Continual Compatible Transfer (CCT)`
+    *   `Balanced Compatible Distillation (BCD)`
+    *   `Balanced Anti-forgetting Distillation (BAD)`
+    *   `Forward Mapping Module (FMM)`
+    *   `Knowledge Capturing Module (KCM)`
+    *   `Feature Replacing`
+    *   `ReID w/ Re-indexing`
+    *   `ReID w/o Re-indexing`
+    *   `Data Privacy`
+
+*   **模块/数据标签**：
+    *   `Old data`, `New data`, `Old Model`, `New Model`
+    *   `BN`, `PReLU`, `MLP`, `Softmax`, `FC`, `Subnet`
+    *   `Z_s^o`, `Z_s^n`, `M^o`, `M^n`
+    *   `L_er`, `L_ca`, `L_new`
+    *   `Old Gallery Feature Set`, `Transferred Feature Set`, `New Gallery Feature Set`, `Extracted Features`
+    *   `Query`, `Old Gallery Images`, `Query Images`, `Old Gallery Features`, `Re-indexed Gallery Features`, `Query Features`
+
+*   **ID标签**：
+    *   `ID:1`, `ID:2`, `ID:N`, `ID:N+1`, `ID:M`, `ID:182`
+    *   用于表示不同个体的身份标识。
+
+*   **其他文本**：
+    *   `Data Stream`
+    *   `Similarity of Same Person`, `Similarity of Different Person`
+    *   `@莱昂的科研日记` (水印)
+
+## 5. 视觉特征
+
+*   **颜色**：
+    *   模块框多为灰色或浅蓝色填充，边框为深色。
+    *   连接线和箭头多为黑色。
+    *   文本为黑色。
+    *   `Data Privacy` 区域有一个红色的锁图标和红色的叉号，强调其重要性。
+
+*   **形状**：
+    *   矩形和圆角矩形：表示模块、数据块。
+    *   圆形：在KCM模块中表示求和操作。
+    *   箭头：表示方向。
+    *   行人图像：小图示例。
+
+*   **大小**：
+    *   标题和模块名称字体较大，内容描述字体较小。
+    *   模块框的大小根据其内部内容的复杂程度有所不同。
+
+*   **特殊标记**：
+    *   `x4`：表示重复或数量。
+    *   `Σ`：求和符号。
+    *   `Multiply`：乘法操作。
+    *   `1-α`, `α`：权重因子。
+    *   带锁的图标和叉号：表示数据隐私和禁止操作。
+    *   水印 `@莱昂的科研日记`。
+
+这张科研绘图通过清晰的模块划分、详细的数据流和明确的文本标注，全面展示了一个用于持续行人重识别的复杂框架，并强调了其在解决遗忘、兼容性和数据隐私方面的能力。

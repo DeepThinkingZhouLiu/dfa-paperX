@@ -1,0 +1,1464 @@
+{
+  "version": "0.1",
+  "canvas": {
+    "width": 1920,
+    "height": 1080,
+    "unit": "px"
+  },
+  "grid": {
+    "rows": 3,
+    "cols": 2,
+    "margin": {
+      "top": 20,
+      "right": 20,
+      "bottom": 20,
+      "left": 20
+    },
+    "gutter": {
+      "row": 10,
+      "col": 10
+    }
+  },
+  "layout": {
+    "flow": "left-to-right",
+    "algorithm": "dagre"
+  },
+  "chunks": [
+    {
+      "chunk_id": "chunk_0_0",
+      "grid_area": {
+        "row": 0,
+        "col": 0,
+        "rowspan": 1,
+        "colspan": 2
+      },
+      "role": "process",
+      "content_summary": "上部 (a) 训练阶段：包含旧/新数据到旧/新模型的特征提取、CCT 模块（FMM+KCM 门控融合）、以及 BCD/BAD 蒸馏损失"
+    },
+    {
+      "chunk_id": "chunk_1_0",
+      "grid_area": {
+        "row": 1,
+        "col": 0,
+        "rowspan": 1,
+        "colspan": 1
+      },
+      "role": "process",
+      "content_summary": "中部左 (b) 迁移阶段：F^{s−1} 经 CCT 转为 Transferred Feature Set，与新模型提取的特征合并形成 F^s"
+    },
+    {
+      "chunk_id": "chunk_1_1",
+      "grid_area": {
+        "row": 1,
+        "col": 1,
+        "rowspan": 1,
+        "colspan": 1
+      },
+      "role": "process",
+      "content_summary": "中部右 (c) 测试阶段：查询图像经新模型提取特征与 F^s 匹配，输出检索 ID"
+    },
+    {
+      "chunk_id": "chunk_2_0",
+      "grid_area": {
+        "row": 2,
+        "col": 0,
+        "rowspan": 1,
+        "colspan": 1
+      },
+      "role": "auxiliary",
+      "content_summary": "下部左：三种检索/索引流程对比（Feature Replacing、ReID w/ Re-indexing、ReID w/o Re-indexing）"
+    },
+    {
+      "chunk_id": "chunk_2_1",
+      "grid_area": {
+        "row": 2,
+        "col": 1,
+        "rowspan": 1,
+        "colspan": 1
+      },
+      "role": "auxiliary",
+      "content_summary": "下部右：数据隐私场景（无法访问旧图库图像导致不能重索引，旧特征与新模型不兼容）"
+    }
+  ],
+  "groups": [
+    {
+      "group_id": "grp_training",
+      "label": "(a) Training at s^th Stage",
+      "type": "stage",
+      "grid_area": {
+        "row": 0,
+        "col": 0,
+        "rowspan": 1,
+        "colspan": 2
+      },
+      "chunks": [
+        "chunk_0_0"
+      ],
+      "content_summary": "训练阶段：旧/新数据流，旧/新模型生成 z^o 与 z^s，基础损失 L_base",
+      "layout_flow": "left-to-right"
+    },
+    {
+      "group_id": "grp_cct",
+      "label": "Continual Compatible Transfer (CCT)",
+      "type": "module",
+      "grid_area": {
+        "row": 0,
+        "col": 0,
+        "rowspan": 1,
+        "colspan": 2
+      },
+      "chunks": [
+        "chunk_0_0"
+      ],
+      "content_summary": "CCT 模块：FMM（FC→PReLU→BN×4）与 KCM（门控+键值记忆检索）两路，经乘法门控与求和融合得到 ẑ；附带 BCD（相似度对齐）与 BAD（防遗忘蒸馏）损失",
+      "layout_flow": "left-to-right"
+    },
+    {
+      "group_id": "grp_transfer",
+      "label": "(b) Transfer at s^th Stage",
+      "type": "stage",
+      "grid_area": {
+        "row": 1,
+        "col": 0,
+        "rowspan": 1,
+        "colspan": 1
+      },
+      "chunks": [
+        "chunk_1_0"
+      ],
+      "content_summary": "将历史图库 F^{s−1} 通过 CCT 转移为兼容特征，与新阶段抽取的特征合并为 F^s",
+      "layout_flow": "left-to-right"
+    },
+    {
+      "group_id": "grp_testing",
+      "label": "(c) Testing at s^th Stage",
+      "type": "stage",
+      "grid_area": {
+        "row": 1,
+        "col": 1,
+        "rowspan": 1,
+        "colspan": 1
+      },
+      "chunks": [
+        "chunk_1_1"
+      ],
+      "content_summary": "测试阶段：查询图像用新模型抽取特征，在 F^s 上进行匹配并返回 ID",
+      "layout_flow": "left-to-right"
+    },
+    {
+      "group_id": "grp_retrieval",
+      "label": "Feature Replacing / ReID w/ Re-indexing / ReID w/o Re-indexing",
+      "type": "module",
+      "grid_area": {
+        "row": 2,
+        "col": 0,
+        "rowspan": 1,
+        "colspan": 1
+      },
+      "chunks": [
+        "chunk_2_0"
+      ],
+      "content_summary": "三种运维策略对比：替换特征并重建索引（最佳）、不重建索引（可能不兼容，性能下降）",
+      "layout_flow": "left-to-right"
+    },
+    {
+      "group_id": "grp_privacy",
+      "label": "Data Privacy",
+      "type": "conditional",
+      "grid_area": {
+        "row": 2,
+        "col": 1,
+        "rowspan": 1,
+        "colspan": 1
+      },
+      "chunks": [
+        "chunk_2_1"
+      ],
+      "content_summary": "隐私限制：无法访问旧图库图像，不能用新模型重抽图库特征，旧特征残留不兼容，检索受限",
+      "layout_flow": "left-to-right"
+    }
+  ],
+  "nodes": [
+    {
+      "node_id": "n_old_data",
+      "label": "Old Data (Data Stream)",
+      "type": "dataset",
+      "group": "grp_training",
+      "role": "input",
+      "content_summary": "旧阶段到达的数据样本，位于数据流上端"
+    },
+    {
+      "node_id": "n_new_data",
+      "label": "New Data (Data Stream)",
+      "type": "dataset",
+      "group": "grp_training",
+      "role": "input",
+      "content_summary": "当前阶段新到达的数据样本，位于数据流下端"
+    },
+    {
+      "node_id": "n_old_model",
+      "label": "Old Model",
+      "type": "module",
+      "group": "grp_training",
+      "role": "process",
+      "content_summary": "上一阶段训练好的旧模型，用于提取旧特征 z^o"
+    },
+    {
+      "node_id": "n_new_model",
+      "label": "New Model",
+      "type": "module",
+      "group": "grp_training",
+      "role": "process",
+      "content_summary": "当前阶段的新模型，用于提取新特征 z^s 以及后续提取查询/新图库特征"
+    },
+    {
+      "node_id": "n_z_o",
+      "label": "z^o (Old Feature)",
+      "type": "data",
+      "group": "grp_training",
+      "role": "output",
+      "content_summary": "旧模型输出的特征表示，浅黄特征条"
+    },
+    {
+      "node_id": "n_z_s",
+      "label": "z^s (New Feature)",
+      "type": "data",
+      "group": "grp_training",
+      "role": "output",
+      "content_summary": "新模型输出的特征表示，浅蓝特征条"
+    },
+    {
+      "node_id": "n_L_base",
+      "label": "L_base (Base Loss)",
+      "type": "loss",
+      "group": "grp_training",
+      "role": "output",
+      "content_summary": "新模型基础训练损失，对 z^s 的监督"
+    },
+    {
+      "node_id": "n_fmm",
+      "label": "Forward Mapping Module (FMM)",
+      "type": "module",
+      "group": "grp_cct",
+      "role": "process",
+      "content_summary": "前向映射模块，将新特征映射到与旧空间兼容的表征"
+    },
+    {
+      "node_id": "n_fmm_mlp",
+      "label": "FC → PReLU → BN ×4",
+      "type": "layer",
+      "group": "grp_cct",
+      "role": "process",
+      "content_summary": "FMM 的多层感知器结构，四次堆叠"
+    },
+    {
+      "node_id": "n_fmm_out",
+      "label": "FMM Output",
+      "type": "data",
+      "group": "grp_cct",
+      "role": "output",
+      "content_summary": "FMM 分支输出的映射特征"
+    },
+    {
+      "node_id": "n_kcm",
+      "label": "Knowledge Capturing Module (KCM)",
+      "type": "module",
+      "group": "grp_cct",
+      "role": "process",
+      "content_summary": "知识捕获模块：门控生成 + 键值记忆检索汇聚"
+    },
+    {
+      "node_id": "n_kcm_left_fc",
+      "label": "FC (Gate Branch)",
+      "type": "layer",
+      "group": "grp_cct",
+      "role": "process",
+      "content_summary": "KCM 左支全连接层，用于生成门控输入"
+    },
+    {
+      "node_id": "n_kcm_left_softmax",
+      "label": "Softmax (Gate)",
+      "type": "op",
+      "group": "grp_cct",
+      "role": "process",
+      "content_summary": "KCM 左支 Softmax 产生互补门控权重"
+    },
+    {
+      "node_id": "n_gate_a",
+      "label": "a^m (Gate Weight)",
+      "type": "data",
+      "group": "grp_cct",
+      "role": "param",
+      "content_summary": "门控系数 a^m，用于调节 FMM 分支权重"
+    },
+    {
+      "node_id": "n_gate_1ma",
+      "label": "1−a^m (Complement Gate)",
+      "type": "data",
+      "group": "grp_cct",
+      "role": "param",
+      "content_summary": "互补门控系数 1−a^m，用于调节记忆分支权重"
+    },
+    {
+      "node_id": "n_kcm_keys",
+      "label": "Memory Keys k1..kd",
+      "type": "data",
+      "group": "grp_cct",
+      "role": "param",
+      "content_summary": "KCM 键集合，用于相似性计算与权重归一化"
+    },
+    {
+      "node_id": "n_kcm_values",
+      "label": "Memory Values v1..vd",
+      "type": "data",
+      "group": "grp_cct",
+      "role": "param",
+      "content_summary": "KCM 值集合，按权重加权求和得到记忆汇聚特征"
+    },
+    {
+      "node_id": "n_kcm_attn_softmax",
+      "label": "Softmax (Over Keys)",
+      "type": "op",
+      "group": "grp_cct",
+      "role": "process",
+      "content_summary": "对键相似度进行 Softmax，得到注意力权重"
+    },
+    {
+      "node_id": "n_kcm_weighted_sum",
+      "label": "Weighted Sum ∑",
+      "type": "op",
+      "group": "grp_cct",
+      "role": "process",
+      "content_summary": "使用记忆值与权重进行加权求和"
+    },
+    {
+      "node_id": "n_kcm_out",
+      "label": "KCM Memory Output",
+      "type": "data",
+      "group": "grp_cct",
+      "role": "output",
+      "content_summary": "KCM 记忆检索后的汇聚特征"
+    },
+    {
+      "node_id": "n_mul_fmm",
+      "label": "Multiply × (FMM branch)",
+      "type": "op",
+      "group": "grp_cct",
+      "role": "process",
+      "content_summary": "门控乘法：FMM 输出与 a^m 相乘"
+    },
+    {
+      "node_id": "n_mul_kcm",
+      "label": "Multiply × (KCM branch)",
+      "type": "op",
+      "group": "grp_cct",
+      "role": "process",
+      "content_summary": "门控乘法：KCM 输出与 1−a^m 相乘"
+    },
+    {
+      "node_id": "n_sum_cct",
+      "label": "Sum ⊕ (Fusion)",
+      "type": "op",
+      "group": "grp_cct",
+      "role": "process",
+      "content_summary": "对两路门控特征进行求和融合"
+    },
+    {
+      "node_id": "n_z_hat",
+      "label": "ẑ (Compatible Feature)",
+      "type": "data",
+      "group": "grp_cct",
+      "role": "output",
+      "content_summary": "CCT 融合后的兼容特征表示"
+    },
+    {
+      "node_id": "n_bcd",
+      "label": "Balanced Compatible Distillation (BCD)",
+      "type": "loss",
+      "group": "grp_cct",
+      "role": "output",
+      "content_summary": "基于相似度矩阵的兼容蒸馏，平衡同人/异人关系对齐"
+    },
+    {
+      "node_id": "n_Mo",
+      "label": "M^o (Similarity Matrix)",
+      "type": "data",
+      "group": "grp_cct",
+      "role": "aux",
+      "content_summary": "由旧特征计算的相似度矩阵（同人/异人）"
+    },
+    {
+      "node_id": "n_Ms",
+      "label": "M^s (Similarity Matrix)",
+      "type": "data",
+      "group": "grp_cct",
+      "role": "aux",
+      "content_summary": "由新特征计算的相似度矩阵（同人/异人）"
+    },
+    {
+      "node_id": "n_bad",
+      "label": "Balanced Anti-forgetting Distillation (BAD)",
+      "type": "loss",
+      "group": "grp_cct",
+      "role": "output",
+      "content_summary": "平衡的抗遗忘蒸馏，利用旧分类器对当前特征的响应约束新模型"
+    },
+    {
+      "node_id": "n_old_classifier",
+      "label": "Old Classifier",
+      "type": "module",
+      "group": "grp_cct",
+      "role": "process",
+      "content_summary": "旧身份空间的分类器，用作教师信号"
+    },
+    {
+      "node_id": "n_bad_weights",
+      "label": "ψ^o, ψ^s (Balancing Weights)",
+      "type": "data",
+      "group": "grp_cct",
+      "role": "param",
+      "content_summary": "BAD 的平衡系数，用于权衡旧/新分布"
+    },
+    {
+      "node_id": "n_F_prev",
+      "label": "Old Gallery Feature Set F^{s−1}",
+      "type": "data",
+      "group": "grp_transfer",
+      "role": "input",
+      "content_summary": "上一阶段的图库特征集合（含 ID:1…N）"
+    },
+    {
+      "node_id": "n_cct_transfer",
+      "label": "CCT at s^th Stage",
+      "type": "module",
+      "group": "grp_transfer",
+      "role": "process",
+      "content_summary": "将旧图库特征映射/转移到与当前阶段兼容的空间"
+    },
+    {
+      "node_id": "n_transferred_set",
+      "label": "Transferred Feature Set",
+      "type": "data",
+      "group": "grp_transfer",
+      "role": "output",
+      "content_summary": "经 CCT 转移后的旧图库特征集合"
+    },
+    {
+      "node_id": "n_new_images",
+      "label": "New Images",
+      "type": "dataset",
+      "group": "grp_transfer",
+      "role": "input",
+      "content_summary": "新阶段的图库图像，用新模型提取特征"
+    },
+    {
+      "node_id": "n_extracted_features",
+      "label": "Extracted Features",
+      "type": "data",
+      "group": "grp_transfer",
+      "role": "output",
+      "content_summary": "由新模型对新图像提取得到的特征"
+    },
+    {
+      "node_id": "n_merge_union",
+      "label": "Merge/Union",
+      "type": "op",
+      "group": "grp_transfer",
+      "role": "process",
+      "content_summary": "将转移特征与新提取特征合并入统一图库"
+    },
+    {
+      "node_id": "n_Fs",
+      "label": "New Gallery Feature Set F^s (IDs 1..M)",
+      "type": "data",
+      "group": "grp_transfer",
+      "role": "output",
+      "content_summary": "第 s 阶段的统一图库特征集合，含旧与新增 ID"
+    },
+    {
+      "node_id": "n_query_image",
+      "label": "Query Image",
+      "type": "dataset",
+      "group": "grp_testing",
+      "role": "input",
+      "content_summary": "待检索的查询图像"
+    },
+    {
+      "node_id": "n_query_feature",
+      "label": "Query Feature",
+      "type": "data",
+      "group": "grp_testing",
+      "role": "output",
+      "content_summary": "新模型从查询图像提取的特征"
+    },
+    {
+      "node_id": "n_match",
+      "label": "Matching/Retrieval",
+      "type": "op",
+      "group": "grp_testing",
+      "role": "process",
+      "content_summary": "在 F^s 上进行相似度匹配的检索过程"
+    },
+    {
+      "node_id": "n_result_id",
+      "label": "Result: ID:182 (✔)",
+      "type": "data",
+      "group": "grp_testing",
+      "role": "output",
+      "content_summary": "检索结果示例，正确匹配到的身份 ID"
+    },
+    {
+      "node_id": "n_old_gallery_images",
+      "label": "Old Gallery Images (ID:1, ID:2, ...)",
+      "type": "dataset",
+      "group": "grp_retrieval",
+      "role": "input",
+      "content_summary": "旧图库图像集合（用于替换特征或重建索引）"
+    },
+    {
+      "node_id": "n_query_images",
+      "label": "Query Images",
+      "type": "dataset",
+      "group": "grp_retrieval",
+      "role": "input",
+      "content_summary": "用于检索的查询图像集合"
+    },
+    {
+      "node_id": "n_old_gallery_features",
+      "label": "Old Gallery Features",
+      "type": "data",
+      "group": "grp_retrieval",
+      "role": "process",
+      "content_summary": "旧模型提取的旧图库特征（可能与新模型不兼容）"
+    },
+    {
+      "node_id": "n_reindexing",
+      "label": "Re-indexing",
+      "type": "op",
+      "group": "grp_retrieval",
+      "role": "process",
+      "content_summary": "用新模型替换旧图库特征并重建索引"
+    },
+    {
+      "node_id": "n_reindexed_gallery_features",
+      "label": "Re-indexed Gallery Features",
+      "type": "data",
+      "group": "grp_retrieval",
+      "role": "output",
+      "content_summary": "重索引后与新模型兼容的图库特征"
+    },
+    {
+      "node_id": "n_reid_with_reindex",
+      "label": "ReID w/ Re-indexing",
+      "type": "op",
+      "group": "grp_retrieval",
+      "role": "process",
+      "content_summary": "使用重建索引的图库进行检索"
+    },
+    {
+      "node_id": "n_reid_without_reindex",
+      "label": "ReID w/o Re-indexing",
+      "type": "op",
+      "group": "grp_retrieval",
+      "role": "process",
+      "content_summary": "在不重建索引的情况下进行检索（存在不兼容风险）"
+    },
+    {
+      "node_id": "n_query_features_var",
+      "label": "Query Features",
+      "type": "data",
+      "group": "grp_retrieval",
+      "role": "output",
+      "content_summary": "新模型从查询图像提取的特征（用于下部流程）"
+    },
+    {
+      "node_id": "n_incompat_ids",
+      "label": "Incompatible IDs (red ×)",
+      "type": "data",
+      "group": "grp_retrieval",
+      "role": "aux",
+      "content_summary": "不重建索引导致的不兼容 ID/匹配错误提示"
+    },
+    {
+      "node_id": "n_privacy_lock",
+      "label": "Data Privacy (Lock)",
+      "type": "op",
+      "group": "grp_privacy",
+      "role": "aux",
+      "content_summary": "隐私限制标识，指示访问受限"
+    },
+    {
+      "node_id": "n_no_access",
+      "label": "No Access to Old Gallery Images (X)",
+      "type": "op",
+      "group": "grp_privacy",
+      "role": "aux",
+      "content_summary": "由于隐私无法访问旧图库图像，阻断替换/重索引流程"
+    },
+    {
+      "node_id": "n_privacy_old_gallery_features",
+      "label": "Old Gallery Features (Residual, Incompatible)",
+      "type": "data",
+      "group": "grp_privacy",
+      "role": "process",
+      "content_summary": "无法重抽后的旧图库特征残留，含不兼容条目（如 ID:3、ID:5）"
+    },
+    {
+      "node_id": "n_retrieval_privacy",
+      "label": "Retrieval under Privacy",
+      "type": "op",
+      "group": "grp_privacy",
+      "role": "process",
+      "content_summary": "隐私受限场景下的检索（不重索引）"
+    },
+    {
+      "node_id": "n_query_features_privacy",
+      "label": "Query Features",
+      "type": "data",
+      "group": "grp_privacy",
+      "role": "output",
+      "content_summary": "新模型在隐私场景中对查询图像提取的特征"
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "e1",
+      "source": "n_old_data",
+      "target": "n_old_model",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e2",
+      "source": "n_old_model",
+      "target": "n_z_o",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e3",
+      "source": "n_new_data",
+      "target": "n_new_model",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e4",
+      "source": "n_new_model",
+      "target": "n_z_s",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e5",
+      "source": "n_z_s",
+      "target": "n_L_base",
+      "type": "dependency",
+      "label": "base loss"
+    },
+    {
+      "edge_id": "e6",
+      "source": "n_z_s",
+      "target": "n_fmm",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e7",
+      "source": "n_fmm",
+      "target": "n_fmm_mlp",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e8",
+      "source": "n_fmm_mlp",
+      "target": "n_fmm_out",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e9",
+      "source": "n_z_s",
+      "target": "n_kcm_left_fc",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e10",
+      "source": "n_kcm_left_fc",
+      "target": "n_kcm_left_softmax",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e11",
+      "source": "n_kcm_left_softmax",
+      "target": "n_gate_a",
+      "type": "data",
+      "label": "gate"
+    },
+    {
+      "edge_id": "e12",
+      "source": "n_kcm_left_softmax",
+      "target": "n_gate_1ma",
+      "type": "data",
+      "label": "1−gate"
+    },
+    {
+      "edge_id": "e13",
+      "source": "n_z_s",
+      "target": "n_kcm_attn_softmax",
+      "type": "data",
+      "label": "query"
+    },
+    {
+      "edge_id": "e14",
+      "source": "n_kcm_keys",
+      "target": "n_kcm_attn_softmax",
+      "type": "data",
+      "label": "keys"
+    },
+    {
+      "edge_id": "e15",
+      "source": "n_kcm_attn_softmax",
+      "target": "n_kcm_weighted_sum",
+      "type": "data",
+      "label": "attn weights"
+    },
+    {
+      "edge_id": "e16",
+      "source": "n_kcm_values",
+      "target": "n_kcm_weighted_sum",
+      "type": "data",
+      "label": "values"
+    },
+    {
+      "edge_id": "e17",
+      "source": "n_kcm_weighted_sum",
+      "target": "n_kcm_out",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e18",
+      "source": "n_fmm_out",
+      "target": "n_mul_fmm",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e19",
+      "source": "n_gate_a",
+      "target": "n_mul_fmm",
+      "type": "data",
+      "label": "× gate"
+    },
+    {
+      "edge_id": "e20",
+      "source": "n_kcm_out",
+      "target": "n_mul_kcm",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e21",
+      "source": "n_gate_1ma",
+      "target": "n_mul_kcm",
+      "type": "data",
+      "label": "× (1−gate)"
+    },
+    {
+      "edge_id": "e22",
+      "source": "n_mul_fmm",
+      "target": "n_sum_cct",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e23",
+      "source": "n_mul_kcm",
+      "target": "n_sum_cct",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e24",
+      "source": "n_sum_cct",
+      "target": "n_z_hat",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e25",
+      "source": "n_z_o",
+      "target": "n_Mo",
+      "type": "data",
+      "label": "similarity"
+    },
+    {
+      "edge_id": "e26",
+      "source": "n_z_s",
+      "target": "n_Ms",
+      "type": "data",
+      "label": "similarity"
+    },
+    {
+      "edge_id": "e27",
+      "source": "n_Mo",
+      "target": "n_bcd",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e28",
+      "source": "n_Ms",
+      "target": "n_bcd",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e29",
+      "source": "n_z_hat",
+      "target": "n_bcd",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e30",
+      "source": "n_z_s",
+      "target": "n_old_classifier",
+      "type": "data",
+      "label": "teacher logits"
+    },
+    {
+      "edge_id": "e31",
+      "source": "n_old_classifier",
+      "target": "n_bad",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e32",
+      "source": "n_bad_weights",
+      "target": "n_bad",
+      "type": "param",
+      "label": "ψ^o, ψ^s"
+    },
+    {
+      "edge_id": "e34",
+      "source": "n_F_prev",
+      "target": "n_cct_transfer",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e35",
+      "source": "n_cct_transfer",
+      "target": "n_transferred_set",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e36",
+      "source": "n_new_images",
+      "target": "n_new_model",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e37",
+      "source": "n_new_model",
+      "target": "n_extracted_features",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e38",
+      "source": "n_transferred_set",
+      "target": "n_merge_union",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e39",
+      "source": "n_extracted_features",
+      "target": "n_merge_union",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e40",
+      "source": "n_merge_union",
+      "target": "n_Fs",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e41",
+      "source": "n_query_image",
+      "target": "n_new_model",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e42",
+      "source": "n_new_model",
+      "target": "n_query_feature",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e43",
+      "source": "n_Fs",
+      "target": "n_match",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e44",
+      "source": "n_query_feature",
+      "target": "n_match",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e45",
+      "source": "n_match",
+      "target": "n_result_id",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e46",
+      "source": "n_old_gallery_images",
+      "target": "n_old_gallery_features",
+      "type": "data",
+      "label": "feature replacing"
+    },
+    {
+      "edge_id": "e47",
+      "source": "n_old_gallery_features",
+      "target": "n_reindexing",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e48",
+      "source": "n_reindexing",
+      "target": "n_reindexed_gallery_features",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e49",
+      "source": "n_query_images",
+      "target": "n_new_model",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e50",
+      "source": "n_new_model",
+      "target": "n_query_features_var",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e51",
+      "source": "n_reindexed_gallery_features",
+      "target": "n_reid_with_reindex",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e52",
+      "source": "n_query_features_var",
+      "target": "n_reid_with_reindex",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e53",
+      "source": "n_old_gallery_features",
+      "target": "n_reid_without_reindex",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e54",
+      "source": "n_query_features_var",
+      "target": "n_reid_without_reindex",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e55",
+      "source": "n_old_gallery_features",
+      "target": "n_incompat_ids",
+      "type": "dependency",
+      "label": "non-compat"
+    },
+    {
+      "edge_id": "e56",
+      "source": "n_reid_without_reindex",
+      "target": "n_incompat_ids",
+      "type": "dependency",
+      "label": "errors"
+    },
+    {
+      "edge_id": "e57",
+      "source": "n_privacy_lock",
+      "target": "n_no_access",
+      "type": "control",
+      "label": "privacy constraint"
+    },
+    {
+      "edge_id": "e58",
+      "source": "n_no_access",
+      "target": "n_reindexing",
+      "type": "control",
+      "label": "blocked"
+    },
+    {
+      "edge_id": "e59",
+      "source": "n_old_gallery_features",
+      "target": "n_privacy_old_gallery_features",
+      "type": "data",
+      "label": "residual"
+    },
+    {
+      "edge_id": "e60",
+      "source": "n_query_images",
+      "target": "n_new_model",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e61",
+      "source": "n_new_model",
+      "target": "n_query_features_privacy",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e62",
+      "source": "n_privacy_old_gallery_features",
+      "target": "n_retrieval_privacy",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e63",
+      "source": "n_query_features_privacy",
+      "target": "n_retrieval_privacy",
+      "type": "data",
+      "label": null
+    },
+    {
+      "edge_id": "e64",
+      "source": "n_retrieval_privacy",
+      "target": "n_incompat_ids",
+      "type": "dependency",
+      "label": "limited accuracy"
+    }
+  ],
+  "hierarchy": {
+    "chunk_contains_groups": {
+      "chunk_0_0": [
+        "grp_training",
+        "grp_cct"
+      ],
+      "chunk_1_0": [
+        "grp_transfer"
+      ],
+      "chunk_1_1": [
+        "grp_testing"
+      ],
+      "chunk_2_0": [
+        "grp_retrieval"
+      ],
+      "chunk_2_1": [
+        "grp_privacy"
+      ]
+    },
+    "group_spans_chunks": {
+      "grp_training": [
+        "chunk_0_0"
+      ],
+      "grp_cct": [
+        "chunk_0_0"
+      ],
+      "grp_transfer": [
+        "chunk_1_0"
+      ],
+      "grp_testing": [
+        "chunk_1_1"
+      ],
+      "grp_retrieval": [
+        "chunk_2_0"
+      ],
+      "grp_privacy": [
+        "chunk_2_1"
+      ]
+    },
+    "group_contains_nodes": {
+      "grp_training": [
+        "n_old_data",
+        "n_new_data",
+        "n_old_model",
+        "n_new_model",
+        "n_z_o",
+        "n_z_s",
+        "n_L_base"
+      ],
+      "grp_cct": [
+        "n_fmm",
+        "n_fmm_mlp",
+        "n_fmm_out",
+        "n_kcm",
+        "n_kcm_left_fc",
+        "n_kcm_left_softmax",
+        "n_gate_a",
+        "n_gate_1ma",
+        "n_kcm_keys",
+        "n_kcm_values",
+        "n_kcm_attn_softmax",
+        "n_kcm_weighted_sum",
+        "n_kcm_out",
+        "n_mul_fmm",
+        "n_mul_kcm",
+        "n_sum_cct",
+        "n_z_hat",
+        "n_bcd",
+        "n_Mo",
+        "n_Ms",
+        "n_bad",
+        "n_old_classifier",
+        "n_bad_weights"
+      ],
+      "grp_transfer": [
+        "n_F_prev",
+        "n_cct_transfer",
+        "n_transferred_set",
+        "n_new_images",
+        "n_extracted_features",
+        "n_merge_union",
+        "n_Fs"
+      ],
+      "grp_testing": [
+        "n_query_image",
+        "n_query_feature",
+        "n_match",
+        "n_result_id"
+      ],
+      "grp_retrieval": [
+        "n_old_gallery_images",
+        "n_query_images",
+        "n_old_gallery_features",
+        "n_reindexing",
+        "n_reindexed_gallery_features",
+        "n_reid_with_reindex",
+        "n_reid_without_reindex",
+        "n_query_features_var",
+        "n_incompat_ids"
+      ],
+      "grp_privacy": [
+        "n_privacy_lock",
+        "n_no_access",
+        "n_privacy_old_gallery_features",
+        "n_retrieval_privacy",
+        "n_query_features_privacy"
+      ]
+    },
+    "chunk_contains_nodes": {
+      "chunk_0_0": [
+        "n_old_data",
+        "n_new_data",
+        "n_old_model",
+        "n_new_model",
+        "n_z_o",
+        "n_z_s",
+        "n_L_base",
+        "n_fmm",
+        "n_fmm_mlp",
+        "n_fmm_out",
+        "n_kcm",
+        "n_kcm_left_fc",
+        "n_kcm_left_softmax",
+        "n_gate_a",
+        "n_gate_1ma",
+        "n_kcm_keys",
+        "n_kcm_values",
+        "n_kcm_attn_softmax",
+        "n_kcm_weighted_sum",
+        "n_kcm_out",
+        "n_mul_fmm",
+        "n_mul_kcm",
+        "n_sum_cct",
+        "n_z_hat",
+        "n_bcd",
+        "n_Mo",
+        "n_Ms",
+        "n_bad",
+        "n_old_classifier",
+        "n_bad_weights"
+      ],
+      "chunk_1_0": [
+        "n_F_prev",
+        "n_cct_transfer",
+        "n_transferred_set",
+        "n_new_images",
+        "n_extracted_features",
+        "n_merge_union",
+        "n_Fs"
+      ],
+      "chunk_1_1": [
+        "n_query_image",
+        "n_query_feature",
+        "n_match",
+        "n_result_id"
+      ],
+      "chunk_2_0": [
+        "n_old_gallery_images",
+        "n_query_images",
+        "n_old_gallery_features",
+        "n_reindexing",
+        "n_reindexed_gallery_features",
+        "n_reid_with_reindex",
+        "n_reid_without_reindex",
+        "n_query_features_var",
+        "n_incompat_ids"
+      ],
+      "chunk_2_1": [
+        "n_privacy_lock",
+        "n_no_access",
+        "n_privacy_old_gallery_features",
+        "n_retrieval_privacy",
+        "n_query_features_privacy"
+      ]
+    },
+    "node_parent": {
+      "n_old_data": {
+        "group": "grp_training",
+        "chunk": "chunk_0_0"
+      },
+      "n_new_data": {
+        "group": "grp_training",
+        "chunk": "chunk_0_0"
+      },
+      "n_old_model": {
+        "group": "grp_training",
+        "chunk": "chunk_0_0"
+      },
+      "n_new_model": {
+        "group": "grp_training",
+        "chunk": "chunk_0_0"
+      },
+      "n_z_o": {
+        "group": "grp_training",
+        "chunk": "chunk_0_0"
+      },
+      "n_z_s": {
+        "group": "grp_training",
+        "chunk": "chunk_0_0"
+      },
+      "n_L_base": {
+        "group": "grp_training",
+        "chunk": "chunk_0_0"
+      },
+      "n_fmm": {
+        "group": "grp_cct",
+        "chunk": "chunk_0_0"
+      },
+      "n_fmm_mlp": {
+        "group": "grp_cct",
+        "chunk": "chunk_0_0"
+      },
+      "n_fmm_out": {
+        "group": "grp_cct",
+        "chunk": "chunk_0_0"
+      },
+      "n_kcm": {
+        "group": "grp_cct",
+        "chunk": "chunk_0_0"
+      },
+      "n_kcm_left_fc": {
+        "group": "grp_cct",
+        "chunk": "chunk_0_0"
+      },
+      "n_kcm_left_softmax": {
+        "group": "grp_cct",
+        "chunk": "chunk_0_0"
+      },
+      "n_gate_a": {
+        "group": "grp_cct",
+        "chunk": "chunk_0_0"
+      },
+      "n_gate_1ma": {
+        "group": "grp_cct",
+        "chunk": "chunk_0_0"
+      },
+      "n_kcm_keys": {
+        "group": "grp_cct",
+        "chunk": "chunk_0_0"
+      },
+      "n_kcm_values": {
+        "group": "grp_cct",
+        "chunk": "chunk_0_0"
+      },
+      "n_kcm_attn_softmax": {
+        "group": "grp_cct",
+        "chunk": "chunk_0_0"
+      },
+      "n_kcm_weighted_sum": {
+        "group": "grp_cct",
+        "chunk": "chunk_0_0"
+      },
+      "n_kcm_out": {
+        "group": "grp_cct",
+        "chunk": "chunk_0_0"
+      },
+      "n_mul_fmm": {
+        "group": "grp_cct",
+        "chunk": "chunk_0_0"
+      },
+      "n_mul_kcm": {
+        "group": "grp_cct",
+        "chunk": "chunk_0_0"
+      },
+      "n_sum_cct": {
+        "group": "grp_cct",
+        "chunk": "chunk_0_0"
+      },
+      "n_z_hat": {
+        "group": "grp_cct",
+        "chunk": "chunk_0_0"
+      },
+      "n_bcd": {
+        "group": "grp_cct",
+        "chunk": "chunk_0_0"
+      },
+      "n_Mo": {
+        "group": "grp_cct",
+        "chunk": "chunk_0_0"
+      },
+      "n_Ms": {
+        "group": "grp_cct",
+        "chunk": "chunk_0_0"
+      },
+      "n_bad": {
+        "group": "grp_cct",
+        "chunk": "chunk_0_0"
+      },
+      "n_old_classifier": {
+        "group": "grp_cct",
+        "chunk": "chunk_0_0"
+      },
+      "n_bad_weights": {
+        "group": "grp_cct",
+        "chunk": "chunk_0_0"
+      },
+      "n_F_prev": {
+        "group": "grp_transfer",
+        "chunk": "chunk_1_0"
+      },
+      "n_cct_transfer": {
+        "group": "grp_transfer",
+        "chunk": "chunk_1_0"
+      },
+      "n_transferred_set": {
+        "group": "grp_transfer",
+        "chunk": "chunk_1_0"
+      },
+      "n_new_images": {
+        "group": "grp_transfer",
+        "chunk": "chunk_1_0"
+      },
+      "n_extracted_features": {
+        "group": "grp_transfer",
+        "chunk": "chunk_1_0"
+      },
+      "n_merge_union": {
+        "group": "grp_transfer",
+        "chunk": "chunk_1_0"
+      },
+      "n_Fs": {
+        "group": "grp_transfer",
+        "chunk": "chunk_1_0"
+      },
+      "n_query_image": {
+        "group": "grp_testing",
+        "chunk": "chunk_1_1"
+      },
+      "n_query_feature": {
+        "group": "grp_testing",
+        "chunk": "chunk_1_1"
+      },
+      "n_match": {
+        "group": "grp_testing",
+        "chunk": "chunk_1_1"
+      },
+      "n_result_id": {
+        "group": "grp_testing",
+        "chunk": "chunk_1_1"
+      },
+      "n_old_gallery_images": {
+        "group": "grp_retrieval",
+        "chunk": "chunk_2_0"
+      },
+      "n_query_images": {
+        "group": "grp_retrieval",
+        "chunk": "chunk_2_0"
+      },
+      "n_old_gallery_features": {
+        "group": "grp_retrieval",
+        "chunk": "chunk_2_0"
+      },
+      "n_reindexing": {
+        "group": "grp_retrieval",
+        "chunk": "chunk_2_0"
+      },
+      "n_reindexed_gallery_features": {
+        "group": "grp_retrieval",
+        "chunk": "chunk_2_0"
+      },
+      "n_reid_with_reindex": {
+        "group": "grp_retrieval",
+        "chunk": "chunk_2_0"
+      },
+      "n_reid_without_reindex": {
+        "group": "grp_retrieval",
+        "chunk": "chunk_2_0"
+      },
+      "n_query_features_var": {
+        "group": "grp_retrieval",
+        "chunk": "chunk_2_0"
+      },
+      "n_incompat_ids": {
+        "group": "grp_retrieval",
+        "chunk": "chunk_2_0"
+      },
+      "n_privacy_lock": {
+        "group": "grp_privacy",
+        "chunk": "chunk_2_1"
+      },
+      "n_no_access": {
+        "group": "grp_privacy",
+        "chunk": "chunk_2_1"
+      },
+      "n_privacy_old_gallery_features": {
+        "group": "grp_privacy",
+        "chunk": "chunk_2_1"
+      },
+      "n_retrieval_privacy": {
+        "group": "grp_privacy",
+        "chunk": "chunk_2_1"
+      },
+      "n_query_features_privacy": {
+        "group": "grp_privacy",
+        "chunk": "chunk_2_1"
+      }
+    }
+  }
+}

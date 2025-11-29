@@ -2,7 +2,17 @@ from dataclasses import dataclass, field
 import os
 from pathlib import Path
 from typing import Any, Dict, List
-from dataflow.cli_funcs.paths import DataFlowPath
+try:
+    from dataflow.cli_funcs.paths import DataFlowPath
+except Exception:
+    class DataFlowPath:
+        @staticmethod
+        def get_dataflow_dir():
+            return Path(__file__).resolve().parent
+
+        @staticmethod
+        def get_dataflow_statics_dir():
+            return Path(__file__).resolve().parent.parent / "static"
 current_file = Path(__file__).resolve()
 
 BASE_DIR = DataFlowPath.get_dataflow_dir()
@@ -144,3 +154,101 @@ class IconGenState(MainState):
     # 下面是 icongen 自己的产物 / 临时数据
     icon_prompt: str = ""                                 # 生成的图标提示词
     img_save_path: str = ""                              # 生成的图标保存路径
+
+    
+# ==================== Web 爬取/研究 Request ====================
+@dataclass
+class WebCrawlRequest(MainRequest):
+    """Web 爬取任务的 Request，继承自 MainRequest"""
+    # 初始需求与下载目录
+    initial_request: str = ""
+    download_dir: str = os.path.join(STATICS_DIR, "web_crawl")
+
+    # 爬取/研究配置
+    search_engine: str = "tavily"     # 'tavily' | 'duckduckgo' | 'jina'
+    use_jina_reader: bool = False
+    enable_rag: bool = True
+
+
+# ==================== Web 爬取/研究 State ====================
+@dataclass
+class WebCrawlState(MainState):
+    """管理网络爬取与研究过程的状态"""
+    # 重写 request 类型为 WebCrawlRequest
+    request: WebCrawlRequest = field(default_factory=WebCrawlRequest)
+
+    # 直通字段（为兼容调用方直接从 state 访问这些配置项）
+    initial_request: str = ""
+    download_dir: str = os.path.join(STATICS_DIR, "web_crawl")
+    search_engine: str = "tavily"
+    use_jina_reader: bool = False
+    enable_rag: bool = True
+    rag_manager: Any = None
+
+    # 研究/爬取过程中的临时与产出数据
+    sub_tasks: list[Dict[str, Any]] = field(default_factory=list)
+    completed_sub_tasks: list[Dict[str, Any]] = field(default_factory=list)
+    research_summary: Dict[str, Any] = field(default_factory=dict)
+    search_results_text: str = ""
+    filtered_urls: list[str] = field(default_factory=list)
+    crawled_data: list[Dict[str, Any]] = field(default_factory=list)
+    visited_urls: set[str] = field(default_factory=set)
+    url_queue: list[str] = field(default_factory=list)
+    is_finished: bool = False
+    supervisor_feedback: str = "Process has not started."
+    # 控制参数
+    max_crawl_cycles_per_task: int = 5
+    max_crawl_cycles_for_research: int = 15
+    current_cycle: int = 0
+    download_successful_for_current_task: bool = False
+
+    def reset_for_new_task(self):
+        self.search_results_text = ""
+        self.filtered_urls = []
+        self.visited_urls = set()
+        self.url_queue = []
+        self.current_cycle = 0
+        self.download_successful_for_current_task = False
+
+
+# ==================== Paper2Graph  Request ====================
+@dataclass
+class Paper2GraphRequest(MainRequest):      
+    target: str = ""
+    # 供下游 Agent 使用的约束与说明（若上游未提供，可为空，Agent 内置 fallback）
+    header_json_desc: Dict[str, Any] = field(default_factory=dict)
+    semantic_json_desc: Dict[str, Any] = field(default_factory=dict)
+    layout_json_desc: Dict[str, Any] = field(default_factory=dict)
+    design_json_desc: Dict[str, Any] = field(default_factory=dict)
+    
+    semantic_json_schema: Dict[str, Any] = field(default_factory=dict)
+    layout_json_schema: Dict[str, Any] = field(default_factory=dict)
+    design_json_schema: Dict[str, Any] = field(default_factory=dict)
+
+
+# ==================== Paper2Graph State ====================
+@dataclass
+class Paper2GraphState(MainState):
+    request: Paper2GraphRequest = field(default_factory=Paper2GraphRequest)
+
+    # enriched_description 为结构化对象，包含 semantic_desc 与 layout_desc
+    enriched_description: Dict[str, Any] = field(default_factory=dict)
+
+    # 各阶段 JSON 的承载结构：语义/布局/美学设计及最终 PaperGraph JSON
+    header_json: Dict[str, Any] = field(default_factory=dict)
+    semantic_json: Dict[str, Any] = field(default_factory=dict)
+    layout_plan: Dict[str, Any] = field(default_factory=dict)  # 布局规划（grid级别）
+    # node 级布局规划结果，由 p2g_node_layout_planner_agent 生成
+    node_layout_plan: Dict[str, Any] = field(default_factory=dict)
+    # 最终的 layout_json，包含 chunks/nodes 的像素级 bbox
+    layout_json: Dict[str, Any] = field(default_factory=dict)
+    design_json: Dict[str, Any] = field(default_factory=dict)
+    final_json: Dict[str, Any] = field(default_factory=dict)
+
+    # Checker 相关字段
+    layout_error_info: str = ""
+    wireframe_url: str = ""
+    semantic_gap: str = ""
+    
+    # Node 渲染设计结果，由 p2g_node_render_design_agent 生成
+    node_render_design: Dict[str, Any] = field(default_factory=dict)

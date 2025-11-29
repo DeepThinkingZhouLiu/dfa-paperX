@@ -1,0 +1,151 @@
+以下是对给定科研绘图的系统化、分层次、完整描述。
+
+一、整体布局与结构
+- 全图分为两层：
+  - 上层为三个并列的子图，分别标注为 (a) Training at s^th Stage、(b) Transfer at s^th Stage、(c) Testing at s^th Stage。三个子图置于浅灰色背景区域中，左右横向排布，彼此独立但数据流有逻辑关联。
+  - 下层为一个大面积的虚线边框区域，展示“数据隐私约束下的 ReID 管线选择与影响”（含 Feature Replacing、ReID with Re-indexing、ReID w/o Re-indexing 三种路径），伴随“Data Privacy”图标与流程对比。
+- 主要视觉元素：
+  - 照片（行人图像），竖条状“数据流”条带，模型方块（Old Model、New Model），模块化子系统（CCT、FMM、KCM、BCD、BAD），数学运算节点（Multiply、Sum），相似度矩阵与柱状分布图，ID 标签的“画廊特征集合”，以及箭头表示的数据/特征流向。
+  - 颜色编码：偏黄/米黄色用于“旧数据/旧特征/旧模型相关”，偏蓝色用于“新数据/新特征/新模型相关”，白色/浅色用于中立或通用组件；绿色与蓝色线条用于展示加权/门控系数的流向；红色“X”表示不兼容或错误匹配，绿色“✓”表示正确匹配。
+
+二、模块与组件（逐子图）
+1) (a) Training at s^th Stage（训练阶段）
+- 左侧输入区：
+  - “Data Stream”竖条：标注 Old data（上半段）与 New data（下半段），中间插入一张行人图像，表示当前 s 阶段数据以流式方式到来。
+  - Old Model 方块：从“Data Stream”取样，输出旧特征 z^o（黄色）。
+  - New Model 方块：从“Data Stream”取样（重点是当前阶段新数据 D^s），输出新特征 z^n（蓝色）。
+  - 旁注符号：ϕ^o、ϕ^n（分别代表旧/新模型的特征抽取函数）；D^s（当前阶段数据集）；L_base（基础训练损失，源于新模型对新数据的标准学习）。
+- 中部主体模块：Continual Compatible Transfer (CCT)，以虚线大框包围，含两子模块：
+  - Forward Mapping Module (FMM)：
+    - 内部为“×4”重复的前馈块，每个块包含若干层：FC、BN、PReLU（图中列名依次显示如 FC1、PReLU、BN、PReLU、BN 等，实际以4组串联表示）。
+    - 输入为旧特征 z^o，输出为经前向映射后的特征（用于适配新空间）。
+    - 末端连接一个“Multiply”乘法节点（用于与门控/权重相乘）。
+  - Knowledge Capturing Module (KCM)：
+    - 上支路：MLP → Softmax，产生权重/门控系数（记为 a^m 及其互补项 1−a^d；图中以绿色/蓝色线区分两类系数）。
+    - 下支路：FC → Softmax，生成对键值对的注意分布：Softmax 输出对键集合 {k1, k2, k3, …} 的权重，对应的值集合 {v1, v2, v3, …} 经加权求和（Σ）后再“Multiply”。
+    - 两支路的加权结果与 FMM 输出在右侧以“Sum”圆节点求和，得到兼容迁移后的融合特征。
+- 右侧损失与约束：
+  - Balanced Compatible Distillation (BCD)：
+    - 展示两个相似度矩阵（以方格组成 M），颜色标注说明：
+      - 米黄色格：Similarity of Same Person（同一身份的相似度）
+      - 白色格：Similarity of Different Person（不同身份的相似度）
+    - 表达用新/旧空间的相似关系进行“兼容蒸馏”，均衡同/不同身份相似度的约束。
+  - Balanced Anti-forgetting Distillation (BAD)：
+    - 显示柱状分布图（两组），以及“Old Classifier”方块（参数标记 ψ^o）。
+    - 表示在蒸馏过程中对旧分类器知识的均衡保留，抑制遗忘（通过分布/响应的对齐与均衡）。
+- 层次关系与作用：
+  - Old/New Model 产生 z^o/z^n。
+  - CCT（由 FMM+KCM 构成）对 z^o 进行前向映射并借助知识捕获进行门控/融合，使旧特征与新空间兼容。
+  - BCD 对相似度结构进行兼容蒸馏；BAD 对旧分类器知识进行平衡反遗忘蒸馏。
+  - L_base 用于新模型的基础学习；BCD/BAD 作为额外约束共同优化训练。
+
+2) (b) Transfer at s^th Stage（迁移阶段）
+- 输入与中间态：
+  - Old Gallery Feature Set F^(s−1)：一个竖条栈状方块，内部标注 ID:1 … ID:N（旧阶段累计的画廊特征）。
+  - “CCT at s^th stage”方块：表示使用第 s 阶段训练得到的 CCT 来对旧画廊特征做迁移。
+  - Transferred Feature Set：迁移后的画廊特征集合（颜色与形式从偏黄向偏蓝过渡）。
+- 融合生成新画廊：
+  - New Gallery Feature Set：包含 ID:1 … ID:N+1 … ID:M（在旧 ID 基础上新增的身份），由两部分组成：
+    - 迁移后的旧特征（来自 Transferred Feature Set）。
+    - 新阶段“Extracted Features”（右侧有行人图像 → New Model → 提取新特征）添加到画廊。
+  - 最终得到 F^s（第 s 阶段的画廊特征全集）。
+
+3) (c) Testing at s^th Stage（测试阶段）
+- 左侧为 F^s：竖条栈状展示 ID:1 … ID:M。
+- 中部为 New Model（第 s 阶段训练好的新模型）。
+- 右侧为 Query：一张行人图像（蓝框/蓝色语义）。
+- 流程：Query 经 New Model 提取特征，与 F^s 进行匹配，右侧显示“ID:182 ✓”（绿色勾），表示识别成功并返回相应 ID。
+
+4) 下层虚线大框：隐私约束与三种 ReID 管线
+- 顶部彩色箭头标示三种路径：
+  - 蓝色箭头：Feature Replacing
+  - 黄色箭头：ReID w/ Re-indexing
+  - 红色箭头：ReID w/o Re-indexing
+- 左侧“Old Gallery Images”与“Query Images”：
+  - Old Gallery Images：展示两张带虚线边框的行人图像，标注 ID:1、ID:2。
+  - Query Images：两张查询图像（用于生成查询特征）。
+- 中部“Old Gallery Features”与“New Model”：
+  - Old Gallery Features：竖条方块表示旧画廊特征。
+  - New Model：用于对 Query Images 提取“Query Features”（右侧小方块）。
+- “Re-indexing”与“Feature Replacing”：
+  - Re-indexing：蓝色箭头与“Re-indexed Gallery Features”方块，表示用新模型或迁移策略对旧画廊特征进行重新索引/替换，使其与新空间兼容。
+  - Feature Replacing：蓝色路径强调直接替换旧画廊特征为与新模型兼容的新特征。
+- “ReID w/ Re-indexing”与“ReID w/o Re-indexing”对比：
+  - 有 Re-indexing（黄色箭头）：旧画廊特征经重新索引后与 Query Features 相兼容，得到更稳健的识别流程。
+  - 无 Re-indexing（红色箭头）：直接用旧画廊特征与新模型的查询特征匹配，右侧以红色“X”标注 ID:5 等失败示例，说明不兼容导致误识。
+- “Data Privacy”：
+  - 中部偏右显示红色锁头图标与“Data Privacy”文字，并以斜杠标注“不允许访问旧画廊图像”：
+    - 箭头从 Old Gallery Images 指向 New Model 被红叉阻断，强调隐私约束下无法用旧图像重新提取特征。
+    - 后果：只能保留“Old Gallery Features”（旧特征），与新模型提取的“Query Features”不兼容，导致右侧“Old Gallery Features”上出现红色“X”（ID:3、ID:5 等），凸显失败风险。
+
+三、连接关系与数据/控制流
+- (a) 训练阶段：
+  - Data Stream → Old Model → z^o → FMM → Multiply（与 KCM 权重）→ Sum（与 KCM 输出的注意汇聚结果）→ 兼容迁移特征。
+  - Data Stream → New Model → z^n → L_base（基础监督）。
+  - CCT 输出特征同时参与 BCD（相似度矩阵 M 的约束）与 BAD（旧分类器 ψ^o 的响应分布对齐）。
+  - 绿色/蓝色线分别从 KCM 的 Softmax 输出流向“Multiply/Sum”，表示两类系数（a^m 与 1−a^d）对 FMM 结果与注意汇聚结果的加权。
+- (b) 迁移阶段：
+  - F^(s−1) → CCT at s^th stage → Transferred Feature Set。
+  - 新数据 → New Model → Extracted Features。
+  - Transferred Feature Set + Extracted Features → New Gallery Feature Set → F^s。
+- (c) 测试阶段：
+  - Query → New Model → Query Feature → 与 F^s 匹配 → 输出预测 ID（示例为 ID:182 ✓）。
+- 下层隐私管线：
+  - Old Gallery Images →（若允许）→ New Model → 新的画廊特征（Feature Replacing/Re-indexing）。
+  - 若隐私不允许：Old Gallery Images ↛ New Model（被锁头与红叉阻断），只能保留 Old Gallery Features，与 Query Features 匹配往往失败（红色“X”）。
+
+四、文本与标签（位置与含义）
+- 子图标题：
+  - (a) Training at s^th Stage（上层左，训练流程）
+  - (b) Transfer at s^th Stage（上层中，画廊特征迁移）
+  - (c) Testing at s^th Stage（上层右，测试与检索）
+- 关键模块与缩写：
+  - CCT（Continual Compatible Transfer）：包含 FMM（Forward Mapping Module）与 KCM（Knowledge Capturing Module）。
+  - BCD（Balanced Compatible Distillation）：基于相似度矩阵 M，强调“Similarity of Same Person”“Similarity of Different Person”图例。
+  - BAD（Balanced Anti-forgetting Distillation）：与 Old Classifier（ψ^o）相关的分布均衡。
+- 符号与变量：
+  - ϕ^o、ϕ^n（旧/新模型的特征提取函数）
+  - z^o（旧特征）、z^n（新特征）
+  - D^s（第 s 阶段数据集）
+  - L_base（基础损失）
+  - a^m、1−a^d（门控/加权系数）
+  - F^(s−1)、F^s（第 s−1/第 s 阶段的画廊特征集合）
+  - ID:1 … ID:N、ID:N+1 … ID:M（身份编号）
+  - Query、Query Features（查询图像与其特征）
+  - Transferred Feature Set、New Gallery Feature Set、Extracted Features（迁移后的旧画廊、新画廊、提取的新特征）
+- 说明性标签：
+  - Data Stream、Old data、New data
+  - Multiply、Sum、Softmax、MLP、FC、BN、PReLU、×4（结构重复次数）
+  - Old Classifier（ψ^o）
+  - “Data Privacy”（配锁图标）、“Re-indexing”“Feature Replacing”“ReID w/ Re-indexing”“ReID w/o Re-indexing”
+  - 红色“X”（错误匹配）、绿色“✓”（正确匹配）
+
+五、视觉特征与符号规范
+- 颜色语义：
+  - 黄色/米黄色：旧域、旧模型、旧特征、同人相似度高的矩阵单元
+  - 蓝色：新域、新模型、新特征、查询与新画廊
+  - 绿色/蓝色线：两类门控系数与注意权重的路径
+  - 红色：隐私阻断、错误匹配、不可兼容
+- 形状与图示：
+  - 方块：模型、模块、特征集合、相似度矩阵、分类器
+  - 圆形节点：Multiply（×）与 Sum（+）
+  - 竖条堆叠：画廊特征集合（带 ID 标签）
+  - 方格矩阵：相似度 M（带颜色图例）
+  - 柱状条形：BAD 中的响应分布
+  - 锁头图标：Data Privacy 限制
+- 排版与层次：
+  - 大虚线框表示模块或场景（CCT、隐私场景）。
+  - 箭头明确数据/特征/权重的方向。
+  - 组件之间的相对位置体现流程先后：输入（左）→处理（中）→约束/损失（右）；训练→迁移→测试的阶段性递进。
+
+六、逻辑总结（可转结构化数据的要点）
+- 阶段性流程：以 s 阶段为核心，训练（CCT+BCD+BAD）→迁移旧画廊至新空间（F^(s−1) → F^s）→测试（Query 与 F^s 匹配）。
+- 兼容与遗忘：
+  - CCT 通过 FMM+KCM 对旧特征进行前向映射与知识加权融合。
+  - BCD 平衡同/不同人的相似度，以保证新旧特征空间的兼容。
+  - BAD 保留旧分类器知识，缓解灾难性遗忘。
+- 画廊维护策略：
+  - 有隐私约束时：无法访问旧图像，仅能使用旧特征，需依赖特征迁移/重索引以恢复兼容；否则会导致 ReID 失败（红 X）。
+  - 无隐私约束时：可进行 Feature Replacing 或 Re-indexing，使旧画廊与新模型对齐，提高检索准确性。
+
+此描述覆盖了图中全部重要视觉元素、模块结构、连接关系、标签说明与颜色语义，便于后续转化为结构化数据或流程图。
