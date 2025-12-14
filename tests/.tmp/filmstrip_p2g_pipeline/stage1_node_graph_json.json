@@ -13,8 +13,8 @@
       "node_id": "n1",
       "label": "Input Image",
       "role": "input",
-      "semantic_desc": "An RGB training image used for weakly supervised semantic segmentation.",
-      "visual_desc": "A generic natural scene photo (e.g., street/indoor) without any overlaid text or annotations.",
+      "semantic_desc": "Raw RGB training image used for weakly supervised semantic segmentation.",
+      "visual_desc": "A natural image (e.g., street scene) thumbnail with no text, realistic colors.",
       "constraints": {
         "no_text_inside": true
       }
@@ -23,18 +23,18 @@
       "node_id": "n2",
       "label": "Image-level Labels",
       "role": "input",
-      "semantic_desc": "Multi-class image-level supervision indicating which semantic categories appear in the image (no pixel masks).",
-      "visual_desc": "A tag/list panel with small class icons (e.g., car, person, road) shown as symbols, not text.",
+      "semantic_desc": "Multi-label class presence annotation at image level (no pixel masks).",
+      "visual_desc": "A compact tag list / multi-hot vector visualization (e.g., small class icons or a 0/1 bar) without text inside.",
       "constraints": {
         "no_text_inside": true
       }
     },
     {
       "node_id": "n3",
-      "label": "Patch Tokenizer",
+      "label": "Smaller Patch Tokenizer",
       "role": "process",
-      "semantic_desc": "Splits the image into smaller patches/tokens (smaller patch size to improve localization granularity).",
-      "visual_desc": "A module box labeled 'Patch Tokenizer' with an inset grid icon representing fine patches.",
+      "semantic_desc": "Patch embedding stage using smaller patch size to increase spatial granularity for pixel-level localization.",
+      "visual_desc": "A rounded rectangle module labeled 'Smaller Patch Tokenizer' with a tiny grid icon indicating finer patches.",
       "constraints": {
         "no_text_inside": false
       }
@@ -43,18 +43,18 @@
       "node_id": "n4",
       "label": "Localization Token",
       "role": "process",
-      "semantic_desc": "A dedicated token injected at the input stage to encourage localization-aware representation learning under weak supervision.",
-      "visual_desc": "A small token vector icon (circle with 'L' symbol) feeding into the backbone alongside patch tokens.",
+      "semantic_desc": "A dedicated learnable token injected at the input/token level to strengthen localization cues under weak supervision.",
+      "visual_desc": "A small pill-shaped token icon feeding into the encoder, labeled 'Loc Token'.",
       "constraints": {
-        "no_text_inside": true
+        "no_text_inside": false
       }
     },
     {
       "node_id": "n5",
       "label": "SegFormer Backbone",
       "role": "process",
-      "semantic_desc": "Transformer encoder backbone (SegFormer) extracting multi-scale feature maps from tokens.",
-      "visual_desc": "A large rounded rectangle labeled 'SegFormer Backbone' with stacked feature pyramid glyphs inside.",
+      "semantic_desc": "Transformer encoder (SegFormer backbone) extracting multi-scale feature maps from tokens.",
+      "visual_desc": "A large rounded rectangle labeled 'SegFormer Backbone' with stacked feature pyramid glyphs on the right edge.",
       "constraints": {
         "no_text_inside": false
       }
@@ -63,8 +63,8 @@
       "node_id": "n6",
       "label": "Adapter Module",
       "role": "process",
-      "semantic_desc": "Lightweight adaptation layer to improve pixel-level learning capacity without changing the main backbone heavily.",
-      "visual_desc": "A slim plug-in block attached to the backbone output labeled 'Adapter'.",
+      "semantic_desc": "Lightweight adaptation block to enhance feature discrimination/localization without full backbone retraining.",
+      "visual_desc": "A slim rounded rectangle labeled 'Adapter' attached to the backbone output stream (sidecar style).",
       "constraints": {
         "no_text_inside": false
       }
@@ -73,8 +73,8 @@
       "node_id": "n7",
       "label": "Classification Head",
       "role": "process",
-      "semantic_desc": "Image-level classifier operating on global features to match image-level labels (weak supervision).",
-      "visual_desc": "A small module box labeled 'Cls Head' outputting a bar-chart probability vector icon.",
+      "semantic_desc": "Image-level classifier head producing class logits from backbone features for weak supervision.",
+      "visual_desc": "A rounded rectangle labeled 'Cls Head' followed by a small logits vector icon.",
       "constraints": {
         "no_text_inside": false
       }
@@ -83,8 +83,8 @@
       "node_id": "n8",
       "label": "Classification Loss",
       "role": "aux",
-      "semantic_desc": "Supervises image-level predictions using image-level labels (e.g., multi-label BCE / CE).",
-      "visual_desc": "A diamond-shaped loss node labeled 'L_cls' with a small sigma icon.",
+      "semantic_desc": "Supervision term computed from image-level labels and classification logits (e.g., multi-label BCE/CE).",
+      "visual_desc": "A small hexagon labeled 'L_cls' with an incoming label arrow and outgoing gradient arrow.",
       "constraints": {
         "no_text_inside": false
       }
@@ -93,8 +93,8 @@
       "node_id": "n9",
       "label": "Segmentation Decoder",
       "role": "process",
-      "semantic_desc": "Decoder transforming backbone feature maps into dense per-pixel segmentation logits.",
-      "visual_desc": "A module box labeled 'Decoder' with an upsampling arrow icon.",
+      "semantic_desc": "Decoder head that upsamples and fuses backbone features to produce dense per-pixel logits.",
+      "visual_desc": "A rounded rectangle labeled 'Decoder' with an upsampling arrow icon.",
       "constraints": {
         "no_text_inside": false
       }
@@ -103,8 +103,8 @@
       "node_id": "n10",
       "label": "Predicted Segmentation",
       "role": "output",
-      "semantic_desc": "Model predicted per-pixel semantic map (softmax probabilities or hard labels).",
-      "visual_desc": "A color-coded segmentation mask overlay on the input image with multiple class colors.",
+      "semantic_desc": "Dense semantic segmentation prediction (per-pixel class map) generated by the decoder.",
+      "visual_desc": "A color-coded segmentation mask overlay on the input image (distinct colors for classes), no text.",
       "constraints": {
         "no_text_inside": true
       }
@@ -113,8 +113,8 @@
       "node_id": "n11",
       "label": "Patch Clustering",
       "role": "process",
-      "semantic_desc": "Clusters fine-grained patch features to form region/group prototypes supporting pseudo-label generation and pixel-level learning.",
-      "visual_desc": "A clustering diagram icon (points grouped into colored clusters) inside a labeled module box.",
+      "semantic_desc": "Clustering over fine-grained patch features to form region/group cues for pseudo-label generation.",
+      "visual_desc": "A rounded rectangle labeled 'Patch Clustering' with a scatter plot icon and colored cluster blobs.",
       "constraints": {
         "no_text_inside": false
       }
@@ -123,8 +123,8 @@
       "node_id": "n12",
       "label": "Memory Bank",
       "role": "aux",
-      "semantic_desc": "Stores and updates feature prototypes/embeddings across iterations to stabilize clustering and pseudo-label quality.",
-      "visual_desc": "A database cylinder icon labeled 'Memory Bank' with arrows indicating enqueue/dequeue.",
+      "semantic_desc": "Feature memory storing class/region prototypes or historical patch embeddings to stabilize pseudo labels.",
+      "visual_desc": "A database cylinder icon labeled 'Memory Bank' with arrows indicating read/write.",
       "constraints": {
         "no_text_inside": false
       }
@@ -133,8 +133,8 @@
       "node_id": "n13",
       "label": "Pseudo-label Generator",
       "role": "process",
-      "semantic_desc": "Generates pseudo pixel-level labels from predictions and/or clustered features guided by image-level labels.",
-      "visual_desc": "A module box labeled 'Pseudo-label Gen' outputting a mask icon with dashed boundaries.",
+      "semantic_desc": "Generates pixel-level pseudo masks by combining predictions with clustering and memory bank cues.",
+      "visual_desc": "A rounded rectangle labeled 'Pseudo-label Generator' with a wand/gear icon and a mask output port.",
       "constraints": {
         "no_text_inside": false
       }
@@ -143,18 +143,28 @@
       "node_id": "n14",
       "label": "Pseudo Labels",
       "role": "aux",
-      "semantic_desc": "Auto-generated pixel-level supervision masks used to train the segmentation branch.",
-      "visual_desc": "A noisy segmentation mask (speckled/partial regions) shown as a dashed-outline colored mask.",
+      "semantic_desc": "Generated pixel-wise supervision signal used to train the segmentation branch under weak supervision.",
+      "visual_desc": "A grayscale/colored mask image with crisp regions (pseudo mask look), no text.",
       "constraints": {
         "no_text_inside": true
       }
     },
     {
       "node_id": "n15",
-      "label": "Segmentation CE Loss",
+      "label": "Pixel-wise CE Loss",
       "role": "aux",
-      "semantic_desc": "Cross-entropy loss between predicted segmentation and pseudo labels to provide dense supervision.",
-      "visual_desc": "A diamond-shaped loss node labeled 'L_seg (CE)' with a pixel-grid icon.",
+      "semantic_desc": "Cross-entropy loss between predicted segmentation and pseudo labels for dense supervision.",
+      "visual_desc": "A small hexagon labeled 'L_ce' with two inputs (pred mask, pseudo mask) and an output gradient arrow.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n16",
+      "label": "Total Loss",
+      "role": "aux",
+      "semantic_desc": "Combined training objective aggregating classification and pixel-wise losses to optimize the model.",
+      "visual_desc": "A summation node (circle with '+') labeled 'L = L_cls + L_ce' inside.",
       "constraints": {
         "no_text_inside": false
       }
@@ -166,24 +176,24 @@
       "from": "n1",
       "to": "n3",
       "edge_type": "data_flow",
-      "label": "RGB",
+      "label": "RGB image",
       "direction_hint": "left_to_right"
     },
     {
       "edge_id": "e2",
-      "from": "n3",
-      "to": "n5",
-      "edge_type": "data_flow",
-      "label": "patch tokens",
-      "direction_hint": "left_to_right"
-    },
-    {
-      "edge_id": "e3",
       "from": "n4",
       "to": "n5",
       "edge_type": "data_flow",
       "label": "loc token",
-      "direction_hint": "top_to_bottom"
+      "direction_hint": "left_to_right"
+    },
+    {
+      "edge_id": "e3",
+      "from": "n3",
+      "to": "n5",
+      "edge_type": "data_flow",
+      "label": "fine patch tokens",
+      "direction_hint": "left_to_right"
     },
     {
       "edge_id": "e4",
@@ -206,7 +216,7 @@
       "from": "n7",
       "to": "n8",
       "edge_type": "data_flow",
-      "label": "class scores",
+      "label": "class logits",
       "direction_hint": "left_to_right"
     },
     {
@@ -214,7 +224,7 @@
       "from": "n2",
       "to": "n8",
       "edge_type": "data_flow",
-      "label": "weak labels",
+      "label": "image-level supervision",
       "direction_hint": "top_to_bottom"
     },
     {
@@ -230,7 +240,7 @@
       "from": "n9",
       "to": "n10",
       "edge_type": "data_flow",
-      "label": "seg logits",
+      "label": "pixel logits / mask",
       "direction_hint": "left_to_right"
     },
     {
@@ -238,51 +248,43 @@
       "from": "n6",
       "to": "n11",
       "edge_type": "data_flow",
-      "label": "patch features",
+      "label": "patch embeddings",
       "direction_hint": "bottom_to_top"
     },
     {
       "edge_id": "e11",
       "from": "n11",
-      "to": "n12",
+      "to": "n13",
       "edge_type": "data_flow",
-      "label": "cluster prototypes",
+      "label": "cluster cues",
       "direction_hint": "left_to_right"
     },
     {
       "edge_id": "e12",
-      "from": "n12",
-      "to": "n11",
-      "edge_type": "control_flow",
-      "label": "prototype retrieval",
-      "direction_hint": "right_to_left"
-    },
-    {
-      "edge_id": "e13",
       "from": "n10",
       "to": "n13",
       "edge_type": "data_flow",
-      "label": "pred mask",
+      "label": "current predictions",
       "direction_hint": "top_to_bottom"
     },
     {
-      "edge_id": "e14",
-      "from": "n11",
+      "edge_id": "e13",
+      "from": "n12",
       "to": "n13",
       "edge_type": "data_flow",
-      "label": "clusters",
+      "label": "prototype lookup",
+      "direction_hint": "left_to_right"
+    },
+    {
+      "edge_id": "e14",
+      "from": "n6",
+      "to": "n12",
+      "edge_type": "data_flow",
+      "label": "enqueue features",
       "direction_hint": "left_to_right"
     },
     {
       "edge_id": "e15",
-      "from": "n2",
-      "to": "n13",
-      "edge_type": "annotation",
-      "label": "label constraint",
-      "direction_hint": "left_to_right"
-    },
-    {
-      "edge_id": "e16",
       "from": "n13",
       "to": "n14",
       "edge_type": "data_flow",
@@ -290,35 +292,59 @@
       "direction_hint": "left_to_right"
     },
     {
-      "edge_id": "e17",
+      "edge_id": "e16",
       "from": "n10",
       "to": "n15",
       "edge_type": "data_flow",
-      "label": "pixel probs",
+      "label": "pred mask",
       "direction_hint": "left_to_right"
     },
     {
-      "edge_id": "e18",
+      "edge_id": "e17",
       "from": "n14",
       "to": "n15",
       "edge_type": "data_flow",
-      "label": "targets",
+      "label": "pseudo supervision",
       "direction_hint": "top_to_bottom"
     },
     {
-      "edge_id": "e19",
+      "edge_id": "e18",
       "from": "n8",
-      "to": "n5",
-      "edge_type": "annotation",
-      "label": "optimize",
-      "direction_hint": "right_to_left"
+      "to": "n16",
+      "edge_type": "data_flow",
+      "label": "L_cls",
+      "direction_hint": "left_to_right"
+    },
+    {
+      "edge_id": "e19",
+      "from": "n15",
+      "to": "n16",
+      "edge_type": "data_flow",
+      "label": "L_ce",
+      "direction_hint": "left_to_right"
     },
     {
       "edge_id": "e20",
-      "from": "n15",
+      "from": "n16",
       "to": "n5",
       "edge_type": "annotation",
-      "label": "optimize",
+      "label": "optimize (backprop)",
+      "direction_hint": "right_to_left"
+    },
+    {
+      "edge_id": "e21",
+      "from": "n16",
+      "to": "n6",
+      "edge_type": "annotation",
+      "label": "optimize (backprop)",
+      "direction_hint": "right_to_left"
+    },
+    {
+      "edge_id": "e22",
+      "from": "n16",
+      "to": "n9",
+      "edge_type": "annotation",
+      "label": "optimize (backprop)",
       "direction_hint": "right_to_left"
     }
   ]

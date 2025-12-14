@@ -22,7 +22,7 @@
   "by_node": {
     "n1": {
       "render_method": "vlm",
-      "vlm_desc": "A natural RGB photograph-style thumbnail of an urban street scene with buildings, road, cars and pedestrians; realistic lighting and colors; no overlays, no borders, no text.",
+      "vlm_desc": "A realistic natural RGB photo thumbnail of an urban street scene with buildings, road, and a few cars/pedestrians, typical daytime lighting, rich natural colors, no overlaid graphics, no text.",
       "size_hint": {
         "w_px": 360,
         "h_px": 240,
@@ -31,40 +31,40 @@
     },
     "n2": {
       "render_method": "vlm",
-      "vlm_desc": "A compact multi-label indicator icon: a small grid of rounded colored pills and tiny squares suggesting a multi-hot vector; abstract UI-like; no readable text, no letters or numbers.",
+      "vlm_desc": "A compact multi-label visualization: a small grid of tiny class pictogram icons with some highlighted/filled and others dimmed, representing a multi-hot label vector; clean white background, minimalistic, no text.",
       "size_hint": {
-        "w_px": 220,
-        "h_px": 120,
-        "aspect_ratio": "11:6"
+        "w_px": 240,
+        "h_px": 140,
+        "aspect_ratio": "12:7"
       }
     },
     "n3": {
       "render_method": "pptx",
-      "pptx_intent": "Rounded rectangle module with text 'Patch Embedding'. Include a small simple grid glyph (3x3) at left to suggest patches. Fill primary (#4A90D9) at low tint, dark text (#333), thin outline.",
+      "pptx_intent": "Rounded rectangle module with text 'Smaller Patch Tokenizer'. Add a tiny simple grid glyph (finer patch grid) inside the box near a corner; fill primary light blue, dark gray text, thin outline.",
       "size_hint": {
-        "w_px": 210,
+        "w_px": 230,
         "h_px": 80
       }
     },
     "n4": {
       "render_method": "pptx",
-      "pptx_intent": "Small rounded rectangle or pill-shaped token element with text 'Loc Token'. Accent color (#fc8d62) fill, white or dark text; optionally a small vector-dot icon. Designed as an injected token.",
+      "pptx_intent": "Small pill-shaped (capsule) token element with text 'Loc Token'. Solid accent or light accent fill, thin outline; sized like a token icon.",
       "size_hint": {
-        "w_px": 140,
-        "h_px": 55
+        "w_px": 120,
+        "h_px": 50
       }
     },
     "n5": {
       "render_method": "pptx",
-      "pptx_intent": "Large rounded rectangle labeled 'SegFormer Backbone'. Add a simple stacked feature-pyramid glyph at right (3–4 offset rectangles). Primary theme styling, editable.",
+      "pptx_intent": "Large rounded rectangle labeled 'SegFormer Backbone'. Include a simple stacked feature-pyramid glyph on the right edge (3-4 staggered bars/blocks). Primary fill, thin outline, bold-ish title text.",
       "size_hint": {
         "w_px": 260,
-        "h_px": 95
+        "h_px": 110
       }
     },
     "n6": {
       "render_method": "pptx",
-      "pptx_intent": "Small sidecar rounded rectangle labeled 'Adapter'. Place adjacent/attached to backbone stream. Primary tint fill, dark text, thin outline.",
+      "pptx_intent": "Slim rounded rectangle sidecar labeled 'Adapter'. Same style family as modules; narrower width to suggest lightweight block.",
       "size_hint": {
         "w_px": 160,
         "h_px": 70
@@ -72,31 +72,31 @@
     },
     "n7": {
       "render_method": "pptx",
-      "pptx_intent": "Rounded rectangle labeled 'Classifier'. Add a tiny logits/bar glyph to the right (3–5 vertical bars). Editable shape and text.",
+      "pptx_intent": "Rounded rectangle labeled 'Cls Head' with a small simple logits vector icon to its right (e.g., short vertical bars). Primary fill, thin outline.",
       "size_hint": {
-        "w_px": 200,
-        "h_px": 80
+        "w_px": 190,
+        "h_px": 75
       }
     },
     "n8": {
       "render_method": "pptx",
-      "pptx_intent": "Diamond (or hexagon) loss node labeled 'L_cls'. Add a small sigma/gradient-like glyph (simple ∑-style or arrows) as a tiny icon. Accent outline or accent corner mark.",
+      "pptx_intent": "Small hexagon with text 'L_cls'. Neutral light fill (near white) with accent outline or subtle gray outline; intended as a loss node.",
       "size_hint": {
-        "w_px": 140,
-        "h_px": 90
+        "w_px": 90,
+        "h_px": 70
       }
     },
     "n9": {
       "render_method": "pptx",
-      "pptx_intent": "Rounded rectangle labeled 'Decoder'. Add a small upsampling icon (upward arrow over stepped blocks). Primary tint fill, dark text.",
+      "pptx_intent": "Rounded rectangle labeled 'Decoder' with a simple upsampling arrow icon (arrow pointing up or expanding). Primary fill, thin outline.",
       "size_hint": {
-        "w_px": 200,
+        "w_px": 180,
         "h_px": 80
       }
     },
     "n10": {
       "render_method": "vlm",
-      "vlm_desc": "A segmentation result visualization: the same kind of street photo as input with a semi-transparent color-coded segmentation overlay (distinct solid regions in multiple colors for road, buildings, vehicles, sky). No legend, no text, no labels.",
+      "vlm_desc": "A semantic segmentation result shown as a color-coded mask overlay on a street-scene photo: semi-transparent regions in distinct class colors (e.g., road, building, car, sky), crisp boundaries, no legend and no text.",
       "size_hint": {
         "w_px": 360,
         "h_px": 240,
@@ -105,51 +105,51 @@
     },
     "n11": {
       "render_method": "pptx",
-      "pptx_intent": "Rounded rectangle labeled 'Patch Clustering'. Include a small icon showing dots grouped into 2–3 clusters (colored groups). Editable vector-like glyph.",
+      "pptx_intent": "Rounded rectangle labeled 'Patch Clustering' with a small scatter-plot icon inside showing a few colored cluster blobs/dots. Use simple vector dots (no axes labels).",
       "size_hint": {
         "w_px": 220,
-        "h_px": 80
+        "h_px": 85
       }
     },
     "n12": {
       "render_method": "pptx",
-      "pptx_intent": "Database cylinder shape labeled 'Memory Bank'. Add a few small vector glyphs inside (tiny circles/lines) to indicate stored embeddings. Primary tint fill, dark text.",
+      "pptx_intent": "Database cylinder icon with text 'Memory Bank' centered on it; add small read/write arrows (one in, one out). Use primary or neutral fill with outline; keep it editable as shapes.",
       "size_hint": {
-        "w_px": 190,
-        "h_px": 95
+        "w_px": 150,
+        "h_px": 110
       }
     },
     "n13": {
       "render_method": "pptx",
-      "pptx_intent": "Rounded rectangle labeled 'Pseudo Labeling'. Add a small refinement/wand icon and a tiny mask thumbnail icon at the edge. Editable shapes, accent highlight for the wand.",
+      "pptx_intent": "Rounded rectangle labeled 'Pseudo-label Generator' with a small wand/gear glyph and a small mask output port indicator. Primary fill, thin outline; allow enough width for long text.",
       "size_hint": {
-        "w_px": 240,
-        "h_px": 80
+        "w_px": 260,
+        "h_px": 90
       }
     },
     "n14": {
       "render_method": "vlm",
-      "vlm_desc": "A standalone pseudo-label mask tile: semi-transparent colored segmentation regions with visible uncertainty—speckled/stippled texture and soft/noisy boundaries; no text, no legend, plain background.",
+      "vlm_desc": "A pseudo-label mask image: flat regions with crisp boundaries, mostly grayscale with a few muted colors, blocky/region-like segmentation appearance on a plain background, no text or legend.",
       "size_hint": {
-        "w_px": 300,
-        "h_px": 200,
-        "aspect_ratio": "3:2"
+        "w_px": 320,
+        "h_px": 220,
+        "aspect_ratio": "8:5"
       }
     },
     "n15": {
       "render_method": "pptx",
-      "pptx_intent": "Diamond (or hexagon) loss node labeled 'L_ce'. Add a tiny pixel-grid icon plus a small sigma/gradient glyph. Use accent color for outline or header strip.",
+      "pptx_intent": "Small hexagon with text 'L_ce'. Neutral light fill with accent or gray outline; two incoming connectors expected and one outgoing.",
       "size_hint": {
-        "w_px": 150,
-        "h_px": 95
+        "w_px": 90,
+        "h_px": 70
       }
     },
     "n16": {
       "render_method": "pptx",
-      "pptx_intent": "Output icon representing trained weights: stacked layer rectangles with a small downward arrow and text 'Update'. Use neutral/primary tint, dark text. Editable group.",
+      "pptx_intent": "Summation node as a circle with a plus sign and text inside reading 'L = L_cls + L_ce'. Use neutral fill, clear dark text; ensure text fits (may use slightly larger circle).",
       "size_hint": {
-        "w_px": 190,
-        "h_px": 90
+        "w_px": 150,
+        "h_px": 150
       }
     }
   }
