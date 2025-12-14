@@ -78,7 +78,7 @@ async def test_node_render_design():
     # 构建 state
     request = Paper2GraphRequest(
         target="Test target for node render design",
-        model="gpt-4o",
+        model="gemini-2.5-pro",
     )
     
     state = Paper2GraphState(request=request)
@@ -95,7 +95,7 @@ async def test_node_render_design():
     # 执行 agent（串行模式，便于调试）
     state = await p2g_node_render_design_agent(
         state,
-        model_name="gpt-4o",
+        model_name="gemini-2.5-pro",
         temperature=0.0,
         max_tokens=4096,
         parser_type="json",
@@ -237,13 +237,13 @@ async def test_single_chunk():
     # 构建 state
     request = Paper2GraphRequest(
         target="Test single chunk",
-        model="gpt-4o",
+        model="gemini-2.5-pro",
     )
     state = Paper2GraphState(request=request)
     
     # 创建 agent 并执行
     agent = P2gNodeRenderDesignAgent.create(
-        model_name="gpt-4o",
+        model_name="gemini-2.5-pro",
         temperature=0.0,
         max_tokens=4096,
         parser_type="json",

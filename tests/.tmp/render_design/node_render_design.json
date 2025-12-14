@@ -5,353 +5,784 @@
       "nodes": [
         {
           "node_id": "n1",
-          "render_method": "pptx",
-          "pptx_desc": "Title text box with centered alignment, bold 24pt font, dark blue color (#1a365d)",
-          "reasoning": "This is a simple title text that can be effectively rendered with native text formatting"
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A professionally typeset text block with the content: \"Early Experience paradigm: bridging Imitation Learning and Reinforcement Learning via rollout-based early supervision.\" The phrase \"Early Experience paradigm\" should be rendered in a slightly bolder or heavier font weight to create visual emphasis.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "Early Experience paradigm: bridging Imitation Learning and Reinforcement Learning via rollout-based early supervision.",
+            "aspect_ratio_hint": "16:9"
+          },
+          "reasoning": "The node contains a full descriptive sentence that serves as the main title/introduction for the figure. This is far beyond a simple label and requires professional typesetting and visual hierarchy, which is a core use case for VLM."
         },
         {
           "node_id": "n2",
-          "render_method": "pptx",
-          "pptx_desc": "Large rectangular frame with a border labeled 'Early Experience Framework', no fill, dark blue border color (#1a365d), used to group elements",
-          "reasoning": "This is a simple container frame with a label, suitable for pptx rendering"
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A small, rounded rectangle module box. Inside, it contains the primary label \"IL\" in a bold font, and below it, a smaller secondary label \"Expert Supervision\".",
+            "style": "module_box",
+            "color_scheme": "muted_teal",
+            "background": "transparent",
+            "label_text": "IL\nExpert Supervision",
+            "aspect_ratio_hint": "3:2"
+          },
+          "reasoning": "The description specifies a 'labeled shape or icon', not just text. VLM is necessary to create a styled, colored container that functions as a conceptual block, which is beyond the scope of a simple pptx text box."
         },
         {
           "node_id": "n3",
-          "render_method": "pptx",
-          "pptx_desc": "Side annotation text box with left alignment, italic 12pt font, gray color (#666666), explaining IL and RL concepts",
-          "reasoning": "This is a simple text annotation that can be rendered using native text formatting"
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A small, rounded rectangle module box, visually consistent with node n2. Inside, it contains the primary label \"RL\" in a bold font, and below it, a smaller secondary label \"Environment Interaction\".",
+            "style": "module_box",
+            "color_scheme": "soft_orange",
+            "background": "transparent",
+            "label_text": "RL\nEnvironment Interaction",
+            "aspect_ratio_hint": "3:2"
+          },
+          "reasoning": "Similar to n2, this node is described as a 'labeled shape or icon'. VLM is required to render a styled conceptual block that visually represents the RL concept, ensuring consistency with the overall diagram style."
         },
         {
           "node_id": "n4",
           "render_method": "vlm",
-          "vlm_prompt": "A visual callout diagram illustrating the concept of Early Experience as a bridge between IL (expert data) and RL (environment interaction), featuring arrows and labels for 'reward-free rollouts' and 'self-reflection', clean scientific illustration style, white background",
-          "reasoning": "This annotation describes a conceptual bridge with multiple components, benefiting from a visual metaphor that is best rendered as an image"
+          "vlm_spec": {
+            "content": "A prominent, central rounded rectangle that acts as a visual bridge. It should be larger than the IL and RL blocks to signify its importance. The box is clearly labeled with the text \"Early Experience\" in a clean, bold, sans-serif font.",
+            "style": "module_box",
+            "color_scheme": "calm_blue",
+            "background": "transparent",
+            "label_text": "Early Experience",
+            "aspect_ratio_hint": "3:2"
+          },
+          "reasoning": "This is a 'central bridging shape' and a 'main_block', representing the core framework. Its role as a visual metaphor and central element requires custom design and styling that can only be achieved with VLM."
+        },
+        {
+          "node_id": "n5",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "Two clean, moderately thick arrows with solid triangular arrowheads. One arrow originates from the IL block (n2) and points towards the central Early Experience block (n4). The second arrow originates from the RL block (n3) and also points towards the central block (n4), visually showing convergence.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": null,
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "This node is a graphical element (arrows) used for connection. While simple, using VLM ensures the arrows' style (thickness, arrowhead design) is consistent with the high-quality, flat 2D vector aesthetic of the entire figure, which cannot be guaranteed with default pptx shapes."
         }
       ],
       "chunk_style_hints": {
         "dominant_color": "#4A90D9",
-        "visual_weight": "medium",
-        "style_notes": "Clean scientific illustration style consistent with academic papers"
+        "visual_weight": "high"
       }
     },
     {
       "chunk_id": "c2",
       "nodes": [
         {
-          "node_id": "n5",
-          "render_method": "vlm",
-          "vlm_prompt": "A detailed module box labeled 'Expert Dataset D_expert = {(s_i, a_i)}' representing a collection of expert demonstrations. The box should have a structured appearance with visual elements indicating data collection, such as small icons of state-action pairs. Use a clean scientific illustration style with a white background, suitable for academic presentations.",
-          "reasoning": "The node represents a module with internal structure and labeled content, which benefits from a detailed visual representation beyond simple text or shapes."
-        },
-        {
           "node_id": "n6",
-          "render_method": "pptx",
-          "pptx_desc": "Text box with left-aligned text, 12pt font size, black color, explaining the meaning of s_i and a_i in expert trajectories. Positioned near the module box for clarity.",
-          "reasoning": "This is a simple annotation explaining terms, which can be effectively rendered using native text formatting."
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A professional module box representing a dataset. The box should have a clear title 'Expert Dataset' at the top. Inside the box, show a few stylized examples of data pairs like '(s₁, a₁)', '(s₂, a₂)', '...' arranged vertically to represent a collection. The overall design should be clean and structured.",
+            "style": "module_box",
+            "color_scheme": "muted_teal",
+            "background": "transparent",
+            "label_text": "Expert Dataset",
+            "aspect_ratio_hint": "3:2"
+          },
+          "reasoning": "This node is a 'Dataset container shape' and a 'main_block'. It represents a core concept and has internal structure. According to the guidelines, any shape, module, or container should be rendered using vlm."
         },
         {
           "node_id": "n7",
           "render_method": "vlm",
-          "vlm_prompt": "An illustrative placeholder showing multiple expert trajectories as sequences of state-action pairs. The design should include arrows connecting circular state nodes (labeled s_i) to rectangular action nodes (labeled a_i), in a minimalist flat design style with a white background, suitable for academic paper figures.",
-          "reasoning": "This node requires a visual representation of trajectory data with specific node-edge structure, which is best achieved through generated imagery."
+          "vlm_spec": {
+            "content": "A cleanly rendered mathematical formula 'D_expert = {(sᵢ, aᵢ)}'. The text should be rendered with high quality, similar to LaTeX, with proper subscript formatting for the 'i'. The font should be a sans-serif style consistent with the diagram's theme.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "This is a formula with special formatting (subscripts, curly braces). While it's text, rendering it as a vlm ensures correct and high-quality mathematical typesetting, which is difficult to guarantee with pptx text. This avoids potential formatting issues."
         },
         {
           "node_id": "n8",
-          "render_method": "pptx",
-          "pptx_desc": "Note text box with italicized text, 10pt font size, gray color, explaining the role of D_expert in imitation learning and early experience data construction. Positioned below the main module box.",
-          "reasoning": "This is a simple annotation note that can be effectively rendered using native text formatting."
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A clean block of annotation text. The text should be formatted for clarity, for example: 'sᵢ: expert state\naᵢ: expert action'. The text should be in a readable, dark gray sans-serif font.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "The descriptive text 's_i denotes expert states and a_i denotes corresponding expert actions' is longer than the 5-word limit for pptx. Therefore, vlm is required to ensure the text is rendered cleanly and legibly as part of the diagram."
+        },
+        {
+          "node_id": "n9",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A clean text block with the phrase 'offline expert demonstrations'. The text should be rendered in a professional, dark gray sans-serif font, intended to be placed as a subtitle or descriptor for the D_expert module.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "offline expert demonstrations",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "Although the text is short, it's a key descriptor for a main module. Using vlm ensures consistent high-quality typography and alignment with the main vlm-rendered block (n6), following the 'when in doubt, prefer vlm' rule for visual consistency."
+        },
+        {
+          "node_id": "n10",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A clean, solid, straight arrow with a standard filled arrowhead. The arrow should be designed to connect the expert dataset block to the next module in the pipeline, indicating data flow.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "This node is an 'Arrow or connector', which is a graphical shape, not text. All shapes and diagrammatic flow elements must be rendered using vlm."
         }
       ],
       "chunk_style_hints": {
-        "dominant_color": "#4A90D9",
-        "visual_weight": "medium",
-        "style_notes": "Clean scientific illustration style consistent with academic papers"
+        "dominant_color": "#66c2a5",
+        "visual_weight": "medium"
       }
     },
     {
       "chunk_id": "c3",
       "nodes": [
         {
-          "node_id": "n9",
-          "render_method": "vlm",
-          "vlm_prompt": "A module box labeled 'Initial LLM Policy π_0', representing a starting policy module. The box should have a clear label and be visually distinct, with input and output connectors. Style should be a clean scientific illustration with a white background, suitable for academic diagrams.",
-          "reasoning": "The node represents a module with a specific label and function, which benefits from a detailed visual representation that includes connectors and a clear label."
-        },
-        {
-          "node_id": "n10",
-          "render_method": "pptx",
-          "pptx_desc": "Simple arrow shape pointing towards the 'Initial LLM Policy π_0' module, representing input from expert states. Use a solid line with a medium thickness, dark blue color (#1a365d).",
-          "reasoning": "This is a simple connector arrow indicating input, which can be effectively rendered using native PowerPoint shapes."
-        },
-        {
           "node_id": "n11",
           "render_method": "vlm",
-          "vlm_prompt": "A fan-out shape or grouped arrows representing multiple sampled non-expert candidate actions {a_i^1, …, a_i^K} emerging from the 'Initial LLM Policy π_0'. The design should show multiple diverging paths, in a clean scientific illustration style with a white background.",
-          "reasoning": "The node involves a complex visual metaphor of diverging paths, which is best represented with a generated image to capture the concept effectively."
+          "vlm_spec": {
+            "content": "A professional module box for a scientific diagram. The box should have a clear title area at the top. The main title should be 'Initial LLM policy π₀'. Below the title, in a smaller font, should be the subtitle '(pre-trained LLM-based policy)'. The design should be clean and modern, with rounded corners. A subtle, stylized brain or neural network icon can be placed inside the box to visually represent the LLM.",
+            "style": "module_box",
+            "color_scheme": "calm_blue",
+            "background": "transparent",
+            "label_text": "Initial LLM policy π₀\n(pre-trained LLM-based policy)",
+            "aspect_ratio_hint": "3:2"
+          },
+          "reasoning": "This node represents a core module with a multi-line title and a mathematical symbol (π_0). This complexity requires vlm for proper layout, styling, and to maintain a professional appearance, making it unsuitable for a simple pptx text box."
         },
         {
           "node_id": "n12",
-          "render_method": "pptx",
-          "pptx_desc": "Text annotation box with the text 'Sampled actions a_i^j are non-expert candidates contrasted with the expert action a_i for the same state s_i'. Use italic 12pt font, dark gray color (#4a4a4a), placed near the relevant visual elements.",
-          "reasoning": "This is a simple text annotation that can be effectively rendered using native text formatting in PowerPoint."
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A clean, solid-line arrow pointing from left to right. The arrowhead should be a simple, filled triangle, consistent with scientific diagram aesthetics. The line should be straight and of medium thickness.",
+            "style": "flat_2d_vector",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "Although an arrow can be a simple shape, rendering it via vlm ensures its style (arrowhead, line weight, color) is perfectly consistent with the overall high-quality vector illustration style of the figure. It represents a data flow, not just a pointer."
+        },
+        {
+          "node_id": "n13",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A clean text block containing the phrase: 'For each sᵢ, sample K non-expert actions {aᵢ¹, ..., aᵢᴷ} from π₀.' The mathematical symbols (sᵢ, aᵢ¹, aᵢᴷ, π₀) should be rendered clearly and correctly, potentially using a font style that distinguishes them from the surrounding text (e.g., a serif or italic font for variables).",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "For each sᵢ, sample K non-expert actions {aᵢ¹, ..., aᵢᴷ} from π₀.",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "The text is longer than 5 words and contains complex mathematical notation. Using vlm ensures correct and high-quality rendering of the symbols and maintains font consistency with the rest of the diagram, which is difficult to guarantee with pptx."
+        },
+        {
+          "node_id": "n14",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "An annotation displaying the mathematical inequality '{aᵢ¹, ..., aᵢᴷ} ≠ aᵢ'. The text should be clear and legible. It can be enclosed in a subtle, light-colored bracket or have a distinct color to emphasize its role as an important note.",
+            "style": "scientific_diagram",
+            "color_scheme": "warm_accent",
+            "background": "transparent",
+            "label_text": "{aᵢ¹, ..., aᵢᴷ} ≠ aᵢ",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "This node is an annotation containing a mathematical formula and serves to emphasize a key concept. VLM rendering allows for specific styling (color, brackets) to make it stand out as an important note, and ensures the formula is rendered correctly."
+        },
+        {
+          "node_id": "n15",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A visual representation of a set of items. This should be depicted as a small, stylized stack of three slightly offset, rounded rectangles, suggesting a collection of 'action candidates'. The group should look like a single cohesive element. The label '{aᵢ¹, ..., aᵢᴷ}' should be placed near the group.",
+            "style": "scientific_diagram",
+            "color_scheme": "soft_orange",
+            "background": "transparent",
+            "label_text": "{aᵢ¹, ..., aᵢᴷ}",
+            "aspect_ratio_hint": "4:3"
+          },
+          "reasoning": "The node is described as a 'Grouped shape' representing a set of candidates, not just a text label. This requires a visual, conceptual illustration, making vlm the only appropriate choice."
         }
       ],
       "chunk_style_hints": {
         "dominant_color": "#4A90D9",
-        "visual_weight": "medium",
-        "style_notes": "Clean scientific illustration style consistent with academic papers"
+        "visual_weight": "medium"
       }
     },
     {
       "chunk_id": "c4",
       "nodes": [
         {
-          "node_id": "n13",
-          "render_method": "vlm",
-          "vlm_prompt": "A detailed illustration of a module box labeled 'Environment / Env', depicting an interactive environment where actions are executed. Include visual elements that suggest interaction, such as arrows or dynamic lines entering and exiting the box. Style should be clean scientific illustration with a white background, suitable for academic presentations.",
-          "reasoning": "The node represents a conceptual module with interaction elements, which benefits from a detailed visual representation beyond simple shapes."
-        },
-        {
-          "node_id": "n14",
-          "render_method": "pptx",
-          "pptx_desc": "Simple arrow connector from expert action to environment, using a straight arrow shape with a medium thickness, dark blue color (#1a365d), pointing towards the environment module.",
-          "reasoning": "This is a straightforward connector arrow, which can be effectively rendered using native PowerPoint shapes."
-        },
-        {
-          "node_id": "n15",
-          "render_method": "pptx",
-          "pptx_desc": "Multiple simple arrow connectors from non-expert actions to environment, using straight arrow shapes with medium thickness, dark blue color (#1a365d), each pointing towards the environment module.",
-          "reasoning": "These are simple connector arrows, suitable for rendering with native PowerPoint shapes."
-        },
-        {
           "node_id": "n16",
           "render_method": "vlm",
-          "vlm_prompt": "An aggregation box labeled 'Rollout Dataset D_rollout = {(s_i, a_i^j, s_i^j)}', visually representing the collection of triplets of state, non-expert action, and resulting future state. Include elements that suggest data aggregation, such as grouped icons or symbols. Style should be clean scientific illustration with a white background, suitable for academic papers.",
-          "reasoning": "The node represents a complex data aggregation concept, which benefits from a detailed visual representation beyond simple text."
+          "vlm_spec": {
+            "content": "A professional module box representing a simulation environment. It should have a clean, modern look, perhaps with a subtle icon inside suggesting a world or a grid (like a simple globe or a maze). The label 'Environment' should be clearly visible at the top of the box.",
+            "style": "module_box",
+            "color_scheme": "calm_blue",
+            "background": "white",
+            "label_text": "Environment",
+            "aspect_ratio_hint": "3:2"
+          },
+          "reasoning": "The node represents a key conceptual module ('Environment') and is described as a 'Module box', which requires a designed visual representation beyond a simple shape, making vlm the appropriate choice."
         },
         {
           "node_id": "n17",
           "render_method": "pptx",
-          "pptx_desc": "Text annotation emphasizing the use of future states as reward-free supervision signals, using italicized font, dark blue color (#1a365d), placed near the relevant module.",
-          "reasoning": "This is a simple text annotation, suitable for rendering with native PowerPoint text formatting."
+          "pptx_desc": "A solid, straight arrow with a standard arrowhead, dark gray color (#333333), 1.5pt weight. The layout engine will route it from the source (expert pairs) to the target (Environment module).",
+          "reasoning": "This node represents a simple connector arrow, which is a native PowerPoint shape and does not require AI generation for its basic form."
         },
         {
           "node_id": "n18",
           "render_method": "pptx",
-          "pptx_desc": "Text annotation noting the comparison of expert next states with non-expert futures, using italicized font, dark blue color (#1a365d), placed near the relevant module.",
-          "reasoning": "This is a simple text annotation, suitable for rendering with native PowerPoint text formatting."
+          "pptx_desc": "A solid, straight arrow with a standard arrowhead, dark gray color (#333333), 1.5pt weight. The layout engine will route it from the source (non-expert pairs) to the target (Environment module).",
+          "reasoning": "Similar to n17, this node is a simple connector arrow, best rendered as a native PowerPoint shape."
+        },
+        {
+          "node_id": "n19",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A clean text block displaying two lines of transition rules. First line: 'Expert: (s_i, a_i) → s_{i+1}'. Second line: 'Non-expert: (s_i, a_i^j) → s_i^j'. Use a clear, sans-serif font. The formulas should be rendered crisply. The labels 'Expert:' and 'Non-expert:' can be slightly bolded for emphasis.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "The node contains structured text with mathematical notation. This requires vlm rendering for consistent, high-quality formatting that a simple pptx text box cannot guarantee."
+        },
+        {
+          "node_id": "n20",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A module box representing a dataset, styled consistently with other data containers. It should feature a data or document stack icon. The label 'D_rollout' should be prominently displayed.",
+            "style": "module_box",
+            "color_scheme": "muted_teal",
+            "background": "white",
+            "label_text": "D_rollout",
+            "aspect_ratio_hint": "4:3"
+          },
+          "reasoning": "This node is a 'Dataset container', a key conceptual block that benefits from a designed visual representation using vlm to distinguish it as a data element."
+        },
+        {
+          "node_id": "n21",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A cleanly rendered mathematical formula: 'D_rollout = {(s_i, a_i^j, s_i^j)}'. The subscripts and superscripts must be clear and legible. The font should be a professional sans-serif or a standard math font, matching the style of other formulas.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "This node contains a mathematical formula. VLM is preferred to ensure high-quality typesetting and visual consistency, which is superior to a simple pptx text box."
+        },
+        {
+          "node_id": "n22",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A text box with the annotation: 'future state used as reward-free supervision signal'. The text should be wrapped into multiple lines for good layout. The box can have a very light gray, transparent, or subtly bordered background to set it apart as an annotation.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "The node contains a descriptive sentence longer than 5 words that explains a key concept. VLM is necessary to render this text in a visually appealing and readable format that integrates well with the diagram."
         }
       ],
       "chunk_style_hints": {
         "dominant_color": "#4A90D9",
-        "visual_weight": "medium",
-        "style_notes": "Clean scientific illustration style consistent with academic papers"
+        "visual_weight": "medium"
       }
     },
     {
       "chunk_id": "c5",
       "nodes": [
         {
-          "node_id": "n19",
+          "node_id": "n23",
           "render_method": "vlm",
-          "vlm_prompt": "A branching node labeled 'Dual Branches: IWM & SR' showing a split into two core methods. The node should visually represent a decision point with two distinct paths diverging from a central point. Use a clean scientific illustration style with clear labels for each branch, white background, suitable for academic paper figures.",
-          "reasoning": "The node represents a conceptual diagram with a branching structure, which benefits from a visual metaphor that is best rendered using AI-generated imagery."
+          "vlm_spec": {
+            "content": "A large, subtle container shape, like a rounded rectangle with a light gray fill and a dashed outline. This container is designed to visually enclose two other data modules (D_expert and D_rollout). It should feature a prominent, clean text label 'Early Experience Data' positioned at the top-center of the container.",
+            "style": "module_box",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "Early Experience Data",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "This node is a conceptual grouping container with a specific label and visual style (enclosing other elements). This complexity goes beyond a simple pptx shape and requires vlm for proper rendering as a cohesive visual block."
         },
         {
-          "node_id": "n20",
-          "render_method": "pptx",
-          "pptx_desc": "A simple connector arrow pointing from the branching node to the IWM branch, labeled 'D_rollout triplets'. Use a straight arrow shape with a medium thickness, dark blue color (#1a365d), and a text box with 12pt font for the label.",
-          "reasoning": "This is a simple connector arrow with a label, which can be effectively rendered using native PowerPoint shapes and text."
+          "node_id": "n24",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A clean, professionally typeset text block displaying the phrase 'From static demos to environment-conditioned rollouts'. The text should be rendered in a dark gray sans-serif font, potentially on two lines for readability, against a transparent background.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "From static demos to environment-conditioned rollouts",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "The text is a descriptive sentence (9 words), which is too long for pptx rendering. Using vlm ensures consistent, high-quality typography and layout control that integrates well with the diagram's style."
         },
         {
-          "node_id": "n21",
-          "render_method": "pptx",
-          "pptx_desc": "A simple connector arrow pointing from the branching node to the SR branch, labeled 'D_rollout and expert next states'. Use a straight arrow shape with a medium thickness, dark blue color (#1a365d), and a text box with 12pt font for the label.",
-          "reasoning": "This is a simple connector arrow with a label, which can be effectively rendered using native PowerPoint shapes and text."
+          "node_id": "n25",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A clean, professionally typeset text block. The text should read 'Early Experience data: rollout triples and expert future states'. The part 'Early Experience data:' can be slightly bolder to act as a title for the description. The text should be in a dark gray sans-serif font.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "Early Experience data: rollout triples and expert future states",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "This is a descriptive annotation longer than 5 words that clarifies a key concept. VLM is necessary for proper formatting, potential text styling (like bolding a part), and maintaining visual consistency."
+        },
+        {
+          "node_id": "n26",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A clean, branching arrow. It starts as a single straight line segment and then forks into two separate arrows pointing outwards and downwards, indicating a split in the process flow. The arrowheads should be simple, filled triangles. The entire element should be a single, cohesive shape.",
+            "style": "flat_2d_vector",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "This node represents a critical branching of the main information flow. While a simple arrow could be pptx, a forking arrow is a complex shape. Using vlm ensures a clean, precise, and stylistically consistent visual representation of this fork, which is difficult to achieve with standard pptx connectors."
         }
       ],
       "chunk_style_hints": {
-        "dominant_color": "#4A90D9",
-        "visual_weight": "medium",
-        "style_notes": "Clean scientific illustration style consistent with academic papers"
+        "dominant_color": "#808080",
+        "visual_weight": "medium"
       }
     },
     {
       "chunk_id": "c6",
       "nodes": [
         {
-          "node_id": "n22",
-          "render_method": "vlm",
-          "vlm_prompt": "A detailed illustration of a main module box labeled 'Implicit World Modeling (IWM)', representing branch A of a scientific framework. The box should have a clear label and be visually distinct, with input and output arrows indicating data flow. The style should be a clean scientific illustration with a white background, suitable for academic presentations.",
-          "reasoning": "The node represents a complex module with internal structure and data flow, which benefits from a detailed visual representation."
-        },
-        {
-          "node_id": "n23",
-          "render_method": "vlm",
-          "vlm_prompt": "An illustration showing an input node where (s_i, a_i^j) from D_rollout are fed as inputs into a policy for prediction. The design should include arrows indicating input flow, with a clean and minimalist style, white background, suitable for scientific diagrams.",
-          "reasoning": "The node describes a data flow process, which is best represented with a visual diagram to show the input connections."
-        },
-        {
-          "node_id": "n24",
-          "render_method": "vlm",
-          "vlm_prompt": "An illustration of an input/target node showing future states s_i^j from D_rollout used as supervision targets. The design should include visual elements indicating target data flow, with a clean scientific style and white background.",
-          "reasoning": "The node involves a conceptual representation of data flow and supervision targets, which is best visualized with a generated image."
-        },
-        {
-          "node_id": "n25",
-          "render_method": "vlm",
-          "vlm_prompt": "A detailed illustration of an LLM policy box labeled 'Policy π_θ' within the IWM branch, performing future state prediction. The design should include visual elements indicating prediction processes, with a clean and professional style, white background.",
-          "reasoning": "The node represents a complex policy module with prediction functionality, which benefits from a detailed visual representation."
-        },
-        {
-          "node_id": "n26",
-          "render_method": "pptx",
-          "pptx_desc": "Text box with formula-style text: 'Predict s_i^j given (s_i, a_i^j): (s_i, a_i^j) → π_θ → ŝ_i^j', using a monospaced font, 12pt size, black color, left-aligned.",
-          "reasoning": "This is a simple formula-style text that can be effectively rendered with native text formatting."
-        },
-        {
           "node_id": "n27",
-          "render_method": "pptx",
-          "pptx_desc": "Text box with annotation text: 'L_IWM = -log p_θ(s_i^j | s_i, a_i^j); no rewards, only future states used; LLM learns an implicit dynamics model.', using a sans-serif font, 10pt size, dark gray color, left-aligned.",
-          "reasoning": "This is a simple annotation text that can be effectively rendered with native text formatting."
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A clean, modern title block with the text \"Implicit World Modeling (IWM)\". The text should be prominent and clearly legible, acting as a header for this section of the diagram.",
+            "style": "scientific_diagram",
+            "color_scheme": "calm_blue",
+            "background": "transparent",
+            "label_text": "Implicit World Modeling (IWM)",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "This is a title for a major conceptual branch. Using vlm allows for better visual hierarchy and styling that integrates with the overall diagram's aesthetic, which is not achievable with a simple pptx text box."
+        },
+        {
+          "node_id": "n28",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A stylized data packet or block representing the input from the D_rollout dataset. It should visually distinguish the input parts '(s_i, a_i^j)' from the target part 's_i^j'. For example, '(s_i, a_i^j)' could be on the left side of the block, and 's_i^j' on the right, separated by a subtle line, to indicate their different roles.",
+            "style": "scientific_diagram",
+            "color_scheme": "muted_teal",
+            "background": "transparent",
+            "label_text": "(s_i, a_i^j) | s_i^j",
+            "aspect_ratio_hint": "3:2"
+          },
+          "reasoning": "The node describes a structured data input with distinct parts (input vs. target), which is too complex for a simple pptx shape. VLM is necessary to visualize this data structure clearly and professionally."
+        },
+        {
+          "node_id": "n29",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A professional-looking, rounded rectangle module box. It should have a clean, modern design with a subtle icon inside representing a neural network or language model. The label \"LLM policy π_θ\" should be clearly displayed within the box.",
+            "style": "module_box",
+            "color_scheme": "calm_blue",
+            "background": "white",
+            "label_text": "LLM policy π_θ",
+            "aspect_ratio_hint": "4:3"
+          },
+          "reasoning": "This is a core processing module representing the LLM policy. VLM is required to render it as a visually distinct and professional module box, consistent with the style guide for main blocks."
+        },
+        {
+          "node_id": "n30",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A diagrammatic arrow indicating a process flow. The arrow should originate from a point labeled '(s_i, a_i^j)', pass through a central point (representing the LLM policy), and terminate at a point labeled 'predicted future state tokens'. This is a single visual element that explains the transformation.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "",
+            "aspect_ratio_hint": "16:9"
+          },
+          "reasoning": "The description is 'Arrow annotation... indicating the prediction flow,' which implies a labeled process rather than a simple connector between two nodes. VLM is appropriate to render this mini-flow cohesively."
+        },
+        {
+          "node_id": "n31",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A text block containing the formula 'minimize −log p_θ(s_i^j | s_i, a_i^j)'. The formula must be rendered with correct mathematical typography (e.g., LaTeX style). The text 'NLL loss over future state tokens' can be included below the formula as a subtitle.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "minimize −log p_θ(s_i^j | s_i, a_i^j)",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "The node contains a mathematical formula. VLM is the best method to ensure correct and professional-looking mathematical typography, which is difficult to guarantee with standard pptx text boxes."
+        },
+        {
+          "node_id": "n32",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A clean text annotation box containing the sentence 'policy internalizes environment dynamics implicitly'. The text should be well-formatted and easy to read, possibly enclosed in a light gray, rounded rectangle to denote it as an explanatory note.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "policy internalizes environment dynamics implicitly",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "The annotation text is longer than 5 words, making it unsuitable for pptx rendering according to the guidelines. VLM can handle multi-word text with better formatting and styling options."
         }
       ],
       "chunk_style_hints": {
         "dominant_color": "#4A90D9",
-        "visual_weight": "medium",
-        "style_notes": "Clean scientific illustration style consistent with academic papers"
+        "visual_weight": "high"
       }
     },
     {
       "chunk_id": "c7",
       "nodes": [
         {
-          "node_id": "n28",
-          "render_method": "vlm",
-          "vlm_prompt": "A conceptual diagram of a module labeled 'Self-Reflection (SR)' representing branch B of a framework. The module should have a clear label and be visually distinct, with a clean scientific illustration style, white background, and a focus on clarity and academic presentation.",
-          "reasoning": "The node represents a main module with a specific label and conceptual significance, which benefits from a visually distinct and clear representation."
-        },
-        {
-          "node_id": "n29",
-          "render_method": "vlm",
-          "vlm_prompt": "A diagram showing an input node for expert path data, labeled with (s_i, a_i, s_{i+1}), representing data obtained from D_expert and environment interaction. The design should include arrows and labels, with a clean scientific illustration style and a white background.",
-          "reasoning": "The node involves a structured representation of data flow, which is best captured through a generated diagram."
-        },
-        {
-          "node_id": "n30",
-          "render_method": "vlm",
-          "vlm_prompt": "A diagram showing an input node for non-expert path data, labeled with (s_i, a_i^j, s_i^j), representing data from the rollout dataset D_rollout. The design should include arrows and labels, with a clean scientific illustration style and a white background.",
-          "reasoning": "Similar to n29, this node involves structured data representation, which is best visualized through a generated diagram."
-        },
-        {
-          "node_id": "n31",
-          "render_method": "vlm",
-          "vlm_prompt": "A comparison node visualizing the contrast between expert future state s_{i+1} and non-expert futures s_i^j for the same state s_i. The design should include a clear comparison layout, with labels and arrows, in a clean scientific illustration style on a white background.",
-          "reasoning": "The node involves a comparison visualization, which benefits from a clear and structured diagrammatic representation."
-        },
-        {
-          "node_id": "n32",
-          "render_method": "vlm",
-          "vlm_prompt": "A module diagram labeled 'LLM generates explanation c_i^j', showing the process of taking comparison context and producing natural language reflections. The design should include a representation of the LLM and the explanation generation process, with a clean scientific illustration style and a white background.",
-          "reasoning": "The node represents a complex process involving an LLM, which is best visualized through a detailed and clear diagram."
-        },
-        {
           "node_id": "n33",
           "render_method": "vlm",
-          "vlm_prompt": "A dataset box labeled 'Reflection Dataset D_refl = {(s_i, a_i^j, c_i^j)}', showing the collection of states, non-expert actions, and generated explanations. The design should include a clear label and a structured layout, with a clean scientific illustration style and a white background.",
-          "reasoning": "The node represents a dataset with specific components, which benefits from a structured and clear visual representation."
+          "vlm_spec": {
+            "content": "The text \"Self-Reflection (SR)\" rendered in a clean, bold, sans-serif font. The text should be prominent and serve as a clear heading for this section of the diagram, placed within a subtle colored header bar.",
+            "style": "scientific_diagram",
+            "color_scheme": "calm_blue",
+            "background": "transparent",
+            "label_text": "Self-Reflection (SR)",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "This is a section title with emphasis. Using VLM ensures consistent styling and visual integration as a header for the 'Self-Reflection' branch, making it more than just plain text."
         },
         {
           "node_id": "n34",
           "render_method": "vlm",
-          "vlm_prompt": "An annotation showing an example explanation bubble: 'c_i^j: Taking a_i leads to safer or more goal-directed outcomes than a_i^j because ...'. The design should include a speech bubble or callout style, with a clean scientific illustration style and a white background.",
-          "reasoning": "The node involves a visual element (explanation bubble) that is best represented through a generated image."
+          "vlm_spec": {
+            "content": "A visual grouping element, like a faint rounded rectangle, that contains two parallel micro-flow diagrams. The top flow shows 's_i, a_i → s_{i+1}' (expert outcome). The bottom flow shows 's_i, a_i^j → s_i^j' (non-expert outcome). Use simple circles for states and small rectangles for actions.",
+            "style": "module_box",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "",
+            "aspect_ratio_hint": "16:9"
+          },
+          "reasoning": "This node represents a conceptual grouping of data flows with internal structure. It requires a custom visualization to show the paired outcomes, making it a clear case for VLM."
         },
         {
           "node_id": "n35",
-          "render_method": "pptx",
-          "pptx_desc": "Text box with left-aligned text, 12pt font, black color, describing the joint training of the LLM with D_expert and D_refl.",
-          "reasoning": "This is a simple text annotation that can be effectively rendered with native text formatting."
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A module that visually contrasts two inputs. It shows two circles representing 's_{i+1}' and 's_i^j' side-by-side, with a 'vs.' symbol or a vertical dividing line between them. The expert outcome 's_{i+1}' could be subtly highlighted with a positive indicator (like a faint green glow) and the non-expert 's_i^j' with a neutral or negative one.",
+            "style": "module_box",
+            "color_scheme": "warm_accent",
+            "background": "transparent",
+            "label_text": "Compare Outcomes",
+            "aspect_ratio_hint": "4:3"
+          },
+          "reasoning": "The node's core function is 'comparison' and 'contrast,' which is a visual concept that requires a custom design. VLM is necessary to create this specific visualization."
+        },
+        {
+          "node_id": "n36",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A rounded rectangle module representing a Large Language Model. It should have a minimalist brain or neural network icon inside. The module should look like a distinct processing unit.",
+            "style": "module_box",
+            "color_scheme": "light_purple",
+            "background": "transparent",
+            "label_text": "LLM Explanation Generator",
+            "aspect_ratio_hint": "4:3"
+          },
+          "reasoning": "This node represents a complex component (an LLM module), which should be rendered as a distinct visual block. This is a classic use case for VLM."
+        },
+        {
+          "node_id": "n37",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A stylized representation of a text document or a speech bubble. Inside, include a short, illustrative snippet of text like 'Rationale: expert action is better because...' using placeholder lines for the rest of the text. The label 'c_i^j' should be clearly associated with this visual.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "c_i^j",
+            "aspect_ratio_hint": "3:2"
+          },
+          "reasoning": "This node represents the concept of a 'natural language rationale', which is more than a simple text label. VLM can create a more visually engaging representation like a document icon or text bubble."
+        },
+        {
+          "node_id": "n38",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A module box representing a dataset. It should feature a database cylinder or stacked-sheets icon. The label 'D_refl' should be prominent. Inside, it could show a sample entry like '{(s_i, a_i^j, c_i^j)}'.",
+            "style": "module_box",
+            "color_scheme": "muted_teal",
+            "background": "transparent",
+            "label_text": "D_refl",
+            "aspect_ratio_hint": "4:3"
+          },
+          "reasoning": "This is a dataset container, a key component that should be visually represented as a distinct module with an icon, making VLM the correct choice."
+        },
+        {
+          "node_id": "n39",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A visual element showing two arrows (one originating from D_refl, one from D_expert) converging into a single point or a plus sign icon, indicating a joint or multi-task operation. A small label 'joint training' or '+' can be included near the convergence point.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "",
+            "aspect_ratio_hint": "1:1"
+          },
+          "reasoning": "The node describes a conceptual 'joint use' which is better represented by a custom visual (converging arrows, plus sign) than a simple pptx text box or a standard arrow, which might not convey the 'joint' aspect."
+        },
+        {
+          "node_id": "n40",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A clean text block containing the specified description. The text should be laid out clearly for readability, possibly with keywords like 'jointly learn', 'action prediction', and 'explanation generation' on separate lines or slightly emphasized.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "Multi-task Training: jointly learn expert action prediction and reflection explanation generation from D_expert and D_refl.",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "The description is long (more than 5 words) and contains important conceptual details. VLM is required to format this text for better readability and visual hierarchy, which is not possible with a simple pptx text box."
         }
       ],
       "chunk_style_hints": {
         "dominant_color": "#4A90D9",
-        "visual_weight": "medium",
-        "style_notes": "Clean scientific illustration style consistent with academic papers"
+        "visual_weight": "high"
       }
     },
     {
       "chunk_id": "c8",
       "nodes": [
         {
-          "node_id": "n36",
+          "node_id": "n41",
           "render_method": "vlm",
-          "vlm_prompt": "An aggregation module labeled 'Policy Training & Update under Early Experience', visually combining signals from two branches labeled 'IWM' and 'SR' to update the policy π_θ. The module should depict a conceptual aggregation of world-model-informed loss and expert imitation plus explanation loss into a joint objective. Style should be a clean scientific illustration with a white background, suitable for academic paper figures.",
-          "reasoning": "The node describes a complex aggregation module with multiple components and labels, which benefits from a detailed visual representation that can be best achieved through AI-generated imagery."
+          "vlm_spec": {
+            "content": "A prominent, polished module box representing the final, updated policy. The module should have a clean, modern design. Inside the box, display the text 'LLM Policy π_θ (updated)'. The Greek letter π and subscript θ should be rendered correctly. A subtle 'update' icon, like a circular arrow or a gear with a plus sign, can be placed next to the text to visually reinforce the 'updated' status.",
+            "style": "module_box",
+            "color_scheme": "calm_blue",
+            "background": "transparent",
+            "label_text": "LLM Policy π_θ (updated)",
+            "aspect_ratio_hint": "3:2"
+          },
+          "reasoning": "This is a main conceptual module representing the final output of the training process. It requires a professional visual representation, not just a simple shape or text box. The label includes special characters (π_θ) which are better handled by VLM for consistency."
         },
         {
-          "node_id": "n37",
-          "render_method": "pptx",
-          "pptx_desc": "Arrow with annotation text 'world-model-informed loss / NLL on future states', using a simple straight arrow shape with a label in italic 12pt font, dark gray color (#333333).",
-          "reasoning": "This is a simple annotation with text that can be effectively rendered using native PowerPoint shapes and text formatting."
+          "node_id": "n42",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A clean text block displaying a mathematical expression for the joint loss function. The text should read 'jointly optimize: L_IWM + L_action + L_expl'. The letter 'L' should be styled as a script or italic character representing loss, and the subscripts 'IWM', 'action', and 'expl' must be clear and legible. The entire expression can be enclosed in a light, neutral-colored, rounded rectangle to frame it as a summary annotation.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "jointly optimize: L_IWM + L_action + L_expl",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "This node contains a formula-like text with subscripts, which is considered complex content. Using VLM ensures proper mathematical formatting and visual consistency with the rest of the diagram, which is difficult to guarantee with pptx."
         },
         {
-          "node_id": "n38",
-          "render_method": "pptx",
-          "pptx_desc": "Arrow with annotation text 'expert imitation + explanation prediction loss', using a simple straight arrow shape with a label in italic 12pt font, dark gray color (#333333).",
-          "reasoning": "This is a simple annotation with text that can be effectively rendered using native PowerPoint shapes and text formatting."
+          "node_id": "n43",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A clean, sans-serif text label designed to annotate an incoming arrow. The text should read 'Future-state prediction loss (L_IWM)'. The text should be rendered without any background or container, ready to be placed alongside an arrow.",
+            "style": "flat_2d_vector",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "Future-state prediction loss (L_IWM)",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "The descriptive text 'future-state prediction (NLL) loss' is longer than the 1-5 word guideline for pptx. VLM is chosen to ensure the text is rendered cleanly and legibly as a professional-looking annotation."
         },
         {
-          "node_id": "n39",
-          "render_method": "pptx",
-          "pptx_desc": "Text block summarizing the joint objective, with text 'L_total = L_IWM + λ · L_SR' and a statement about Early Experience bridging IL and RL. Use a 14pt font, left-aligned, dark blue color (#1a365d).",
-          "reasoning": "This node is primarily text-based, summarizing a formula and a statement, which can be effectively rendered using native PowerPoint text formatting."
+          "node_id": "n44",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A clean, sans-serif text label designed to annotate an incoming arrow. The text should be laid out on two lines for clarity and compactness: 'Action prediction loss (L_action)\n+ Explanation generation loss (L_expl)'. The text should be rendered without any background or container.",
+            "style": "flat_2d_vector",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "Action prediction loss (L_action)\n+ Explanation generation loss (L_expl)",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "This annotation text is long and descriptive, clearly exceeding the pptx word limit. Using VLM allows for controlled multi-line layout and ensures a clean, professional appearance consistent with other diagram elements."
         }
       ],
       "chunk_style_hints": {
         "dominant_color": "#4A90D9",
-        "visual_weight": "medium",
-        "style_notes": "Clean scientific illustration style consistent with academic papers"
+        "visual_weight": "high"
       }
     },
     {
       "chunk_id": "c9",
       "nodes": [
         {
-          "node_id": "n40",
+          "node_id": "n45",
           "render_method": "vlm",
-          "vlm_prompt": "A conceptual mini-diagram illustrating the relationship between IL (Imitation Learning) and RL (Reinforcement Learning) with a central label 'Early Experience'. The left side is labeled 'IL (Expert Supervision)', the right side is labeled 'RL (Environment Interaction / Reward)', and the center is labeled 'Early Experience'. The diagram should visually represent the bridging concept between IL and RL, using a clean scientific illustration style with a white background.",
-          "reasoning": "The node describes a conceptual mini-diagram with labeled sections, which benefits from a visual representation to effectively convey the bridging concept between IL and RL."
+          "vlm_spec": {
+            "content": "A professional module box representing the final output agent. Inside the box, include a simple, clean icon of a stylized brain or a friendly robot head to signify an AI agent. The module should be clearly labeled with the text 'Early Experience Policy / LLM Agent'.",
+            "style": "module_box",
+            "color_scheme": "muted_green",
+            "background": "transparent",
+            "label_text": "Early Experience Policy / LLM Agent",
+            "aspect_ratio_hint": "3:2"
+          },
+          "reasoning": "This node represents a key conceptual output, the final agent. It's described as an 'Icon or module' and is a main block, making it a clear candidate for vlm to provide a rich visual representation beyond a simple box."
         },
         {
-          "node_id": "n41",
-          "render_method": "pptx",
-          "pptx_desc": "Text box with left-aligned text, 12pt font size, black color (#000000), describing the use of environment rollouts in Early Experience without reward signals.",
-          "reasoning": "This is a simple annotation text that can be effectively rendered using native text formatting in PowerPoint."
+          "node_id": "n46",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A clean, solid arrow pointing from the 'Early Experience Policy' module. Adjacent to the arrow, display the annotation text 'better imitation of expert actions (IL)'. The text and arrow should form a single, cohesive visual element.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "better imitation of expert actions (IL)",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "The descriptive text 'better imitation of expert actions (IL)' is longer than 5 words and is part of a combined arrow-and-label element. Using vlm ensures the text and arrow are well-integrated and consistently styled, avoiding layout issues with native pptx text."
         },
         {
-          "node_id": "n42",
-          "render_method": "pptx",
-          "pptx_desc": "Text box with left-aligned text, 12pt font size, black color (#000000), explaining the reliance on expert demonstrations and explanations in Early Experience, bridging IL and RL.",
-          "reasoning": "This is a simple annotation text that can be effectively rendered using native text formatting in PowerPoint."
+          "node_id": "n47",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A clean, solid arrow pointing from the 'Early Experience Policy' module in a different direction from the other arrow. Adjacent to this arrow, display the annotation text 'enhanced environment interaction / sample efficiency for RL'. The text and arrow should be rendered as a single visual unit.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "enhanced environment interaction / sample efficiency for RL",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "Similar to n46, this node contains a long descriptive text label that needs to be presented with an arrow. VLM is the appropriate choice to handle the multi-line text and ensure a clean, professional composition."
+        },
+        {
+          "node_id": "n48",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A clean, well-formatted text block containing the summary sentence: 'bridging IL and RL via early, reward-free rollouts and self-reflection.' The text should be professionally typeset in a sans-serif font. It can be enclosed in a very light gray, subtle, rounded rectangle to frame it as a concluding statement.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "bridging IL and RL via early, reward-free rollouts and self-reflection.",
+            "aspect_ratio_hint": "16:9"
+          },
+          "reasoning": "This is a full sentence acting as a summary text block. It is far too long for pptx rendering and requires careful typesetting and layout, which is a primary function of vlm rendering for text-heavy elements."
         }
       ],
       "chunk_style_hints": {
-        "dominant_color": "#4A90D9",
-        "visual_weight": "medium",
-        "style_notes": "Clean scientific illustration style consistent with academic papers"
+        "dominant_color": "#6BAA9B",
+        "visual_weight": "medium"
+      }
+    },
+    {
+      "chunk_id": "c10",
+      "nodes": [
+        {
+          "node_id": "n49",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A clean, professional text box for an annotation. The text inside reads: \"Future states serve as reward-free supervision (early experience).\" The phrase 'reward-free supervision' can be subtly highlighted with a slightly bolder font or a faint color background to draw attention. The box should have a thin, light gray border and a transparent background.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "Future states serve as reward-free supervision (early experience).",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "The annotation is a full sentence (8 words plus parenthetical), which is too long for pptx. It explains a key concept and benefits from professional typesetting provided by vlm."
+        },
+        {
+          "node_id": "n50",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A clean, professional text box for an annotation. The text inside reads: \"IWM: implicit dynamics, no explicit world model.\" The acronym 'IWM' should be in bold. The style should be consistent with other annotations in the figure, featuring a thin, light gray border and a transparent background.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "IWM: implicit dynamics, no explicit world model.",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "This annotation is a descriptive phrase longer than 5 words, explaining the IWM concept. VLM is necessary for proper formatting and to maintain visual consistency with other annotations."
+        },
+        {
+          "node_id": "n51",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A clean, professional text box for an annotation. The text inside reads: \"SR: natural language rationales for why expert actions are better.\" The acronym 'SR' should be in bold. The style should be consistent with other annotations, featuring a thin, light gray border and a transparent background.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "SR: natural language rationales for why expert actions are better.",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "This is a long descriptive sentence (10 words) explaining the SR concept. It is far too long for pptx and requires vlm for professional rendering and consistent styling."
+        },
+        {
+          "node_id": "n52",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A legend box with the title 'Legend'. Inside, it displays three items vertically. Each item consists of a small visual swatch followed by a text label. 1. A small, muted teal rounded rectangle labeled 'Dataset'. 2. A small, calm blue rounded rectangle labeled 'Model/Policy Module'. 3. A small, light purple rounded rectangle labeled 'Environment Module'. The entire legend box has a thin gray border and a solid white background.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "white",
+            "label_text": "Legend",
+            "aspect_ratio_hint": "3:2"
+          },
+          "reasoning": "A legend is a complex visual element with multiple shapes, colors, and text labels. It cannot be rendered using pptx and is a classic use case for vlm to create a clear, structured visual guide."
+        },
+        {
+          "node_id": "n53",
+          "render_method": "vlm",
+          "vlm_spec": {
+            "content": "A clean, professional text box for an annotation. The text inside reads: \"'early experience': rollouts collected before reward-based RL, used for supervision.\" The term 'early experience' is in quotes or italics for emphasis. The style is consistent with other annotations, featuring a thin, light gray border and a transparent background.",
+            "style": "scientific_diagram",
+            "color_scheme": "neutral_gray",
+            "background": "transparent",
+            "label_text": "'early experience': rollouts collected before reward-based RL, used for supervision.",
+            "aspect_ratio_hint": "auto"
+          },
+          "reasoning": "The annotation is a long sentence (11 words) providing a key definition. This requires the formatting and styling capabilities of vlm and is well beyond the scope of pptx."
+        }
+      ],
+      "chunk_style_hints": {
+        "dominant_color": "#808080",
+        "visual_weight": "low"
       }
     }
   ],
   "global_style": {
-    "theme": "NeurIPS-style clean diagram with light background",
-    "color_palette": [
-      "#4A90D9",
-      "#7B68EE",
-      "#50C878",
-      "#FFB347"
-    ],
-    "font_family": "Arial",
-    "background": "white"
+    "theme": "Top-tier CS conference scientific illustration style (NeurIPS, ICML, CVPR, ACL). Clean, professional, publication-ready diagrams with clear visual hierarchy.",
+    "color_guidance": {
+      "primary": "Use calm, professional blues as the primary color for main modules and processing blocks.",
+      "secondary": "Use soft warm tones (peach, coral, light orange) for attention mechanisms, special operations, or highlighted elements.",
+      "accent": "Use muted greens or teals for data inputs, datasets, and source elements.",
+      "neutral": "Use light grays and off-whites for backgrounds, containers, and less important elements.",
+      "text": "Use dark gray or navy blue for text to ensure high contrast and readability.",
+      "overall": "Prefer Morandi-style muted, desaturated colors that look professional in academic papers. Avoid overly saturated or neon colors."
+    },
+    "visual_style": {
+      "design": "Flat 2D vector style, clean lines, no photorealism, no heavy 3D effects.",
+      "shapes": "Use rounded rectangles for modules, circles for states/nodes, straight arrows with clean arrowheads.",
+      "layout": "Prefer horizontal left-to-right flow for main pipelines. Use Manhattan-style routing (90-degree turns) for arrows when needed.",
+      "spacing": "Maintain consistent spacing between elements. Avoid cluttered layouts."
+    },
+    "background": "Solid white or very light gray. No gradients, no shadows, no textures on background.",
+    "font_family": "Sans-serif fonts (Arial, Helvetica) for clean readability."
   }
 }

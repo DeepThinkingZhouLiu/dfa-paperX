@@ -75,24 +75,34 @@ class P2gChunkLayoutPlannerAgent(BaseAgent):
                 "p2g_chunk_layout_planner_agent: semantic_json 为空，请确保已成功运行 p2g_semantic_constructor_agent。"
             )
         
-        # 从 enriched_description 中提取 layout_desc
+        # 从 enriched_description 中提取 layout_desc 和 semantic_desc
         enriched = getattr(state, "enriched_description", {}) or {}
         layout_desc = ""
-        
+        semantic_desc = ""
+
         if isinstance(enriched, dict):
-            ld, sd = enriched.get("layout_desc"), enriched.get("semantic_desc")
-            if isinstance(ld, str) and ld.strip() and isinstance(sd, str) and sd.strip():
+            ld = enriched.get("layout_desc")
+            sd = enriched.get("semantic_desc")
+            if isinstance(ld, str) and ld.strip():
                 layout_desc = ld
+            if isinstance(sd, str) and sd.strip():
                 semantic_desc = sd
 
-        
+        # 调试日志
+        log.info(
+            "enriched_description 检查: layout_desc=%d chars, semantic_desc=%d chars",
+            len(layout_desc), len(semantic_desc)
+        )
+
         if not layout_desc:
+            log.error("enriched_description 内容: %s", enriched)
             raise ValueError(
                 "p2g_chunk_layout_planner_agent: layout_desc 为空，请确保已成功运行 p2g_target_analyst 并写入 "
                 "enriched_description.layout_desc."
             )
-        
+
         if not semantic_desc:
+            log.error("enriched_description 内容: %s", enriched)
             raise ValueError(
                 "p2g_chunk_layout_planner_agent: semantic_desc 为空，请确保已成功运行 p2g_target_analyst 并写入 "
                 "enriched_description.semantic_desc."

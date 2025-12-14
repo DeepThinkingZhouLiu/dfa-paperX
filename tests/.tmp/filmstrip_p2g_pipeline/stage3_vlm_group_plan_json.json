@@ -1,0 +1,22 @@
+{
+  "groups": [
+    {
+      "group_id": "g1",
+      "node_ids": [
+        "n1",
+        "n10",
+        "n14"
+      ],
+      "subject": "Same urban street scene (Cityscapes-like) with consistent viewpoint, objects, lighting, and composition across panels",
+      "prompt": "You are a scientific illustrator generating images for an academic paper figure.\n\nGenerate ONE single image composed of 3 EQUAL-SIZED sub-panels arranged horizontally (side-by-side) with clear white gaps (about 20-30 pixels) between them.\n\nSubject: Same urban street scene (Cityscapes-like) with consistent viewpoint, objects, lighting, and composition across panels\n\nPanel 1 (Left): A natural RGB photograph-style thumbnail of an urban street scene with buildings, road, cars and pedestrians; realistic lighting and colors; no overlays, no borders, no text.\nPanel 2 (Middle): A segmentation result visualization: the same kind of street photo as input with a semi-transparent color-coded segmentation overlay (distinct solid regions in multiple colors for road, buildings, vehicles, sky). No legend, no text, no labels.\nPanel 3 (Right): A standalone pseudo-label mask tile: semi-transparent colored segmentation regions with visible uncertainty—speckled/stippled texture and soft/noisy boundaries; no text, no legend, plain background.\n\nCRITICAL Constraints:\n- All panels MUST depict the EXACT SAME scene/subject for visual consistency (same viewpoint, same objects, same composition).\n- Each panel MUST be a SQUARE or near-square frame of EQUAL size.\n- Content within each panel should be CENTERED and NOT stretched. If the natural aspect ratio differs, add white padding (letterbox/pillarbox) to maintain the square frame without distortion.\n- Do NOT add any text, labels, numbers, legends, watermarks, or captions inside the image.\n- Pure visual data only - no annotations.\n- Use solid pure white (#FFFFFF) background and pure white gaps between panels.\n- The white gaps between panels must be clearly visible and consistent width."
+    },
+    {
+      "group_id": "g2",
+      "node_ids": [
+        "n2"
+      ],
+      "subject": "Abstract UI-style depiction of multi-label image-level annotations (multi-hot indicator)",
+      "prompt": "You are a scientific illustrator generating images for an academic paper figure.\n\nGenerate ONE single image showing: A compact multi-label indicator icon: a small grid of rounded colored pills and tiny squares suggesting a multi-hot vector; abstract UI-like; no readable text, no letters or numbers.\n\nCRITICAL Constraints:\n- The image should be SQUARE or near-square.\n- Content should be CENTERED with white padding if needed to maintain aspect ratio without distortion.\n- Do NOT add any text, labels, numbers, legends, watermarks, or captions inside the image.\n- Use solid pure white (#FFFFFF) background.\n- Clean, minimal scientific illustration style."
+    }
+  ]
+}

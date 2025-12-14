@@ -1,0 +1,543 @@
+{
+  "n3": {
+    "element_type": "rounded_rectangle",
+    "text": "Patch Embedding",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 13,
+      "color": "#333333",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#D9EAFB",
+      "border_style": "solid",
+      "border_color": "#2E5A8C",
+      "border_width": 1.25
+    },
+    "auto_fit": "shrink",
+    "size": {
+      "w_px": 210,
+      "h_px": 80
+    },
+    "decorations": [
+      {
+        "type": "grid_glyph",
+        "grid": {
+          "rows": 3,
+          "cols": 3
+        },
+        "placement": {
+          "anchor": "left",
+          "margin_px": 12,
+          "w_px": 32,
+          "h_px": 32
+        },
+        "style": {
+          "fill_color": "#FFFFFF",
+          "border_color": "#2E5A8C",
+          "border_width": 1.0
+        }
+      }
+    ]
+  },
+  "n4": {
+    "element_type": "rounded_rectangle",
+    "text": "Loc Token",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 12,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#FC8D62",
+      "border_style": "solid",
+      "border_color": "#C85F3D",
+      "border_width": 1.25
+    },
+    "auto_fit": "shrink",
+    "size": {
+      "w_px": 140,
+      "h_px": 55
+    },
+    "decorations": [
+      {
+        "type": "token_icon",
+        "placement": {
+          "anchor": "left",
+          "margin_px": 10,
+          "w_px": 18,
+          "h_px": 18
+        },
+        "style": {
+          "fill_color": "#FFFFFF",
+          "border_color": "#FFFFFF",
+          "border_width": 0.0
+        }
+      }
+    ]
+  },
+  "n5": {
+    "element_type": "rounded_rectangle",
+    "text": "SegFormer Backbone",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 14,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#4A90D9",
+      "border_style": "solid",
+      "border_color": "#2E5A8C",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink",
+    "size": {
+      "w_px": 260,
+      "h_px": 95
+    },
+    "decorations": [
+      {
+        "type": "feature_pyramid_glyph",
+        "levels": 4,
+        "placement": {
+          "anchor": "right",
+          "margin_px": 12,
+          "w_px": 46,
+          "h_px": 56
+        },
+        "style": {
+          "fill_color": "#FFFFFF",
+          "border_color": "#2E5A8C",
+          "border_width": 0.8,
+          "opacity": 0.9
+        }
+      }
+    ]
+  },
+  "n6": {
+    "element_type": "rounded_rectangle",
+    "text": "Adapter",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 13,
+      "color": "#333333",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#D9EAFB",
+      "border_style": "solid",
+      "border_color": "#2E5A8C",
+      "border_width": 1.25
+    },
+    "auto_fit": "shrink",
+    "size": {
+      "w_px": 160,
+      "h_px": 70
+    }
+  },
+  "n7": {
+    "element_type": "rounded_rectangle",
+    "text": "Classifier",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 13,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#8DA0CB",
+      "border_style": "solid",
+      "border_color": "#5F6F95",
+      "border_width": 1.25
+    },
+    "auto_fit": "shrink",
+    "size": {
+      "w_px": 200,
+      "h_px": 80
+    },
+    "decorations": [
+      {
+        "type": "bar_glyph",
+        "bars": 5,
+        "placement": {
+          "anchor": "right",
+          "margin_px": 12,
+          "w_px": 40,
+          "h_px": 34
+        },
+        "style": {
+          "fill_color": "#FFFFFF",
+          "border_color": "#FFFFFF",
+          "border_width": 0.0,
+          "opacity": 0.95
+        }
+      }
+    ]
+  },
+  "n8": {
+    "element_type": "rectangle",
+    "text": "L_cls",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 12,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#E41A1C",
+      "border_style": "solid",
+      "border_color": "#A31515",
+      "border_width": 1.25
+    },
+    "auto_fit": "shrink",
+    "size": {
+      "w_px": 140,
+      "h_px": 90
+    },
+    "geometry": {
+      "custom_shape": "diamond"
+    },
+    "decorations": [
+      {
+        "type": "sigma_gradient_glyph",
+        "placement": {
+          "anchor": "bottom_right",
+          "margin_px": 10,
+          "w_px": 26,
+          "h_px": 26
+        },
+        "style": {
+          "stroke_color": "#FFFFFF",
+          "stroke_width": 1.5
+        }
+      }
+    ]
+  },
+  "n9": {
+    "element_type": "rounded_rectangle",
+    "text": "Decoder",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 13,
+      "color": "#333333",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#D9EAFB",
+      "border_style": "solid",
+      "border_color": "#2E5A8C",
+      "border_width": 1.25
+    },
+    "auto_fit": "shrink",
+    "size": {
+      "w_px": 200,
+      "h_px": 80
+    },
+    "decorations": [
+      {
+        "type": "upsampling_glyph",
+        "placement": {
+          "anchor": "right",
+          "margin_px": 12,
+          "w_px": 42,
+          "h_px": 38
+        },
+        "style": {
+          "stroke_color": "#2E5A8C",
+          "stroke_width": 1.4,
+          "fill_color": "#FFFFFF",
+          "opacity": 0.95
+        }
+      }
+    ]
+  },
+  "n11": {
+    "element_type": "rounded_rectangle",
+    "text": "Patch Clustering",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 13,
+      "color": "#333333",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#D9EAFB",
+      "border_style": "solid",
+      "border_color": "#2E5A8C",
+      "border_width": 1.25
+    },
+    "auto_fit": "shrink",
+    "size": {
+      "w_px": 220,
+      "h_px": 80
+    },
+    "decorations": [
+      {
+        "type": "cluster_dots_glyph",
+        "clusters": 3,
+        "placement": {
+          "anchor": "right",
+          "margin_px": 12,
+          "w_px": 54,
+          "h_px": 38
+        },
+        "style": {
+          "palette": [
+            "#4A90D9",
+            "#66C2A5",
+            "#FC8D62"
+          ],
+          "dot_size_px": 4,
+          "opacity": 0.95
+        }
+      }
+    ]
+  },
+  "n12": {
+    "element_type": "rounded_rectangle",
+    "text": "Memory Bank",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 13,
+      "color": "#333333",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#E6F3EE",
+      "border_style": "solid",
+      "border_color": "#3A7F73",
+      "border_width": 1.25
+    },
+    "auto_fit": "shrink",
+    "size": {
+      "w_px": 190,
+      "h_px": 95
+    },
+    "decorations": [
+      {
+        "type": "database_cylinder_glyph",
+        "placement": {
+          "anchor": "left",
+          "margin_px": 12,
+          "w_px": 46,
+          "h_px": 58
+        },
+        "style": {
+          "fill_color": "#FFFFFF",
+          "border_color": "#3A7F73",
+          "border_width": 1.2,
+          "opacity": 0.95
+        }
+      },
+      {
+        "type": "embedding_glyphs",
+        "placement": {
+          "anchor": "left",
+          "margin_px": 22,
+          "w_px": 28,
+          "h_px": 30,
+          "offset_px": {
+            "x": 10,
+            "y": 14
+          }
+        },
+        "style": {
+          "stroke_color": "#3A7F73",
+          "stroke_width": 1.0,
+          "fill_color": "#66C2A5",
+          "opacity": 0.6
+        }
+      }
+    ]
+  },
+  "n13": {
+    "element_type": "rounded_rectangle",
+    "text": "Pseudo Labeling",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 13,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#8DA0CB",
+      "border_style": "solid",
+      "border_color": "#5F6F95",
+      "border_width": 1.25
+    },
+    "auto_fit": "shrink",
+    "size": {
+      "w_px": 240,
+      "h_px": 80
+    },
+    "decorations": [
+      {
+        "type": "wand_glyph",
+        "placement": {
+          "anchor": "left",
+          "margin_px": 12,
+          "w_px": 26,
+          "h_px": 26
+        },
+        "style": {
+          "stroke_color": "#FC8D62",
+          "stroke_width": 2.0,
+          "fill_color": null
+        }
+      },
+      {
+        "type": "mask_thumbnail_glyph",
+        "placement": {
+          "anchor": "right",
+          "margin_px": 12,
+          "w_px": 34,
+          "h_px": 26
+        },
+        "style": {
+          "fill_color": "#FFFFFF",
+          "border_color": "#5F6F95",
+          "border_width": 1.0,
+          "accent_palette": [
+            "#4A90D9",
+            "#66C2A5",
+            "#FC8D62"
+          ],
+          "opacity": 0.95
+        }
+      }
+    ]
+  },
+  "n15": {
+    "element_type": "rectangle",
+    "text": "L_ce",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 12,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#E41A1C",
+      "border_style": "solid",
+      "border_color": "#A31515",
+      "border_width": 1.25
+    },
+    "auto_fit": "shrink",
+    "size": {
+      "w_px": 150,
+      "h_px": 95
+    },
+    "geometry": {
+      "custom_shape": "diamond"
+    },
+    "decorations": [
+      {
+        "type": "pixel_grid_glyph",
+        "placement": {
+          "anchor": "bottom_left",
+          "margin_px": 10,
+          "w_px": 26,
+          "h_px": 26
+        },
+        "style": {
+          "fill_color": "#FFFFFF",
+          "border_color": "#FFFFFF",
+          "border_width": 0.0,
+          "opacity": 0.9
+        }
+      },
+      {
+        "type": "sigma_gradient_glyph",
+        "placement": {
+          "anchor": "bottom_right",
+          "margin_px": 10,
+          "w_px": 26,
+          "h_px": 26
+        },
+        "style": {
+          "stroke_color": "#FFFFFF",
+          "stroke_width": 1.5
+        }
+      }
+    ]
+  },
+  "n16": {
+    "element_type": "rounded_rectangle",
+    "text": "Update",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 13,
+      "color": "#333333",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#E6F0FA",
+      "border_style": "solid",
+      "border_color": "#2E5A8C",
+      "border_width": 1.25
+    },
+    "auto_fit": "shrink",
+    "size": {
+      "w_px": 190,
+      "h_px": 90
+    },
+    "decorations": [
+      {
+        "type": "stacked_layers_glyph",
+        "layers": 4,
+        "placement": {
+          "anchor": "left",
+          "margin_px": 12,
+          "w_px": 52,
+          "h_px": 44
+        },
+        "style": {
+          "fill_color": "#FFFFFF",
+          "border_color": "#2E5A8C",
+          "border_width": 1.0,
+          "opacity": 0.95
+        }
+      },
+      {
+        "type": "down_arrow_glyph",
+        "placement": {
+          "anchor": "right",
+          "margin_px": 12,
+          "w_px": 20,
+          "h_px": 28
+        },
+        "style": {
+          "stroke_color": "#2E5A8C",
+          "stroke_width": 2.2,
+          "fill_color": null
+        }
+      }
+    ]
+  }
+}

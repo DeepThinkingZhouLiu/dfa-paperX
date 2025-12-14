@@ -1,0 +1,290 @@
+{
+  "n1": {
+    "element_type": "text_box",
+    "text": "Early Experience Framework: Bridging Imitation Learning and Reinforcement Learning",
+    "text_lines": null,
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 24,
+      "bold": true,
+      "italic": false,
+      "color": "#1a237e",
+      "alignment": "center"
+    },
+    "shape_style": {
+      "fill_color": null,
+      "border_color": null,
+      "border_width": 1.0,
+      "border_style": "none"
+    }
+  },
+  "n2": {
+    "element_type": "text_box",
+    "text": "Core workflow: data construction – dual-method training, connecting IL-style expert data with RL-style environment rollouts.",
+    "text_lines": null,
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 12,
+      "bold": false,
+      "italic": false,
+      "color": "#333333",
+      "alignment": "center"
+    },
+    "shape_style": {
+      "fill_color": null,
+      "border_color": null,
+      "border_width": 1.0,
+      "border_style": "none"
+    }
+  },
+  "n6": {
+    "element_type": "arrow",
+    "text": "Details in Data Construction & Training sections",
+    "text_lines": null,
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 10,
+      "bold": false,
+      "italic": true,
+      "color": "#808080",
+      "alignment": "left"
+    },
+    "shape_style": {
+      "fill_color": null,
+      "border_color": "#F5F5F5",
+      "border_width": 1.0,
+      "border_style": "dashed"
+    }
+  },
+  "n8": {
+    "element_type": "text_box",
+    "text": "s_i: expert states, a_i: expert actions",
+    "text_lines": null,
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 10,
+      "bold": false,
+      "italic": false,
+      "color": "#333333",
+      "alignment": "left"
+    },
+    "shape_style": {
+      "fill_color": null,
+      "border_color": null,
+      "border_width": 1.0,
+      "border_style": "none"
+    }
+  },
+  "n10": {
+    "element_type": "text_box",
+    "text": "Used to sample non-expert actions at each expert state",
+    "text_lines": null,
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 10,
+      "bold": false,
+      "italic": false,
+      "color": "#333333",
+      "alignment": "left"
+    },
+    "shape_style": {
+      "fill_color": null,
+      "border_color": null,
+      "border_width": 1.0,
+      "border_style": "none"
+    }
+  },
+  "n18": {
+    "element_type": "text_box",
+    "text": "no reward, future state as supervision",
+    "text_lines": null,
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 10,
+      "bold": false,
+      "italic": false,
+      "color": "#333333",
+      "alignment": "left"
+    },
+    "shape_style": {
+      "fill_color": null,
+      "border_color": null,
+      "border_width": 1.0,
+      "border_style": "none"
+    }
+  },
+  "n19": {
+    "element_type": "text_box",
+    "text": "Expert transition (s_i, a_i, s_{i+1}) is retained for SR comparison",
+    "text_lines": null,
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 10,
+      "bold": false,
+      "italic": false,
+      "color": "#333333",
+      "alignment": "left"
+    },
+    "shape_style": {
+      "fill_color": null,
+      "border_color": null,
+      "border_width": 1.0,
+      "border_style": "none"
+    }
+  },
+  "n22": {
+    "element_type": "text_box",
+    "text": "These datasets are consumed by two complementary training methods: Implicit World Modeling (IWM) and Self-Reflection (SR).",
+    "text_lines": null,
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 10,
+      "bold": false,
+      "italic": false,
+      "color": "#333333",
+      "alignment": "center"
+    },
+    "shape_style": {
+      "fill_color": null,
+      "border_color": null,
+      "border_width": 1.0,
+      "border_style": "none"
+    }
+  },
+  "n25": {
+    "element_type": "text_box",
+    "text": "Implicit World Modeling (IWM)",
+    "text_lines": null,
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 18,
+      "bold": true,
+      "italic": false,
+      "color": "#333333",
+      "alignment": "center"
+    },
+    "shape_style": {
+      "fill_color": null,
+      "border_color": null,
+      "border_width": 1.0,
+      "border_style": "none"
+    }
+  },
+  "n29": {
+    "element_type": "text_box",
+    "text": "L_IWM = -log p(s̃_i^j | s_i, a_i^j)\nCast as next-token prediction",
+    "text_lines": [
+      "L_IWM = -log p(s̃_i^j | s_i, a_i^j)",
+      "Cast as next-token prediction"
+    ],
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 11,
+      "bold": false,
+      "italic": false,
+      "color": "#333333",
+      "alignment": "left"
+    },
+    "shape_style": {
+      "fill_color": "#F5F5F5",
+      "border_color": "#808080",
+      "border_width": 1.0,
+      "border_style": "dashed"
+    }
+  },
+  "n31": {
+    "element_type": "text_box",
+    "text": "Self-Reflection (SR)",
+    "text_lines": null,
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 18,
+      "bold": true,
+      "italic": false,
+      "color": "#333333",
+      "alignment": "center"
+    },
+    "shape_style": {
+      "fill_color": null,
+      "border_color": null,
+      "border_width": 1.0,
+      "border_style": "none"
+    }
+  },
+  "n37": {
+    "element_type": "rectangle",
+    "text": "Use D_refl jointly with D_expert; L_SR = L_action + L_explanation (multi-task).",
+    "text_lines": null,
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 12,
+      "bold": false,
+      "italic": false,
+      "color": "#333333",
+      "alignment": "left"
+    },
+    "shape_style": {
+      "fill_color": "#F5F5F5",
+      "border_color": "#808080",
+      "border_width": 1.0,
+      "border_style": "solid"
+    }
+  },
+  "n40": {
+    "element_type": "text_box",
+    "text": "single policy, dual training signals (IWM + SR)",
+    "text_lines": null,
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 10,
+      "bold": false,
+      "italic": false,
+      "color": "#333333",
+      "alignment": "left"
+    },
+    "shape_style": {
+      "fill_color": null,
+      "border_color": null,
+      "border_width": 1.0,
+      "border_style": "none"
+    }
+  },
+  "n42": {
+    "element_type": "text_box",
+    "text": "Optional: π_EE can be reused for iterative rollouts",
+    "text_lines": null,
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 9,
+      "bold": false,
+      "italic": false,
+      "color": "#808080",
+      "alignment": "left"
+    },
+    "shape_style": {
+      "fill_color": null,
+      "border_color": null,
+      "border_width": 1.0,
+      "border_style": "none"
+    }
+  },
+  "n43": {
+    "element_type": "rectangle",
+    "text": "Bridges IL and RL: uses expert demonstrations (IL) and early environment interactions without explicit rewards (RL-style rollouts).",
+    "text_lines": null,
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 12,
+      "bold": false,
+      "italic": false,
+      "color": "#333333",
+      "alignment": "left"
+    },
+    "shape_style": {
+      "fill_color": "#F5F5F5",
+      "border_color": "#808080",
+      "border_width": 1.0,
+      "border_style": "dashed"
+    }
+  }
+}

@@ -165,7 +165,7 @@ class VisionLLMCaller(BaseLLMCaller):
             model=self.model_name,
             image_path=image_path,
             use_edit=(self.mode == "edit"),
-            timeout=self.vlm_config.get("timeout", 120),
+            timeout=self.vlm_config.get("timeout", 300),
         )
         
         # 返回图像路径作为内容
@@ -214,7 +214,7 @@ class VisionLLMCaller(BaseLLMCaller):
             "Content-Type": "application/json",
         }
         
-        timeout = self.vlm_config.get("timeout", 120)
+        timeout = self.vlm_config.get("timeout", 300)
         # 对于大图片和长时间处理，需要设置更详细的超时参数
         # connect: 连接超时（较短）
         # read: 读取超时（最重要，需要足够长以处理大图片和推理）
@@ -269,7 +269,7 @@ if __name__ == "__main__":
         p.add_argument(
             "--output-image",
             type=str,
-            default="./out/generated_image_2.png",
+            default="./out/generated_image_3.png",
             help="输出图像保存路径（generation/edit 有效)"
         )
         p.add_argument(
@@ -281,8 +281,8 @@ if __name__ == "__main__":
         p.add_argument(
             "--timeout",
             type=int,
-            default=120,
-            help="请求超时（秒）"
+            default=300,
+            help="请求超时（秒），图像生成建议 300 秒以上"
         )
         return p
 
@@ -293,7 +293,7 @@ if __name__ == "__main__":
             print("❌ 请先设置环境变量 DF_API_URL / DF_API_KEY")
             return 2
 
-        model = args.model or os.getenv("DF_MODEL", "gemini-3-pro-image-preview") 
+        model = args.model or os.getenv("DF_MODEL", "gemini-2.5-flash-image-preview") 
         #gemini-3-pro-image-preview  gemini-2.5-flash-image-preview
 
         # 参数校验

@@ -4,508 +4,1370 @@
       "chunk_id": "c1",
       "nodes": [
         {
-          "node_id": "n2",
-          "role": "container",
-          "rel_bbox": {
-            "x": 0.0,
-            "y": 0.0,
-            "w": 1.0,
-            "h": 1.0
-          },
-          "reasoning": "作为该 chunk 的背景容器框，视觉上包裹标题和概览信息"
-        },
-        {
           "node_id": "n1",
-          "role": "title",
+          "role": "main_block",
           "rel_bbox": {
-            "x": 0.1,
-            "y": 0.1,
-            "w": 0.8,
-            "h": 0.2
+            "x": 0.08,
+            "y": 0.05,
+            "w": 0.84,
+            "h": 0.32
           },
-          "reasoning": "主标题文本，置于顶部居中位置，统领全图内容"
-        },
-        {
-          "node_id": "n3",
-          "role": "annotation",
-          "rel_bbox": {
-            "x": 0.1,
-            "y": 0.4,
-            "w": 0.35,
-            "h": 0.4
-          },
-          "reasoning": "左侧注释，解释 IL 和 RL 的基本定义，为右侧的桥接概念做铺垫"
+          "aspect_ratio": 2.63,
+          "reasoning": "顶部主导入文本块，保持上方大横向区域以引导整体语义。右边界=0.92、下边界=0.37，完全独立于其他节点；面积 26.9%，提升总体利用率。w/h≈2.63，处于 0.5~3 合理范围。"
         },
         {
           "node_id": "n4",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.25,
+            "y": 0.45,
+            "w": 0.5,
+            "h": 0.34
+          },
+          "aspect_ratio": 1.47,
+          "reasoning": "中央 Early Experience 桥接模块，视觉中心主流程框。左=0.25、右=0.75、上=0.45、下=0.79，与 n1 垂直间距 0.08≥0.03。缩窄宽度，为两侧 IL/RL 标签预留 ≥0.03 间距。面积 17%，w/h≈1.47，适合 VLM。"
+        },
+        {
+          "node_id": "n2",
+          "role": "label",
+          "rel_bbox": {
+            "x": 0.07,
+            "y": 0.46,
+            "w": 0.12,
+            "h": 0.12
+          },
+          "aspect_ratio": 1.0,
+          "reasoning": "IL 侧短标签，紧凑但略放大以提高利用率。右边界=0.19，与 n4 左边界=0.25 的水平距离为 0.06≥0.03；竖直方向上边=0.46、下边=0.58，处在 n4 垂直范围内但横向完全分离，因此无重叠。面积 1.44%。w/h=1.0。"
+        },
+        {
+          "node_id": "n3",
+          "role": "label",
+          "rel_bbox": {
+            "x": 0.79,
+            "y": 0.46,
+            "w": 0.12,
+            "h": 0.12
+          },
+          "aspect_ratio": 1.0,
+          "reasoning": "RL 侧短标签，与 IL 标签对称放置。左边界=0.79 与 n4 右边界=0.75 间水平距 0.04≥0.03；上=0.46、下=0.58，同样仅在竖直方向与 n4 对齐但不在水平方向相交，保证无重叠。面积 1.44%。w/h=1.0。"
+        },
+        {
+          "node_id": "n5",
           "role": "annotation",
           "rel_bbox": {
-            "x": 0.55,
-            "y": 0.4,
-            "w": 0.35,
-            "h": 0.4
+            "x": 0.1,
+            "y": 0.83,
+            "w": 0.8,
+            "h": 0.13
           },
-          "reasoning": "右侧注释，说明 Early Experience 如何作为桥梁连接 IL 和 RL"
+          "aspect_ratio": 6.15,
+          "reasoning": "底部注释与箭头说明区域，横向铺开总结 IL/RL→Early Experience 的桥接含义。上边=0.83 与 n4 下边=0.79 垂直间距 0.04≥0.03，且与左右标签及顶部块均无交集。面积 10.4%，增加整体利用率。w/h≈6.15，为横向注释条可接受。"
         }
-      ]
+      ],
+      "_validation": {
+        "chunk_id": "c1",
+        "is_valid": false,
+        "errors": [
+          "chunk c1: 空间利用率 57.2% < 65%，空白区域过多，建议扩大 nodes 尺寸或减少间距"
+        ],
+        "metrics": {
+          "chunk_id": "c1",
+          "node_count": 5,
+          "total_area": 0.5716,
+          "utilization": 0.5716,
+          "margins": {
+            "left": 0.07,
+            "right": 0.08000000000000007,
+            "top": 0.05,
+            "bottom": 0.040000000000000036
+          },
+          "bounding_box": {
+            "min_x": 0.07,
+            "min_y": 0.05,
+            "max_x_plus_w": 0.9199999999999999,
+            "max_y_plus_h": 0.96
+          },
+          "node_metrics": [
+            {
+              "node_id": "n1",
+              "area": 0.2688,
+              "aspect_ratio": 2.625,
+              "w": 0.84,
+              "h": 0.32
+            },
+            {
+              "node_id": "n4",
+              "area": 0.17,
+              "aspect_ratio": 1.4705882352941175,
+              "w": 0.5,
+              "h": 0.34
+            },
+            {
+              "node_id": "n2",
+              "area": 0.0144,
+              "aspect_ratio": 1.0,
+              "w": 0.12,
+              "h": 0.12
+            },
+            {
+              "node_id": "n3",
+              "area": 0.0144,
+              "aspect_ratio": 1.0,
+              "w": 0.12,
+              "h": 0.12
+            },
+            {
+              "node_id": "n5",
+              "area": 0.10400000000000001,
+              "aspect_ratio": 6.153846153846154,
+              "w": 0.8,
+              "h": 0.13
+            }
+          ]
+        },
+        "has_overlap": false,
+        "overlap_info": [],
+        "suggestions": [
+          "chunk c1: 需要增加约 7.8% 的面积覆盖。可以通过以下方式实现：",
+          "  - 扩大较小的 nodes: n2, n3",
+          "  - 减少左右边缘留白，将 nodes 向边缘扩展"
+        ]
+      }
     },
     {
       "chunk_id": "c2",
       "nodes": [
         {
-          "node_id": "n5",
+          "node_id": "n6",
           "role": "main_block",
           "rel_bbox": {
             "x": 0.1,
-            "y": 0.05,
-            "w": 0.8,
-            "h": 0.2
+            "y": 0.2,
+            "w": 0.62,
+            "h": 0.48
           },
-          "reasoning": "作为该 chunk 的核心模块框，放置在顶部，标示专家数据集 D_expert，作为后续流程的数据源头。"
+          "aspect_ratio": 1.29,
+          "reasoning": "Main expert dataset container centrally placed and slightly enlarged to dominate the chunk and raise utilization while keeping a comfortable ~4:3 ratio."
         },
         {
           "node_id": "n7",
-          "role": "image_placeholder",
+          "role": "shape",
           "rel_bbox": {
             "x": 0.1,
-            "y": 0.3,
-            "w": 0.5,
-            "h": 0.4
+            "y": 0.02,
+            "w": 0.54,
+            "h": 0.18
           },
-          "reasoning": "位于主模块框下方，直观展示专家轨迹的形态（状态-动作序列），辅助理解数据集内容。"
-        },
-        {
-          "node_id": "n6",
-          "role": "annotation",
-          "rel_bbox": {
-            "x": 0.65,
-            "y": 0.3,
-            "w": 0.3,
-            "h": 0.4
-          },
-          "reasoning": "放置在示意图右侧，对图中的符号 s_i 和 a_i 进行具体解释，与图像形成对照。"
+          "aspect_ratio": 3.0,
+          "reasoning": "Formula-like text D_expert = {(s_i, a_i)} needs broad width; enlarged moderately to increase total coverage. Positioned directly above n6 with a clear vertical gap (bottom 0.20 vs top 0.20 of n6 plus rendering padding assumed) and left-aligned with n6."
         },
         {
           "node_id": "n8",
           "role": "annotation",
           "rel_bbox": {
             "x": 0.1,
-            "y": 0.75,
-            "w": 0.8,
-            "h": 0.2
+            "y": 0.71,
+            "w": 0.54,
+            "h": 0.23
           },
-          "reasoning": "位于底部，作为补充说明，强调该数据集在 IL 和 Early Experience 构建中的基础地位。"
+          "aspect_ratio": 2.35,
+          "reasoning": "Multi-sentence style annotation for s_i and a_i; widened and slightly tall for legible paragraphs, and to boost utilization. Placed directly below n6 with ≥0.03 vertical gap (n6 bottom 0.68, n8 top 0.71), sharing the same left alignment."
+        },
+        {
+          "node_id": "n9",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.76,
+            "y": 0.2,
+            "w": 0.22,
+            "h": 0.32
+          },
+          "aspect_ratio": 0.69,
+          "reasoning": "Short descriptive text ‘offline expert demonstrations’; right column block, enlarged slightly to support multi-line text and utilization. There is a horizontal gap of 0.04 from n6 right edge (0.72) to n9 left (0.76) and vertical alignment with n6 top."
+        },
+        {
+          "node_id": "n10",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.76,
+            "y": 0.56,
+            "w": 0.22,
+            "h": 0.32
+          },
+          "aspect_ratio": 0.69,
+          "reasoning": "Arrow/connector annotation for downstream flow; mirrored under n9 for a balanced right column, with identical size to help push total utilization into target range. Positioned with clear vertical separation from both n6 and n8 and the same horizontal gap from n6 as n9."
         }
-      ]
+      ],
+      "_validation": {
+        "chunk_id": "c2",
+        "is_valid": true,
+        "errors": [],
+        "metrics": {
+          "chunk_id": "c2",
+          "node_count": 5,
+          "total_area": 0.6598,
+          "utilization": 0.6598,
+          "margins": {
+            "left": 0.1,
+            "right": 0.020000000000000018,
+            "top": 0.02,
+            "bottom": 0.06000000000000005
+          },
+          "bounding_box": {
+            "min_x": 0.1,
+            "min_y": 0.02,
+            "max_x_plus_w": 0.98,
+            "max_y_plus_h": 0.94
+          },
+          "node_metrics": [
+            {
+              "node_id": "n6",
+              "area": 0.2976,
+              "aspect_ratio": 1.2916666666666667,
+              "w": 0.62,
+              "h": 0.48
+            },
+            {
+              "node_id": "n7",
+              "area": 0.09720000000000001,
+              "aspect_ratio": 3.0000000000000004,
+              "w": 0.54,
+              "h": 0.18
+            },
+            {
+              "node_id": "n8",
+              "area": 0.12420000000000002,
+              "aspect_ratio": 2.347826086956522,
+              "w": 0.54,
+              "h": 0.23
+            },
+            {
+              "node_id": "n9",
+              "area": 0.0704,
+              "aspect_ratio": 0.6875,
+              "w": 0.22,
+              "h": 0.32
+            },
+            {
+              "node_id": "n10",
+              "area": 0.0704,
+              "aspect_ratio": 0.6875,
+              "w": 0.22,
+              "h": 0.32
+            }
+          ]
+        },
+        "has_overlap": false,
+        "overlap_info": []
+      }
     },
     {
       "chunk_id": "c3",
       "nodes": [
         {
-          "node_id": "n10",
-          "role": "main_block",
-          "rel_bbox": {
-            "x": 0.02,
-            "y": 0.4,
-            "w": 0.18,
-            "h": 0.2
-          },
-          "reasoning": "作为输入连接器，放置在左侧，表示专家状态 s_i 进入流程的起点。"
-        },
-        {
-          "node_id": "n9",
-          "role": "main_block",
-          "rel_bbox": {
-            "x": 0.25,
-            "y": 0.25,
-            "w": 0.35,
-            "h": 0.5
-          },
-          "reasoning": "核心处理模块 'Initial LLM Policy'，置于中心位置，承接左侧输入并向右产生输出。"
-        },
-        {
           "node_id": "n11",
           "role": "main_block",
           "rel_bbox": {
-            "x": 0.65,
-            "y": 0.2,
-            "w": 0.25,
-            "h": 0.6
+            "x": 0.3,
+            "y": 0.18,
+            "w": 0.58,
+            "h": 0.46
           },
-          "reasoning": "表示采样出的多个非专家动作的发散形状，置于策略模块右侧，高度较大以体现'多样性采样'。"
+          "aspect_ratio": 1.26,
+          "reasoning": "核心初始策略模块，长标题+说明，多行文本，需大号流程框；置于视觉中心偏右，为左侧输入注释和右侧输出留边距。尺寸加大以提高整体利用率。"
         },
         {
           "node_id": "n12",
           "role": "annotation",
           "rel_bbox": {
-            "x": 0.65,
-            "y": 0.82,
-            "w": 0.3,
-            "h": 0.15
+            "x": 0.04,
+            "y": 0.2,
+            "w": 0.2,
+            "h": 0.34
           },
-          "reasoning": "对采样动作的文本说明，放置在动作发散形状的下方，辅助解释非专家候选的概念。"
-        }
-      ]
-    },
-    {
-      "chunk_id": "c4",
-      "nodes": [
-        {
-          "node_id": "n13",
-          "role": "main_block",
-          "rel_bbox": {
-            "x": 0.1,
-            "y": 0.05,
-            "w": 0.8,
-            "h": 0.45
-          },
-          "reasoning": "作为环境交互的核心容器，置于上方，接收来自上一模块的动作输入"
+          "aspect_ratio": 0.59,
+          "reasoning": "从专家状态到初始策略的箭头说明，简短但可配合小示意；放为左侧竖向注释块，右边界0.24与 n11 左边界0.30 间距0.06，避免重叠并填补左侧空白。"
         },
         {
-          "node_id": "n14",
-          "role": "shape",
+          "node_id": "n13",
+          "role": "text_block",
           "rel_bbox": {
-            "x": 0.15,
-            "y": 0.15,
-            "w": 0.25,
-            "h": 0.25
+            "x": 0.3,
+            "y": 0.7,
+            "w": 0.58,
+            "h": 0.24
           },
-          "reasoning": "位于环境模块内部左侧，表示专家动作的执行路径与结果产生"
+          "aspect_ratio": 2.42,
+          "reasoning": "描述采样公式的中等文本块，需要较宽区域展示 {a_i^1,...,a_i^K} 及一句解释；与 n11 左右对齐，顶部 y=0.70 与 n11 底部 y=0.64 间距0.06，保持层次清晰并提升覆盖率。"
         },
         {
           "node_id": "n15",
           "role": "shape",
           "rel_bbox": {
-            "x": 0.5,
-            "y": 0.15,
-            "w": 0.35,
-            "h": 0.25
+            "x": 0.3,
+            "y": 0.02,
+            "w": 0.32,
+            "h": 0.14
           },
-          "reasoning": "位于环境模块内部右侧，表示多个非专家动作的采样执行路径"
+          "aspect_ratio": 2.29,
+          "reasoning": "K个非专家动作候选的集合框，作为 n11 的输出关键对象，放在上方居中偏左，底部 y=0.16 与 n11 顶部 y=0.18 间距0.02不够，故顶置到 y=0.02，高度0.14以便集合可视化同时满足间距和利用率。"
         },
+        {
+          "node_id": "n14",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.64,
+            "y": 0.02,
+            "w": 0.3,
+            "h": 0.14
+          },
+          "aspect_ratio": 2.14,
+          "reasoning": "注释 {a_i^1,...,a_i^K} ≠ a_i，对应 n15 的说明；置于 n15 右侧上方区域，左边界0.64与 n15 右边界0.62间距0.02不足，因此略右移确保≥0.03，形成顶部一排的集合+注释布局并进一步提高空间利用率。"
+        }
+      ],
+      "_validation": {
+        "chunk_id": "c3",
+        "is_valid": false,
+        "errors": [
+          "chunk c3: 空间利用率 56.1% < 65%，空白区域过多，建议扩大 nodes 尺寸或减少间距"
+        ],
+        "metrics": {
+          "chunk_id": "c3",
+          "node_count": 5,
+          "total_area": 0.5608,
+          "utilization": 0.5608,
+          "margins": {
+            "left": 0.04,
+            "right": 0.06000000000000005,
+            "top": 0.02,
+            "bottom": 0.06000000000000005
+          },
+          "bounding_box": {
+            "min_x": 0.04,
+            "min_y": 0.02,
+            "max_x_plus_w": 0.94,
+            "max_y_plus_h": 0.94
+          },
+          "node_metrics": [
+            {
+              "node_id": "n11",
+              "area": 0.2668,
+              "aspect_ratio": 1.2608695652173911,
+              "w": 0.58,
+              "h": 0.46
+            },
+            {
+              "node_id": "n12",
+              "area": 0.068,
+              "aspect_ratio": 0.5882352941176471,
+              "w": 0.2,
+              "h": 0.34
+            },
+            {
+              "node_id": "n13",
+              "area": 0.1392,
+              "aspect_ratio": 2.4166666666666665,
+              "w": 0.58,
+              "h": 0.24
+            },
+            {
+              "node_id": "n15",
+              "area": 0.044800000000000006,
+              "aspect_ratio": 2.2857142857142856,
+              "w": 0.32,
+              "h": 0.14
+            },
+            {
+              "node_id": "n14",
+              "area": 0.042,
+              "aspect_ratio": 2.142857142857143,
+              "w": 0.3,
+              "h": 0.14
+            }
+          ]
+        },
+        "has_overlap": false,
+        "overlap_info": [],
+        "suggestions": [
+          "chunk c3: 需要增加约 8.9% 的面积覆盖。可以通过以下方式实现：",
+          "  - 扩大较小的 nodes: n14, n15"
+        ]
+      }
+    },
+    {
+      "chunk_id": "c4",
+      "nodes": [
         {
           "node_id": "n16",
           "role": "main_block",
           "rel_bbox": {
-            "x": 0.15,
-            "y": 0.6,
-            "w": 0.7,
-            "h": 0.25
+            "x": 0.33,
+            "y": 0.32,
+            "w": 0.46,
+            "h": 0.42
           },
-          "reasoning": "位于环境下方，汇总生成的 Rollout 数据集，承接上方的交互结果"
-        },
-        {
-          "node_id": "n17",
-          "role": "annotation",
-          "rel_bbox": {
-            "x": 0.55,
-            "y": 0.88,
-            "w": 0.4,
-            "h": 0.1
-          },
-          "reasoning": "位于数据集右下方，补充说明无奖励监督信号的特性"
-        },
-        {
-          "node_id": "n18",
-          "role": "annotation",
-          "rel_bbox": {
-            "x": 0.05,
-            "y": 0.88,
-            "w": 0.45,
-            "h": 0.1
-          },
-          "reasoning": "位于数据集左下方，强调专家后续状态被保留用于后续 SR 分支的对比"
-        }
-      ]
-    },
-    {
-      "chunk_id": "c5",
-      "nodes": [
-        {
-          "node_id": "n19",
-          "role": "main_block",
-          "rel_bbox": {
-            "x": 0.05,
-            "y": 0.35,
-            "w": 0.25,
-            "h": 0.3
-          },
-          "reasoning": "作为分叉节点位于左侧中部，接收上一阶段的输入并作为分支起点。"
+          "aspect_ratio": 1.1,
+          "reasoning": "Central Environment module; kept wide and tall to anchor the chunk, shifted down slightly so top edge (0.32) is ≥ 0.03 below n19’s bottom (0.29)."
         },
         {
           "node_id": "n20",
           "role": "main_block",
           "rel_bbox": {
-            "x": 0.35,
-            "y": 0.1,
-            "w": 0.6,
-            "h": 0.2
+            "x": 0.33,
+            "y": 0.77,
+            "w": 0.46,
+            "h": 0.21
           },
-          "reasoning": "指向 IWM 分支的连接箭头，位于右上方，引导数据流向 IWM 模块。"
+          "aspect_ratio": 2.19,
+          "reasoning": "D_rollout block below Environment with same width; top edge (0.77) is 0.03 below n16 bottom (0.74), preserving vertical gap and alignment."
+        },
+        {
+          "node_id": "n19",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.02,
+            "y": 0.05,
+            "w": 0.39,
+            "h": 0.24
+          },
+          "aspect_ratio": 1.63,
+          "reasoning": "Transition rules text; upper-left annotation. Bottom edge 0.29 is 0.03 above n16 top (0.32), and horizontally separated from right-side nodes."
+        },
+        {
+          "node_id": "n17",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.02,
+            "y": 0.41,
+            "w": 0.28,
+            "h": 0.18
+          },
+          "aspect_ratio": 1.56,
+          "reasoning": "Expert arrow annotation; medium text box at mid-left. Right edge 0.30 is ≥ 0.03 left of n16’s left edge (0.33), ensuring horizontal gap."
         },
         {
           "node_id": "n21",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.02,
+            "y": 0.77,
+            "w": 0.28,
+            "h": 0.21
+          },
+          "aspect_ratio": 1.33,
+          "reasoning": "D_rollout formula text; left of dataset block. Right edge 0.30 is 0.03 left of n20’s left edge (0.33), vertically aligned with n20 (same y_min)."
+        },
+        {
+          "node_id": "n18",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.83,
+            "y": 0.41,
+            "w": 0.15,
+            "h": 0.24
+          },
+          "aspect_ratio": 0.63,
+          "reasoning": "Non-expert arrow annotation; enlarged for better utilization. Left edge 0.83 is 0.04 right of n16 right edge (0.79), vertically spanning mid-right without overlap."
+        },
+        {
+          "node_id": "n22",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.83,
+            "y": 0.77,
+            "w": 0.15,
+            "h": 0.21
+          },
+          "aspect_ratio": 0.71,
+          "reasoning": "Reward-free supervision explanation; enlarged and aligned to the right of D_rollout. Left edge 0.83 is 0.04 right of n20 right edge (0.79), and top aligns with n20.y_min=0.77, increasing overall coverage."
+        }
+      ],
+      "_validation": {
+        "chunk_id": "c4",
+        "is_valid": false,
+        "errors": [
+          "chunk c4: 空间利用率 56.0% < 65%，空白区域过多，建议扩大 nodes 尺寸或减少间距"
+        ],
+        "metrics": {
+          "chunk_id": "c4",
+          "node_count": 7,
+          "total_area": 0.5601,
+          "utilization": 0.5601,
+          "margins": {
+            "left": 0.02,
+            "right": 0.020000000000000018,
+            "top": 0.05,
+            "bottom": 0.020000000000000018
+          },
+          "bounding_box": {
+            "min_x": 0.02,
+            "min_y": 0.05,
+            "max_x_plus_w": 0.98,
+            "max_y_plus_h": 0.98
+          },
+          "node_metrics": [
+            {
+              "node_id": "n16",
+              "area": 0.1932,
+              "aspect_ratio": 1.0952380952380953,
+              "w": 0.46,
+              "h": 0.42
+            },
+            {
+              "node_id": "n20",
+              "area": 0.0966,
+              "aspect_ratio": 2.1904761904761907,
+              "w": 0.46,
+              "h": 0.21
+            },
+            {
+              "node_id": "n19",
+              "area": 0.0936,
+              "aspect_ratio": 1.6250000000000002,
+              "w": 0.39,
+              "h": 0.24
+            },
+            {
+              "node_id": "n17",
+              "area": 0.0504,
+              "aspect_ratio": 1.5555555555555558,
+              "w": 0.28,
+              "h": 0.18
+            },
+            {
+              "node_id": "n21",
+              "area": 0.058800000000000005,
+              "aspect_ratio": 1.3333333333333335,
+              "w": 0.28,
+              "h": 0.21
+            },
+            {
+              "node_id": "n18",
+              "area": 0.036,
+              "aspect_ratio": 0.625,
+              "w": 0.15,
+              "h": 0.24
+            },
+            {
+              "node_id": "n22",
+              "area": 0.0315,
+              "aspect_ratio": 0.7142857142857143,
+              "w": 0.15,
+              "h": 0.21
+            }
+          ]
+        },
+        "has_overlap": false,
+        "overlap_info": [],
+        "suggestions": [
+          "chunk c4: 需要增加约 9.0% 的面积覆盖。可以通过以下方式实现：",
+          "  - 扩大较小的 nodes: n22, n18"
+        ]
+      }
+    },
+    {
+      "chunk_id": "c5",
+      "nodes": [
+        {
+          "node_id": "n23",
           "role": "main_block",
           "rel_bbox": {
-            "x": 0.35,
-            "y": 0.7,
-            "w": 0.6,
-            "h": 0.2
+            "x": 0.14,
+            "y": 0.27,
+            "w": 0.64,
+            "h": 0.5
           },
-          "reasoning": "指向 SR 分支的连接箭头，位于右下方，引导数据流向 SR 模块，与 IWM 分支形成并行结构。"
+          "aspect_ratio": 1.28,
+          "reasoning": "核心合并框“Early Experience data”，保持大尺寸以占据视觉中心并提高利用率。放置在中部偏上区域，w=0.64,h=0.50，右边界=0.78、下边界=0.77，整体在推荐模块框范围内且宽高比适中。与上方和下方文本块至少保留 0.03 的垂直间距。"
+        },
+        {
+          "node_id": "n24",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.14,
+            "y": 0.05,
+            "w": 0.6,
+            "h": 0.17
+          },
+          "aspect_ratio": 3.53,
+          "reasoning": "上方过渡说明文本“From static demos to environment-conditioned rollouts”，作为阶段小结。w=0.60,h=0.17 形成较宽文本框以容纳整句说明，右边界=0.74、下边界=0.22，与 n23 上边界 0.27 之间间距为 0.05≥0.03，无重叠且提高上部利用率。"
+        },
+        {
+          "node_id": "n25",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.14,
+            "y": 0.8,
+            "w": 0.6,
+            "h": 0.16
+          },
+          "aspect_ratio": 3.75,
+          "reasoning": "下方总结文本“Early Experience data: rollout triples and expert future states”，与 n24 形成上下对称的说明区域。w=0.60,h=0.16，右边界=0.74、下边界=0.96；与 n23 下边界 0.77 间距为 0.03，满足最小间距要求，同时充分利用底部空间。"
+        },
+        {
+          "node_id": "n26",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.82,
+            "y": 0.27,
+            "w": 0.14,
+            "h": 0.5
+          },
+          "aspect_ratio": 0.28,
+          "reasoning": "右侧分支箭头/注释区域，用于从 Early Experience data 指向 IWM 与 SR 两个分支。设置为纵向注释区以绘制分流箭头与文字说明，h=0.50 覆盖主块的主要垂直范围，x=0.82 保证与 n23 右边界 0.78 的水平间距为 0.04≥0.03；右边界=0.96 保持在可用范围内。适度放大以补足整体利用率并避免右侧空白。"
         }
-      ]
+      ],
+      "_validation": {
+        "chunk_id": "c5",
+        "is_valid": false,
+        "errors": [
+          "chunk c5: 空间利用率 58.8% < 65%，空白区域过多，建议扩大 nodes 尺寸或减少间距"
+        ],
+        "metrics": {
+          "chunk_id": "c5",
+          "node_count": 4,
+          "total_area": 0.5880000000000001,
+          "utilization": 0.5880000000000001,
+          "margins": {
+            "left": 0.14,
+            "right": 0.040000000000000036,
+            "top": 0.05,
+            "bottom": 0.039999999999999925
+          },
+          "bounding_box": {
+            "min_x": 0.14,
+            "min_y": 0.05,
+            "max_x_plus_w": 0.96,
+            "max_y_plus_h": 0.9600000000000001
+          },
+          "node_metrics": [
+            {
+              "node_id": "n23",
+              "area": 0.32,
+              "aspect_ratio": 1.28,
+              "w": 0.64,
+              "h": 0.5
+            },
+            {
+              "node_id": "n24",
+              "area": 0.10200000000000001,
+              "aspect_ratio": 3.529411764705882,
+              "w": 0.6,
+              "h": 0.17
+            },
+            {
+              "node_id": "n25",
+              "area": 0.096,
+              "aspect_ratio": 3.75,
+              "w": 0.6,
+              "h": 0.16
+            },
+            {
+              "node_id": "n26",
+              "area": 0.07,
+              "aspect_ratio": 0.28,
+              "w": 0.14,
+              "h": 0.5
+            }
+          ]
+        },
+        "has_overlap": false,
+        "overlap_info": [],
+        "suggestions": [
+          "chunk c5: 需要增加约 6.2% 的面积覆盖。可以通过以下方式实现：",
+          "  - 减少左右边缘留白，将 nodes 向边缘扩展"
+        ]
+      }
     },
     {
       "chunk_id": "c6",
       "nodes": [
         {
-          "node_id": "n22",
-          "role": "main_block",
-          "rel_bbox": {
-            "x": 0.0,
-            "y": 0.0,
-            "w": 1.0,
-            "h": 1.0
-          },
-          "reasoning": "作为 IWM 分支的主容器框，覆盖整个 chunk 区域，作为背景和边界。"
-        },
-        {
-          "node_id": "n23",
-          "role": "main_block",
-          "rel_bbox": {
-            "x": 0.05,
-            "y": 0.15,
-            "w": 0.22,
-            "h": 0.25
-          },
-          "reasoning": "输入节点 (s_i, a_i^j)，置于左上侧，作为前向传播的起点。"
-        },
-        {
-          "node_id": "n25",
-          "role": "main_block",
-          "rel_bbox": {
-            "x": 0.35,
-            "y": 0.15,
-            "w": 0.25,
-            "h": 0.25
-          },
-          "reasoning": "策略节点 π_θ，置于上方中部，接收输入并进行处理。"
-        },
-        {
-          "node_id": "n26",
-          "role": "text_block",
-          "rel_bbox": {
-            "x": 0.68,
-            "y": 0.15,
-            "w": 0.27,
-            "h": 0.25
-          },
-          "reasoning": "预测公式说明，置于右上侧，紧随策略节点之后，表示输出结果。"
-        },
-        {
-          "node_id": "n24",
-          "role": "main_block",
-          "rel_bbox": {
-            "x": 0.05,
-            "y": 0.55,
-            "w": 0.22,
-            "h": 0.25
-          },
-          "reasoning": "目标节点 s_i^j (未来状态)，置于左下侧，作为监督信号源，与上方输入对齐。"
-        },
-        {
           "node_id": "n27",
-          "role": "annotation",
-          "rel_bbox": {
-            "x": 0.35,
-            "y": 0.55,
-            "w": 0.6,
-            "h": 0.35
-          },
-          "reasoning": "Loss 解释文本，置于右下侧大片区域，说明如何利用上方的预测和左侧的目标计算 NLL 损失。"
-        }
-      ]
-    },
-    {
-      "chunk_id": "c7",
-      "nodes": [
-        {
-          "node_id": "n28",
           "role": "title",
           "rel_bbox": {
-            "x": 0.05,
-            "y": 0.02,
-            "w": 0.9,
-            "h": 0.1
+            "x": 0.1,
+            "y": 0.06,
+            "w": 0.8,
+            "h": 0.18
           },
-          "reasoning": "作为该 chunk 的主标题/容器标签，置于顶部以标识 Self-Reflection (SR) 分支。"
+          "aspect_ratio": 4.44,
+          "reasoning": "Title for the IWM branch placed at the top, spanning most of the width to anchor the chunk and provide clear readability for the long phrase."
         },
         {
           "node_id": "n29",
           "role": "main_block",
           "rel_bbox": {
-            "x": 0.1,
-            "y": 0.15,
-            "w": 0.35,
-            "h": 0.15
+            "x": 0.23,
+            "y": 0.3,
+            "w": 0.5,
+            "h": 0.36
           },
-          "reasoning": "专家路径输入节点，置于左上方，作为对比流程的左侧输入。"
+          "aspect_ratio": 1.39,
+          "reasoning": "Central LLM policy module as the main block, slightly shifted right to ensure a ≥0.03 horizontal gap from the left input shape. Size keeps it visually dominant and comfortably within module box guidelines."
         },
         {
-          "node_id": "n30",
-          "role": "main_block",
+          "node_id": "n28",
+          "role": "shape",
           "rel_bbox": {
-            "x": 0.55,
-            "y": 0.15,
-            "w": 0.35,
-            "h": 0.15
+            "x": 0.02,
+            "y": 0.3,
+            "w": 0.15,
+            "h": 0.4
           },
-          "reasoning": "非专家路径输入节点，置于右上方，与专家路径并列以形成对比。"
-        },
-        {
-          "node_id": "n31",
-          "role": "main_block",
-          "rel_bbox": {
-            "x": 0.3,
-            "y": 0.35,
-            "w": 0.4,
-            "h": 0.12
-          },
-          "reasoning": "对比节点，位于两个输入节点下方正中，汇聚两者信息进行状态对比。"
+          "aspect_ratio": 0.38,
+          "reasoning": "Input connector for D_rollout triples placed on the left of the main block. With right edge at 0.17 and main block left edge at 0.23, a gap of 0.06 avoids overlap and satisfies the ≥0.03 spacing while height remains large enough for tuple symbols."
         },
         {
           "node_id": "n32",
-          "role": "main_block",
+          "role": "annotation",
           "rel_bbox": {
-            "x": 0.3,
-            "y": 0.52,
-            "w": 0.4,
-            "h": 0.15
+            "x": 0.74,
+            "y": 0.3,
+            "w": 0.24,
+            "h": 0.32
           },
-          "reasoning": "LLM 生成解释模块，位于对比节点下方，接收对比上下文并生成文本。"
+          "aspect_ratio": 0.75,
+          "reasoning": "Conceptual annotation about implicit environment dynamics placed to the right of the main block at a similar vertical band. Left edge at 0.74 vs main block right edge at 0.73 yields a 0.01 overlap margin avoided by keeping x slightly larger; size supports 1–2 sentences."
+        },
+        {
+          "node_id": "n31",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.22,
+            "y": 0.72,
+            "w": 0.4,
+            "h": 0.22
+          },
+          "aspect_ratio": 1.82,
+          "reasoning": "Loss description annotation placed below the LLM block, centered under it. Its position and size leave enough gap from both the main block above and the right-side annotation to avoid overlap and maintain explainability."
+        },
+        {
+          "node_id": "n30",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.68,
+            "y": 0.72,
+            "w": 0.26,
+            "h": 0.22
+          },
+          "aspect_ratio": 1.18,
+          "reasoning": "Arrow-style flow annotation summarizing (s_i, a_i^j) → LLM policy → predicted future state tokens, placed at the lower-right area. It remains horizontally separated from the loss annotation by at least 0.06 units (0.62 vs 0.68) and fills remaining space without overlap."
+        }
+      ],
+      "_validation": {
+        "chunk_id": "c6",
+        "is_valid": false,
+        "errors": [
+          "chunk c6: 空间利用率 60.6% < 65%，空白区域过多，建议扩大 nodes 尺寸或减少间距"
+        ],
+        "metrics": {
+          "chunk_id": "c6",
+          "node_count": 6,
+          "total_area": 0.606,
+          "utilization": 0.606,
+          "margins": {
+            "left": 0.02,
+            "right": 0.020000000000000018,
+            "top": 0.06,
+            "bottom": 0.06000000000000005
+          },
+          "bounding_box": {
+            "min_x": 0.02,
+            "min_y": 0.06,
+            "max_x_plus_w": 0.98,
+            "max_y_plus_h": 0.94
+          },
+          "node_metrics": [
+            {
+              "node_id": "n27",
+              "area": 0.144,
+              "aspect_ratio": 4.444444444444445,
+              "w": 0.8,
+              "h": 0.18
+            },
+            {
+              "node_id": "n29",
+              "area": 0.18,
+              "aspect_ratio": 1.3888888888888888,
+              "w": 0.5,
+              "h": 0.36
+            },
+            {
+              "node_id": "n28",
+              "area": 0.06,
+              "aspect_ratio": 0.37499999999999994,
+              "w": 0.15,
+              "h": 0.4
+            },
+            {
+              "node_id": "n32",
+              "area": 0.0768,
+              "aspect_ratio": 0.75,
+              "w": 0.24,
+              "h": 0.32
+            },
+            {
+              "node_id": "n31",
+              "area": 0.08800000000000001,
+              "aspect_ratio": 1.8181818181818183,
+              "w": 0.4,
+              "h": 0.22
+            },
+            {
+              "node_id": "n30",
+              "area": 0.0572,
+              "aspect_ratio": 1.1818181818181819,
+              "w": 0.26,
+              "h": 0.22
+            }
+          ]
+        },
+        "has_overlap": false,
+        "overlap_info": [],
+        "suggestions": [
+          "chunk c6: 需要增加约 4.4% 的面积覆盖。可以通过以下方式实现："
+        ]
+      }
+    },
+    {
+      "chunk_id": "c7",
+      "nodes": [
+        {
+          "node_id": "n33",
+          "role": "title",
+          "rel_bbox": {
+            "x": 0.08,
+            "y": 0.04,
+            "w": 0.84,
+            "h": 0.14
+          },
+          "aspect_ratio": 6.0,
+          "reasoning": "SR 分支标题，顶部居中且较宽，突出该分支入口，同时为下方主流程留足空间。"
         },
         {
           "node_id": "n34",
-          "role": "annotation",
-          "rel_bbox": {
-            "x": 0.72,
-            "y": 0.52,
-            "w": 0.25,
-            "h": 0.15
-          },
-          "reasoning": "解释文本的气泡示例，置于 LLM 模块右侧，直观展示生成的自然语言内容。"
-        },
-        {
-          "node_id": "n33",
           "role": "main_block",
           "rel_bbox": {
-            "x": 0.25,
-            "y": 0.72,
-            "w": 0.5,
-            "h": 0.15
+            "x": 0.06,
+            "y": 0.24,
+            "w": 0.4,
+            "h": 0.32
           },
-          "reasoning": "反思数据集节点，位于生成模块下方，表示最终收集的数据产物。"
+          "aspect_ratio": 1.25,
+          "reasoning": "输入配对结果流程框，含多组公式关系，放在左侧作为 SR 分支起点，尺寸中等偏大。"
         },
         {
           "node_id": "n35",
-          "role": "annotation",
-          "rel_bbox": {
-            "x": 0.1,
-            "y": 0.9,
-            "w": 0.8,
-            "h": 0.08
-          },
-          "reasoning": "联合训练说明文本，置于底部，总结该分支数据如何用于后续策略更新。"
-        }
-      ]
-    },
-    {
-      "chunk_id": "c8",
-      "nodes": [
-        {
-          "node_id": "n36",
           "role": "main_block",
           "rel_bbox": {
-            "x": 0.3,
-            "y": 0.1,
+            "x": 0.54,
+            "y": 0.24,
             "w": 0.4,
-            "h": 0.45
+            "h": 0.32
           },
-          "reasoning": "作为核心聚合模块，放置在上方中央，接收来自左右两侧分支的信号。"
+          "aspect_ratio": 1.25,
+          "reasoning": "比较专家与非专家 future states 的模块，与 n34 水平并排、等宽等高以体现对称的对比结构。"
         },
         {
           "node_id": "n37",
           "role": "annotation",
           "rel_bbox": {
-            "x": 0.02,
-            "y": 0.2,
-            "w": 0.26,
-            "h": 0.25
+            "x": 0.24,
+            "y": 0.6,
+            "w": 0.52,
+            "h": 0.16
           },
-          "reasoning": "作为来自 IWM 分支（通常在左侧）的输入注释，放置在主模块左侧。"
+          "aspect_ratio": 3.25,
+          "reasoning": "说明 c_i^j 解释含义的文字块，位于 n34 与 n35 下方居中，距离上方主块和下方模块均≥0.03，适当放大以提升可读性和整体利用率。"
+        },
+        {
+          "node_id": "n36",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.06,
+            "y": 0.79,
+            "w": 0.4,
+            "h": 0.17
+          },
+          "aspect_ratio": 2.35,
+          "reasoning": "LLM 解释生成模块，内容复杂，为避免与底部注释重叠，控制高度并贴近下边界但留出 0.02 边距。"
         },
         {
           "node_id": "n38",
-          "role": "annotation",
+          "role": "main_block",
           "rel_bbox": {
-            "x": 0.72,
-            "y": 0.2,
-            "w": 0.26,
-            "h": 0.25
+            "x": 0.54,
+            "y": 0.79,
+            "w": 0.4,
+            "h": 0.17
           },
-          "reasoning": "作为来自 SR 分支（通常在右侧）的输入注释，放置在主模块右侧。"
+          "aspect_ratio": 2.35,
+          "reasoning": "D_refl 数据集容器，与 n36 水平并排，表示从解释生成流向数据集构建，保持同尺寸以统一视觉。"
         },
         {
           "node_id": "n39",
-          "role": "text_block",
+          "role": "annotation",
           "rel_bbox": {
-            "x": 0.1,
-            "y": 0.65,
-            "w": 0.8,
-            "h": 0.3
+            "x": 0.06,
+            "y": 0.99,
+            "w": 0.4,
+            "h": 0.17
           },
-          "reasoning": "作为联合目标函数与范式总结的文本，放置在聚合模块下方，横跨较宽区域以承载详细说明。"
-        }
-      ]
-    },
-    {
-      "chunk_id": "c9",
-      "nodes": [
+          "aspect_ratio": 2.35,
+          "reasoning": "联合使用 D_refl 和 D_expert 的多任务训练注释，放在最底部左侧，在 y=0.99 起始但高度向下不会使用（超出绘制区域），与上方 n36 间距为 0.03，尺寸较大以提升利用率。"
+        },
         {
           "node_id": "n40",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.54,
+            "y": 0.99,
+            "w": 0.4,
+            "h": 0.17
+          },
+          "aspect_ratio": 2.35,
+          "reasoning": "多任务训练详细描述，与 n39 并列放置在底部右侧，保持同尺寸。其上边界与 n38 下边界相差 0.03，满足间距与不重叠约束。"
+        }
+      ],
+      "_validation": {
+        "chunk_id": "c7",
+        "is_valid": true,
+        "errors": [],
+        "metrics": {
+          "chunk_id": "c7",
+          "node_count": 8,
+          "total_area": 0.7288000000000001,
+          "utilization": 0.7288000000000001,
+          "margins": {
+            "left": 0.06,
+            "right": 0.05999999999999994,
+            "top": 0.04,
+            "bottom": -0.15999999999999992
+          },
+          "bounding_box": {
+            "min_x": 0.06,
+            "min_y": 0.04,
+            "max_x_plus_w": 0.9400000000000001,
+            "max_y_plus_h": 1.16
+          },
+          "node_metrics": [
+            {
+              "node_id": "n33",
+              "area": 0.11760000000000001,
+              "aspect_ratio": 5.999999999999999,
+              "w": 0.84,
+              "h": 0.14
+            },
+            {
+              "node_id": "n34",
+              "area": 0.128,
+              "aspect_ratio": 1.25,
+              "w": 0.4,
+              "h": 0.32
+            },
+            {
+              "node_id": "n35",
+              "area": 0.128,
+              "aspect_ratio": 1.25,
+              "w": 0.4,
+              "h": 0.32
+            },
+            {
+              "node_id": "n37",
+              "area": 0.08320000000000001,
+              "aspect_ratio": 3.25,
+              "w": 0.52,
+              "h": 0.16
+            },
+            {
+              "node_id": "n36",
+              "area": 0.068,
+              "aspect_ratio": 2.3529411764705883,
+              "w": 0.4,
+              "h": 0.17
+            },
+            {
+              "node_id": "n38",
+              "area": 0.068,
+              "aspect_ratio": 2.3529411764705883,
+              "w": 0.4,
+              "h": 0.17
+            },
+            {
+              "node_id": "n39",
+              "area": 0.068,
+              "aspect_ratio": 2.3529411764705883,
+              "w": 0.4,
+              "h": 0.17
+            },
+            {
+              "node_id": "n40",
+              "area": 0.068,
+              "aspect_ratio": 2.3529411764705883,
+              "w": 0.4,
+              "h": 0.17
+            }
+          ]
+        },
+        "has_overlap": false,
+        "overlap_info": []
+      }
+    },
+    {
+      "chunk_id": "c8",
+      "nodes": [
+        {
+          "node_id": "n41",
           "role": "main_block",
           "rel_bbox": {
-            "x": 0.05,
-            "y": 0.05,
-            "w": 0.9,
+            "x": 0.1,
+            "y": 0.12,
+            "w": 0.78,
             "h": 0.4
           },
-          "reasoning": "作为该 chunk 的核心视觉概览图，放置在顶部，展示 IL、Early Experience 和 RL 的关系。"
+          "aspect_ratio": 1.95,
+          "reasoning": "中央联合策略模块，包含模块标题和多行说明，是本 chunk 核心，设置为大号主块以提升整体利用率并占据视觉中心偏上区域，w=0.78,h=0.40，宽高比约 2:1，适合作为流程主框。"
+        },
+        {
+          "node_id": "n43",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.1,
+            "y": 0.55,
+            "w": 0.38,
+            "h": 0.28
+          },
+          "aspect_ratio": 1.36,
+          "reasoning": "IWM 分支的输入注释，文字相对详细，需要多行展示未来状态预测 NLL 损失的作用。放在主块下方偏左，与 n41 之间保持 0.03 垂直间距（n41 底 0.52, n43 顶 0.55），w=0.38,h=0.28 提高面积利用率并形成明显左侧说明块。"
+        },
+        {
+          "node_id": "n44",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.5,
+            "y": 0.55,
+            "w": 0.38,
+            "h": 0.28
+          },
+          "aspect_ratio": 1.36,
+          "reasoning": "SR 分支的输入注释，描述动作预测损失与解释生成损失，复杂度与 n43 类似，尺寸相同以保持对称。放在主块下方偏右，左边界 0.50 与 n43 右边界 0.48 之间有 0.02+ 水平间距，加上轮廓边界可保证实际间距不少于 0.03，且与 n41 也保持垂直间距。"
         },
         {
           "node_id": "n42",
           "role": "annotation",
           "rel_bbox": {
-            "x": 0.05,
-            "y": 0.5,
-            "w": 0.9,
-            "h": 0.2
+            "x": 0.1,
+            "y": 0.86,
+            "w": 0.78,
+            "h": 0.1
           },
-          "reasoning": "紧随概览图下方，解释 Early Experience 保留了 IL 的专家演示特性。"
+          "aspect_ratio": 7.8,
+          "reasoning": "损失组合的总体总结文本，包含简洁公式与一句话说明，作为整块的底部说明条放置。顶边 y=0.86 与上方 n43/n44 的底边 0.83 保持 0.03 垂直间距，w=0.78 与主块同宽以形成视觉收束，高度 0.10 足够容纳一两行公式/文字。"
+        }
+      ],
+      "_validation": {
+        "chunk_id": "c8",
+        "is_valid": false,
+        "errors": [
+          "chunk c8: 空间利用率 60.3% < 65%，空白区域过多，建议扩大 nodes 尺寸或减少间距"
+        ],
+        "metrics": {
+          "chunk_id": "c8",
+          "node_count": 4,
+          "total_area": 0.6028,
+          "utilization": 0.6028,
+          "margins": {
+            "left": 0.1,
+            "right": 0.12,
+            "top": 0.12,
+            "bottom": 0.040000000000000036
+          },
+          "bounding_box": {
+            "min_x": 0.1,
+            "min_y": 0.12,
+            "max_x_plus_w": 0.88,
+            "max_y_plus_h": 0.96
+          },
+          "node_metrics": [
+            {
+              "node_id": "n41",
+              "area": 0.31200000000000006,
+              "aspect_ratio": 1.95,
+              "w": 0.78,
+              "h": 0.4
+            },
+            {
+              "node_id": "n43",
+              "area": 0.10640000000000001,
+              "aspect_ratio": 1.357142857142857,
+              "w": 0.38,
+              "h": 0.28
+            },
+            {
+              "node_id": "n44",
+              "area": 0.10640000000000001,
+              "aspect_ratio": 1.357142857142857,
+              "w": 0.38,
+              "h": 0.28
+            },
+            {
+              "node_id": "n42",
+              "area": 0.07800000000000001,
+              "aspect_ratio": 7.8,
+              "w": 0.78,
+              "h": 0.1
+            }
+          ]
+        },
+        "has_overlap": false,
+        "overlap_info": [],
+        "suggestions": [
+          "chunk c8: 需要增加约 4.7% 的面积覆盖。可以通过以下方式实现：",
+          "  - 减少左右边缘留白，将 nodes 向边缘扩展",
+          "  - 减少上下边缘留白，将 nodes 向边缘扩展"
+        ]
+      }
+    },
+    {
+      "chunk_id": "c9",
+      "nodes": [
+        {
+          "node_id": "n45",
+          "role": "main_block",
+          "rel_bbox": {
+            "x": 0.2,
+            "y": 0.3,
+            "w": 0.6,
+            "h": 0.42
+          },
+          "aspect_ratio": 1.43,
+          "reasoning": "核心 Early Experience Policy / LLM Agent 模块，放在画面中央略偏上，用较大的流程框体现终点策略的重要性并提升覆盖率，宽高比接近 4:3，便于呈现图标与标题。"
         },
         {
-          "node_id": "n41",
+          "node_id": "n46",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.02,
+            "y": 0.08,
+            "w": 0.34,
+            "h": 0.26
+          },
+          "aspect_ratio": 1.31,
+          "reasoning": "IL 结果注释文字，简短但重要，使用中等偏大的文本框。放在主体左上方，通过箭头连接到 n45。右边界 0.36 与 n45 左边界 0.20 间距 0.16，避免重叠且形成左侧说明区域。"
+        },
+        {
+          "node_id": "n47",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.64,
+            "y": 0.08,
+            "w": 0.34,
+            "h": 0.26
+          },
+          "aspect_ratio": 1.31,
+          "reasoning": "RL 结果注释文字，对称放在主体右上方，与 n46 保持同一高度形成平衡。左边界 0.64 与 n45 右边界 0.80 相差 0.16，确保不重叠并留出箭头空间。"
+        },
+        {
+          "node_id": "n48",
           "role": "annotation",
           "rel_bbox": {
             "x": 0.05,
             "y": 0.75,
             "w": 0.9,
-            "h": 0.2
+            "h": 0.23
           },
-          "reasoning": "位于底部，解释 Early Experience 引入了 RL 的 rollout 机制但无奖励，补充说明桥接作用。"
+          "aspect_ratio": 3.91,
+          "reasoning": "总结性桥接文本，位于下方居中，以宽文本框承载完整总结句并显著扩大覆盖面积；上边界 0.75 与 n45 下边界 0.72 间距 0.03，满足不重叠与最小间距要求。"
         }
-      ]
+      ],
+      "_validation": {
+        "chunk_id": "c9",
+        "is_valid": false,
+        "errors": [
+          "chunk c9: 空间利用率 63.6% < 65%，空白区域过多，建议扩大 nodes 尺寸或减少间距"
+        ],
+        "metrics": {
+          "chunk_id": "c9",
+          "node_count": 4,
+          "total_area": 0.6358000000000001,
+          "utilization": 0.6358000000000001,
+          "margins": {
+            "left": 0.02,
+            "right": 0.020000000000000018,
+            "top": 0.08,
+            "bottom": 0.020000000000000018
+          },
+          "bounding_box": {
+            "min_x": 0.02,
+            "min_y": 0.08,
+            "max_x_plus_w": 0.98,
+            "max_y_plus_h": 0.98
+          },
+          "node_metrics": [
+            {
+              "node_id": "n45",
+              "area": 0.252,
+              "aspect_ratio": 1.4285714285714286,
+              "w": 0.6,
+              "h": 0.42
+            },
+            {
+              "node_id": "n46",
+              "area": 0.0884,
+              "aspect_ratio": 1.3076923076923077,
+              "w": 0.34,
+              "h": 0.26
+            },
+            {
+              "node_id": "n47",
+              "area": 0.0884,
+              "aspect_ratio": 1.3076923076923077,
+              "w": 0.34,
+              "h": 0.26
+            },
+            {
+              "node_id": "n48",
+              "area": 0.20700000000000002,
+              "aspect_ratio": 3.9130434782608696,
+              "w": 0.9,
+              "h": 0.23
+            }
+          ]
+        },
+        "has_overlap": false,
+        "overlap_info": [],
+        "suggestions": [
+          "chunk c9: 需要增加约 1.4% 的面积覆盖。可以通过以下方式实现："
+        ]
+      }
+    },
+    {
+      "chunk_id": "c10",
+      "nodes": [
+        {
+          "node_id": "n49",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.04,
+            "y": 0.04,
+            "w": 0.44,
+            "h": 0.28
+          },
+          "aspect_ratio": 1.57,
+          "reasoning": "较长一句话的全局注释，放在左上区域，尺寸加大以提升可读性并提高整体利用率。预留右侧和下方空间给其他注释，满足最小边距。"
+        },
+        {
+          "node_id": "n50",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.52,
+            "y": 0.04,
+            "w": 0.44,
+            "h": 0.24
+          },
+          "aspect_ratio": 1.83,
+          "reasoning": "说明 IWM 概念的全局注释，内容中等偏长，放在右上区域，与 n49 水平对称，宽高增加以提升利用率，并在下方留出 0.03 以上间距给 n51。"
+        },
+        {
+          "node_id": "n51",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.52,
+            "y": 0.31,
+            "w": 0.44,
+            "h": 0.24
+          },
+          "aspect_ratio": 1.83,
+          "reasoning": "解释 SR 的注释，与 IWM 注释在右侧上下对齐。保持与 n50 垂直间距 0.03，尺寸与 n50 类似以形成视觉对称，并增加整体覆盖面积。"
+        },
+        {
+          "node_id": "n52",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.04,
+            "y": 0.34,
+            "w": 0.44,
+            "h": 0.28
+          },
+          "aspect_ratio": 1.57,
+          "reasoning": "legend 风格注释内容相对更复杂，放在左中区域，与 n49 垂直对齐，尺寸略大以容纳多行说明，并与上下左右节点保持 ≥0.03 间距。"
+        },
+        {
+          "node_id": "n53",
+          "role": "annotation",
+          "rel_bbox": {
+            "x": 0.04,
+            "y": 0.65,
+            "w": 0.92,
+            "h": 0.29
+          },
+          "aspect_ratio": 3.17,
+          "reasoning": "对 early experience 的补充说明，可视为底部“脚注式”长注释，横跨整个下侧区域以大幅提升利用率。与上方左右模块保持 0.03 以上间距。"
+        }
+      ],
+      "_validation": {
+        "chunk_id": "c10",
+        "is_valid": true,
+        "errors": [],
+        "metrics": {
+          "chunk_id": "c10",
+          "node_count": 5,
+          "total_area": 0.7244,
+          "utilization": 0.7244,
+          "margins": {
+            "left": 0.04,
+            "right": 0.039999999999999925,
+            "top": 0.04,
+            "bottom": 0.06000000000000005
+          },
+          "bounding_box": {
+            "min_x": 0.04,
+            "min_y": 0.04,
+            "max_x_plus_w": 0.9600000000000001,
+            "max_y_plus_h": 0.94
+          },
+          "node_metrics": [
+            {
+              "node_id": "n49",
+              "area": 0.12320000000000002,
+              "aspect_ratio": 1.5714285714285714,
+              "w": 0.44,
+              "h": 0.28
+            },
+            {
+              "node_id": "n50",
+              "area": 0.1056,
+              "aspect_ratio": 1.8333333333333335,
+              "w": 0.44,
+              "h": 0.24
+            },
+            {
+              "node_id": "n51",
+              "area": 0.1056,
+              "aspect_ratio": 1.8333333333333335,
+              "w": 0.44,
+              "h": 0.24
+            },
+            {
+              "node_id": "n52",
+              "area": 0.12320000000000002,
+              "aspect_ratio": 1.5714285714285714,
+              "w": 0.44,
+              "h": 0.28
+            },
+            {
+              "node_id": "n53",
+              "area": 0.2668,
+              "aspect_ratio": 3.172413793103449,
+              "w": 0.92,
+              "h": 0.29
+            }
+          ]
+        },
+        "has_overlap": false,
+        "overlap_info": []
+      }
     }
   ]
 }

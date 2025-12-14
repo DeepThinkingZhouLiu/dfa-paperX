@@ -1,6 +1,7 @@
 # dataflow_agent/workflow/__init__.py
 
 import importlib
+import os
 from pathlib import Path
 
 from .registry import RuntimeRegistry
@@ -9,11 +10,19 @@ from .registry import RuntimeRegistry
 # 遍历当前包目录下所有以 wf_*.py 命名的 Python 文件，并动态导入。
 # 通过 importlib 以全限定名加载模块，从而确保每个工作流文件中的 @register 装饰器
 # 能够在导入时将相应工作流注册到 RuntimeRegistry。
-_pkg_path = Path(__file__).resolve().parent
-for py in _pkg_path.glob("wf_*.py"):
-    # importlib 需要模块的点分路径（dotted-path），例如 dataflow_agent.workflow.wf_xxx
-    mod_name = f"{__name__}.{py.stem}"
-    importlib.import_module(mod_name)
+#
+# 如果设置了 DF_SKIP_WORKFLOW_AUTOINIT=1 环境变量，则跳过自动导入。
+if not os.environ.get("DF_SKIP_WORKFLOW_AUTOINIT"):
+    _pkg_path = Path(__file__).resolve().parent
+    for py in _pkg_path.glob("wf_*.py"):
+        # importlib 需要模块的点分路径（dotted-path），例如 dataflow_agent.workflow.wf_xxx
+        mod_name = f"{__name__}.{py.stem}"
+        try:
+            importlib.import_module(mod_name)
+        except ImportError as e:
+            # 如果模块导入失败（如缺少外部依赖），打印警告但继续
+            import warnings
+            warnings.warn(f"Failed to import workflow module {mod_name}: {e}")
 # 模块导入后，各 wf_*.py 文件内的 @register 装饰器会自动注册工作流到 RuntimeRegistry
 
 # ---- 2. 工作流的统一接口 ---------------------------------------------

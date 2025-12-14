@@ -252,3 +252,234 @@ class Paper2GraphState(MainState):
     
     # Node 渲染设计结果，由 p2g_node_render_design_agent 生成
     node_render_design: Dict[str, Any] = field(default_factory=dict)
+
+    # PPTX 节点的结构化渲染规格 (node_id -> PPTXRenderSpec)
+    # 由 p2g_pptx_desc_parser_agent 生成
+    pptx_render_specs: Dict[str, Any] = field(default_factory=dict)
+
+    # VLM 渲染结果 (node_id -> image_path)
+    # 由 p2g_vlm_node_renderer_agent 生成
+    vlm_rendered_nodes: Dict[str, str] = field(default_factory=dict)
+
+    # 最终 PPTX 输出路径
+    # 由 p2g_pptx_composer_agent 生成
+    pptx_output_path: str = ""
+
+    # ==================== Chunk-Based Pipeline 字段 ====================
+
+    # chunk_layout_constructor_agent 输出
+    # 包含 canvas 尺寸、chunks bbox、内部布局、inter-chunk 连接
+    chunk_layout_json: Dict[str, Any] = field(default_factory=dict)
+
+    # chunk_vlm_design_agent 输出
+    # chunk_id -> {prompt, style_config, elements, ...}
+    chunk_vlm_designs: Dict[str, Any] = field(default_factory=dict)
+
+    # chunk_render_agent 输出
+    # chunk_id -> {path, bbox, render_status, ...}
+    chunk_images: Dict[str, Any] = field(default_factory=dict)
+    chunk_render_errors: Dict[str, str] = field(default_factory=dict)
+
+    # pptx_composer_agent SAM 提取结果
+    # node_id -> {chunk_id, bbox_in_chunk, bbox_in_canvas, cropped_path, ...}
+    extracted_nodes: Dict[str, Any] = field(default_factory=dict)
+
+
+# ==================== Chunk-Based P2G Pipeline (独立) ====================
+# 这是一套独立的 chunk 级别绘制 pipeline，不影响原有的 node 级别绘制
+
+@dataclass
+class ChunkP2GRequest(MainRequest):
+    """Chunk-Based Paper2Graph Pipeline 的 Request"""
+    target: str = ""
+
+    # 画布配置
+    canvas_width: int = 1920
+    canvas_height: int = 1080
+
+    # Chunk 配置
+    max_chunks: int = 6  # 最大 chunk 数量
+    min_nodes_per_chunk: int = 2  # 每个 chunk 最小节点数
+    max_nodes_per_chunk: int = 8  # 每个 chunk 最大节点数
+
+    # 渲染配置
+    vlm_model: str = "gemini-3-pro-image-preview"
+    vlm_concurrency: int = 4
+    vlm_timeout: int = 180
+
+    # 输出配置
+    output_dir: str = ".tmp/chunk_pipeline_output"
+
+
+@dataclass
+class ChunkP2GState(MainState):
+    """Chunk-Based Paper2Graph Pipeline 的 State
+
+    Pipeline 流程:
+    1. semantic_constructor -> semantic_json
+    2. chunk_layout_planner -> chunk_layout_json
+    3. chunk_vlm_designer -> chunk_vlm_designs
+    4. chunk_renderer -> chunk_images
+    5. chunk_pptx_composer -> pptx_output_path
+    """
+    request: ChunkP2GRequest = field(default_factory=ChunkP2GRequest)
+
+    # ==================== Stage 1: Semantic Constructor ====================
+    # 语义结构，只包含 chunks 列表
+    semantic_json: Dict[str, Any] = field(default_factory=dict)
+    # 结构示例:
+    # {
+    #   "chunks": [
+    #     {
+    #       "chunk_id": "c1",
+    #       "chunk_content": "详细描述该 chunk 要绘制的内容，包括所有视觉元素、布局、连接关系等"
+    #     }
+    #   ]
+    # }
+
+    # ==================== Stage 2: Chunk Layout Planner ====================
+    # 布局信息，只包含 chunk_id 和 bbox
+    chunk_layout_json: Dict[str, Any] = field(default_factory=dict)
+    # 结构示例:
+    # {
+    #   "canvas": {"width": 1920, "height": 1080},
+    #   "chunks": [
+    #     {
+    #       "chunk_id": "c1",
+    #       "bbox": {"x": 100, "y": 50, "w": 600, "h": 400}
+    #     }
+    #   ]
+    # }
+
+    # ==================== Stage 3: Chunk VLM Designer ====================
+    # VLM prompt 设计，chunk_id -> {prompt, ratio}
+    chunk_vlm_designs: Dict[str, Any] = field(default_factory=dict)
+    # 结构示例:
+    # {
+    #   "c1": {
+    #     "prompt": "Create a scientific diagram...",
+    #     "ratio": "4:3"  # 宽高比，如 "4:3", "16:9", "2:1", "1:1"
+    #   }
+    # }
+
+    # ==================== Stage 4: Chunk Renderer ====================
+    # 渲染结果，chunk_id -> {path, bbox, render_status, ...}
+    chunk_images: Dict[str, Any] = field(default_factory=dict)
+    # 结构示例:
+    # {
+    #   "c1": {
+    #     "path": "/output/chunks/c1.png",
+    #     "bbox": {"x": 100, "y": 50, "w": 600, "h": 400},
+    #     "render_status": "success",
+    #     "render_time_ms": 3500
+    #   }
+    # }
+
+    # 渲染错误记录
+    chunk_render_errors: Dict[str, str] = field(default_factory=dict)
+
+    # ==================== Stage 5: PPTX Composer ====================
+    # 最终 PPTX 输出路径
+    pptx_output_path: str = ""
+
+    # SAM 提取的元素（后续实现）
+    extracted_elements: Dict[str, Any] = field(default_factory=dict)
+
+
+# ==================== Film-Strip P2G Pipeline (Bottom-Up) ====================
+# 这是一套新的 bottom-up pipeline：先生成素材（VLM连环画+PPTX原生形状），再基于实际尺寸布局
+
+@dataclass
+class FilmStripP2GRequest(MainRequest):
+    """Film-Strip Bottom-Up Paper2Graph Pipeline 的 Request"""
+    target: str = ""
+
+    # 画布配置（像素）
+    canvas_width: int = 1920
+    canvas_height: int = 1080
+
+    # VLM 渲染配置
+    vlm_model: str = "gemini-3-pro-image-preview"
+    vlm_concurrency: int = 4
+    vlm_timeout: int = 600
+
+    # Film-Strip 约束
+    max_vlm_group_size: int = 4          # 单组子图数上限
+    panel_gap_px: int = 20              # 子图间白色间隔（期望值）
+    panel_bg_hex: str = "#FFFFFF"       # 连环画背景/分隔主色
+
+    # 输出目录
+    output_dir: str = ".tmp/filmstrip_p2g"
+
+
+@dataclass
+class FilmStripP2GState(MainState):
+    """Film-Strip Bottom-Up Paper2Graph Pipeline 的 State
+
+    Pipeline 流程:
+    1. node_graph_constructor -> node_graph_json
+    2. render_method_classifier -> render_plan_json
+    3. vlm_group_planner -> vlm_group_plan_json
+    4. pptx_spec_generator -> pptx_render_specs
+    5. filmstrip_renderer -> vlm_rendered_nodes + vlm_node_assets
+    6. layout_engine -> layout_json
+    7. pptx_composer -> pptx_output_path
+    """
+    request: FilmStripP2GRequest = field(default_factory=FilmStripP2GRequest)
+
+    # ==================== Stage 1: Node Graph ====================
+    node_graph_json: Dict[str, Any] = field(default_factory=dict)
+    # {
+    #   "title": "...",
+    #   "global_style": {...},
+    #   "nodes": [{...}],
+    #   "edges": [{...}]
+    # }
+
+    # ==================== Stage 2: Render Plan ====================
+    render_plan_json: Dict[str, Any] = field(default_factory=dict)
+    # {
+    #   "vlm_nodes": ["n1", "n2"],
+    #   "pptx_nodes": ["n3", "n4"],
+    #   "by_node": {
+    #     "n1": {"render_method": "vlm", "vlm_desc": "...", "size_hint": {...}},
+    #     "n3": {"render_method": "pptx", "pptx_intent": "...", "size_hint": {...}}
+    #   }
+    # }
+
+    # ==================== Stage 3: VLM Groups ====================
+    vlm_group_plan_json: Dict[str, Any] = field(default_factory=dict)
+    # {
+    #   "groups": [
+    #     {
+    #       "group_id": "g1",
+    #       "node_ids": ["n1", "n2", "n5"],  # panel 顺序必须稳定
+    #       "subject": "...",
+    #       "prompt": "..."
+    #     }
+    #   ]
+    # }
+
+    # ==================== Stage 4: PPTX Specs ====================
+    # node_id -> PPTXRenderSpec（供 PPTXNodeRenderer / 扩展版 renderer 消费）
+    pptx_render_specs: Dict[str, Any] = field(default_factory=dict)
+
+    # ==================== Stage 5: Rendered Assets ====================
+    # node_id -> image_path（抠图后的透明 PNG，供 PPTX 插图）
+    vlm_rendered_nodes: Dict[str, str] = field(default_factory=dict)
+    # node_id -> {path, width_px, height_px, source_group_id, panel_index, ...}
+    vlm_node_assets: Dict[str, Any] = field(default_factory=dict)
+    # group_id -> {path, render_time_ms, status, ...}
+    filmstrip_images: Dict[str, Any] = field(default_factory=dict)
+    filmstrip_render_errors: Dict[str, str] = field(default_factory=dict)
+
+    # ==================== Stage 6: Layout ====================
+    layout_json: Dict[str, Any] = field(default_factory=dict)
+    # {
+    #   "canvas": {"width": 1920, "height": 1080, "unit": "px"},
+    #   "nodes": [{"node_id": "n1", "bbox": {"x": 0, "y": 0, "w": 320, "h": 240}}],
+    #   "edges": [{"edge_id": "e1", "from": "n1", "to": "n3", "route": "orthogonal"}]
+    # }
+
+    # ==================== Stage 7: Output ====================
+    pptx_output_path: str = ""

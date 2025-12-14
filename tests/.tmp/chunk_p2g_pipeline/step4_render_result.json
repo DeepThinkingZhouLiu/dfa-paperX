@@ -1,0 +1,30 @@
+{
+  "chunk_images": {
+    "c1": {
+      "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/chunk_p2g_pipeline/chunks/c1.png",
+      "render_status": "success",
+      "render_time_ms": 256059
+    },
+    "c2": {
+      "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/chunk_p2g_pipeline/chunks/c2.png",
+      "render_status": "success",
+      "render_time_ms": 260071
+    },
+    "c3": {
+      "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/chunk_p2g_pipeline/chunks/c3.png",
+      "render_status": "success",
+      "render_time_ms": 209334
+    },
+    "c4": {
+      "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/chunk_p2g_pipeline/chunks/c4.png",
+      "render_status": "success",
+      "render_time_ms": 263437
+    },
+    "c5": {
+      "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/chunk_p2g_pipeline/chunks/c5.png",
+      "render_status": "success",
+      "render_time_ms": 266436
+    }
+  },
+  "chunk_errors": {}
+}

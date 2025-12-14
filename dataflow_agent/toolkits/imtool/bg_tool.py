@@ -1,7 +1,7 @@
 # ================================================================
-# BRIA-RMBG 2.0 高质量抠图工具（离线版）
-# - 模型：RMBG 2.0（ONNX）
-# - 依赖：onnxruntime, pillow, numpy
+# 背景移除工具集
+# - BriaRMBG2Remover: 使用 RMBG 2.0 模型（适合人物/产品照片）
+# - EdgeFloodFillRemover: 基于边缘 flood fill（适合图表/图标）
 # ================================================================
 
 from __future__ import annotations
@@ -10,6 +10,7 @@ import sys
 import numpy as np
 from pathlib import Path
 from PIL import Image, ImageFilter
+from scipy import ndimage
 
 # 若依赖放在 ./deps 目录（推荐本地隔离）
 DEPS_DIR = Path(__file__).resolve().parent / "deps"
@@ -87,10 +88,126 @@ class BriaRMBG2Remover:
         return str(output_path)
 
 
+class EdgeFloodFillRemover:
+    """基于边缘 flood fill 的背景移除器
+
+    适用于图表、图标等内容，特点：
+    - 只移除与图片边缘连通的背景色区域
+    - 保留内容区域内的白色/浅色元素
+    - 不需要额外的深度学习模型
+    - 多个元素作为整体保留（不会过度分割）
+    """
+
+    def __init__(
+        self,
+        output_dir: str | None = None,
+        bg_threshold: int = 245,
+        edge_smooth: bool = True,
+        edge_smooth_radius: int = 2,
+    ):
+        """
+        Args:
+            output_dir: 输出目录
+            bg_threshold: 背景色阈值，RGB 各通道都大于此值视为背景（默认 245）
+            edge_smooth: 是否对边缘进行平滑处理
+            edge_smooth_radius: 边缘平滑半径（像素）
+        """
+        self.output_dir = Path(output_dir) if output_dir else DEFAULT_OUTPUT_DIR
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+        self.bg_threshold = bg_threshold
+        self.edge_smooth = edge_smooth
+        self.edge_smooth_radius = edge_smooth_radius
+
+    def remove_background(self, image_path: str) -> str:
+        """移除背景，只保留内容区域
+
+        Args:
+            image_path: 输入图片路径
+
+        Returns:
+            输出图片路径（带透明通道的 PNG）
+        """
+        img = Image.open(image_path).convert("RGBA")
+        data = np.array(img)
+        h, w = data.shape[:2]
+
+        # 1. 创建背景 mask：RGB 各通道都大于阈值的像素
+        rgb = data[:, :, :3]
+        bg_mask = np.all(rgb > self.bg_threshold, axis=2)
+
+        # 2. 标记连通区域
+        labeled, num_features = ndimage.label(bg_mask)
+
+        # 3. 找到与边缘连通的区域标签
+        edge_labels = set()
+        edge_labels.update(labeled[0, :].tolist())       # 上边缘
+        edge_labels.update(labeled[h - 1, :].tolist())   # 下边缘
+        edge_labels.update(labeled[:, 0].tolist())       # 左边缘
+        edge_labels.update(labeled[:, w - 1].tolist())   # 右边缘
+        edge_labels.discard(0)  # 0 表示非背景区域
+
+        # 4. 只移除与边缘连通的背景区域
+        edge_bg_mask = np.isin(labeled, list(edge_labels))
+
+        # 5. 创建 alpha 通道
+        alpha = np.where(edge_bg_mask, 0, 255).astype(np.uint8)
+
+        # 6. 边缘平滑处理（可选）
+        if self.edge_smooth and self.edge_smooth_radius > 0:
+            alpha = self._smooth_alpha_edge(alpha, edge_bg_mask)
+
+        # 7. 合并 RGBA
+        data[:, :, 3] = alpha
+        out_img = Image.fromarray(data, "RGBA")
+
+        # 8. 保存
+        name = Path(image_path).stem
+        output_path = self.output_dir / f"{name}_bg_removed.png"
+        out_img.save(output_path)
+        print(f"抠图完成（EdgeFloodFill）: {output_path}")
+        return str(output_path)
+
+    def _smooth_alpha_edge(self, alpha: np.ndarray, bg_mask: np.ndarray) -> np.ndarray:
+        """对 alpha 通道边缘进行平滑处理，减少锯齿
+
+        Args:
+            alpha: 原始 alpha 通道
+            bg_mask: 背景 mask
+
+        Returns:
+            平滑后的 alpha 通道
+        """
+        # 使用距离变换来创建渐变边缘
+        # 计算前景区域到背景的距离
+        foreground_mask = ~bg_mask
+        dist_to_bg = ndimage.distance_transform_edt(foreground_mask)
+
+        # 在边缘区域（距离小于 radius）创建渐变
+        radius = self.edge_smooth_radius
+        edge_zone = (dist_to_bg > 0) & (dist_to_bg <= radius)
+
+        # 渐变 alpha：距离越近背景，alpha 越小
+        smooth_alpha = alpha.copy().astype(np.float32)
+        smooth_alpha[edge_zone] = (dist_to_bg[edge_zone] / radius) * 255
+
+        return smooth_alpha.astype(np.uint8)
+
+
 def local_tool_for_bg_remove(req: dict) -> str:
-    """暴露统一接口"""
+    """暴露统一接口（默认使用 RMBG 模型）"""
     remover = BriaRMBG2Remover(
         model_path=req.get("model_path"), output_dir=req.get("output_dir")
+    )
+    return remover.remove_background(req["image_path"])
+
+
+def local_tool_for_edge_floodfill_bg_remove(req: dict) -> str:
+    """暴露 EdgeFloodFill 接口（适合图表/图标）"""
+    remover = EdgeFloodFillRemover(
+        output_dir=req.get("output_dir"),
+        bg_threshold=req.get("bg_threshold", 245),
+        edge_smooth=req.get("edge_smooth", True),
+        edge_smooth_radius=req.get("edge_smooth_radius", 2),
     )
     return remover.remove_background(req["image_path"])
 

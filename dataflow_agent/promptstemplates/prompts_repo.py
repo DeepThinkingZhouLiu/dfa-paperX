@@ -1562,6 +1562,20 @@ class Paper2GraphSemanticConstructor:
   2. 结合 semantic_json_schema（结构示例模板）和 semantic_json_desc（字段说明），将这些语义信息严格映射为语义 JSON；
   3. 保持 chunks / nodes / edges 的结构清晰、命名规范，并与 semantic_desc 中的语义规划保持一致；
   4. 只关注「语义结构层」，不承担布局（坐标/bbox）和外观设计（配色、图标、美术风格等）工作。
+
+  [CHUNK 设计原则]
+  1. 每个 chunk 应包含至少 3-6 个有实质内容的 nodes
+  2. 避免创建只包含标题或单一元素的 chunk
+  3. 标题、注释等轻量元素应归属到其关联的核心模块 chunk 中
+  4. 推荐的 chunk 数量：简单图 3-4 个，复杂图 5-8 个，最多不超过 8 个
+  5. 横跨全宽的"薄层"chunk（如标题行、分隔行）应尽量合并到上方或下方的核心 chunk
+
+  [NODE 设计原则]
+  1. 每个 node 应代表一个独立的可视化单元
+  2. 避免将同类元素拆分为多个 nodes（如多个箭头应合并为一个"连接组"）
+  3. 注释和说明文字应尽量合并，除非它们在空间上明显分离
+  4. 推荐的 node 数量：每个 chunk 4-8 个，整图 20-35 个
+  5. 按认知单元而非数据结构来组织 nodes
   """
 
   task_prompt_for_p2g_semantic_constructor_agent = """
@@ -1642,76 +1656,70 @@ class Paper2GraphSemanticConstructor:
 # ----------------------------------------------------------------------- #
 class Paper2GraphChunkLayoutPlanner:
     system_prompt_for_p2g_chunk_layout_planner_agent = """
-你是科研绘图的布局规划专家，负责在「语义结构」与「几何布局」之间搭建中间层的布局计划（layout_plan）。
+你是科研绘图的布局规划专家，负责为 semantic_json 中的 chunks 规划网格位置。
 
 你的职责是：
-1. 读取已经构建好的 semantic_json（包含 chunks / nodes / edges）；
-2. 结合上游给出的布局描述 layout_desc（包含阅读方向、推荐 grid 和粗粒度分层结构），为每个 chunk 规划其在网格中的位置；
-3. 输出一个轻量的 layout_plan，仅包含：
-   - 整体 grid 规模（grid_rows, grid_cols）和 flow_direction；
-   - 每个 chunk 的行/列位置（row, col）与跨行/跨列（span_row, span_col）；
-   - 每个 chunk 的大致面积级别（size_hint）和简短的关系说明（relation_note）。
+1. 读取 semantic_json（包含 chunks / nodes / edges）
+2. 结合 layout_desc 的布局建议，为每个 chunk 分配网格位置
+3. 输出 layout_plan，包含 grid 规模和每个 chunk 的位置信息
 
 你不负责：
-- 计算任何像素坐标 (x, y, w, h) 或具体的 bbox；
-- 决定节点（nodes）的布局；
-- 决定视觉风格、配色或图标。
+- 计算像素坐标 (x, y, w, h)
+- 决定 nodes 的布局
+- 决定视觉风格
+
+[核心约束 - 网格位置不能冲突！]
+1. 每个网格单元 (row, col) 只能被一个 chunk 占用
+2. 使用 span 时，占用的所有单元格都不能与其他 chunk 重叠
+3. 分配前必须检查：该位置是否已被其他 chunk（含其 span 区域）占用
+
+[GRID 规模建议]
+- 行数 ≤ 3，列数 ≤ 4
+- 优先使用：2x2, 2x3, 3x3
+- 网格单元数应 ≥ chunk 数量
 """
 
     task_prompt_for_p2g_chunk_layout_planner_agent = """
-[TASK]
-根据以下输入信息，为当前图像生成一个布局计划 layout_plan：
-
-1. 语义结构 JSON（semantic_json）：
+[INPUT]
+1. semantic_json：
 {semantic_json}
 
-2. 上游的布局自然语言描述（layout_desc）：
+2. layout_desc：
 {layout_desc}
 
-3. 上游的语义自然语言描述（semantic_desc）：
+3. semantic_desc：
 {semantic_desc}
 
-你的目标是：
-- 推荐一个合理的整体网格规模 grid_rows x grid_cols（例如 2x3、3x3 等），与 layout_desc 中的建议保持一致或作出合理解释；
-- 为 semantic_json.chunks 中的每一个 chunk 分配在该网格中的行/列位置（row, col），在需要时使用 span_row/span_col 表示横向或纵向跨越多个单元格；
-- 对每个 chunk 给出一个 size_hint（small / medium / large），用于指示其在后续布局中的相对面积和视觉权重；
-- 在 relation_note 中用一两句话简要描述该 chunk 与其他 chunks 的主要关系（例如"主流程起点""从 c2,c3 接收输入""两个分支的汇合点"等），若关系较弱或没有明显关系，则简单说明其为相对独立的模块。
-
-[OUTPUT RULES]
-1. 你必须输出一个 JSON 对象 layout_plan，包含以下两个顶层字段：
-   - global：全局布局信息；
-   - chunks：每个 chunk 的布局规划数组。
-
-2. global 字段示例结构：
-   {
-     "grid_rows": 3,
-     "grid_cols": 3,
-     "flow_direction": "left-to-right",
-     "notes": "上层为总览，中层为数据构建主干，下层为双分支与策略更新。"
-   }
-
-3. chunks 字段要求：
-   - 对 semantic_json.chunks 中的每一个 chunk（按照 chunk_id 顺序），都给出一条对应的布局记录，示例结构：
-     {
-       "chunk_id": "c2",
-       "row": 1,
-       "col": 0,
-       "span_row": 1,
-       "span_col": 1,
-       "size_hint": "medium",             // small / medium / large
-       "relation_note": "基础输入与初始策略，是主流程的起点。"
-     }
-   - row 和 col 为从 0 开始的整数行/列索引；
-   - span_row 和 span_col 至少为 1，若不需要跨行/跨列则为 1；
-   - size_hint 用于表达该 chunk 在整体布局中预期的相对大小（large 适合主干/总览/总结模块，small 适合图例/符号说明等轻量信息）。
-
-4. 重要约束：
-   - 不要在 layout_plan 中引入任何像素级信息（x, y, w, h 等）或画布大小信息；
-   - 不要修改或重复输出 semantic_json 的内容，只引用 chunk_id 和整体结构信息；
-   - 对于 layout_desc 中没有明确指定位置的 chunks，你可以根据语义合理地放入网格中的空位，并在 relation_note 中简短解释原因。
-
 [OUTPUT FORMAT]
-请仅输出一个 JSON 对象 layout_plan，不要添加任何解释性文字或注释。
+输出 JSON 对象 layout_plan：
+
+{{
+  "global": {{
+    "grid_rows": 2,
+    "grid_cols": 3,
+    "flow_direction": "left-to-right",
+    "notes": "布局说明"
+  }},
+  "chunks": [
+    {{
+      "chunk_id": "c1",
+      "row": 0,
+      "col": 0,
+      "span_row": 1,
+      "span_col": 1,
+      "size_hint": "large",
+      "relation_note": "说明"
+    }}
+  ]
+}}
+
+[关键要求]
+1. 为每个 chunk 分配唯一的网格位置
+2. 使用 span 时检查不与其他 chunk 冲突
+3. row/col 从 0 开始
+4. span_row/span_col 默认为 1
+
+仅输出 JSON，不要解释。
 """
 
 
@@ -1749,31 +1757,32 @@ Your responsibilities:
 **CRITICAL: Rendering Method Guidelines**
 
 **pptx rendering** is ONLY suitable for:
-- Pure text content: titles, labels, simple descriptions, formulas displayed as text
-- Very simple geometric shapes: basic rectangles, circles, simple arrows, straight connectors
-- Simple container/border frames: just a border to group elements, no internal structure
-- Simple annotations: short text notes, callouts with just text
+- Very short text labels (1-5 words): "IL", "RL", "Input", "Output"
+- Simple section titles (single line, no special formatting)
+- Pure numeric labels or simple formulas displayed as text
 
 **vlm rendering** should be used for:
-- **Any shape with internal structure or multiple components** (e.g., "module box with input/output ports", "comparison node showing contrast")
-- **Any shape representing a conceptual diagram** (e.g., "mini-diagram showing relationship between A and B")
-- **Any shape with visual metaphor** (e.g., "fan-out shape", "aggregation module", "branching node")
-- **Any shape representing data flow or process** (e.g., "rollout dataset", "policy training module")
-- **Any shape that would benefit from an icon or illustration** (e.g., "LLM module", "environment", "encoder")
+- **ALL other cases**, including:
+  - Titles with special styling or emphasis
+  - Any text longer than 5 words
+  - Any shape, module, or container
+  - Any node with internal structure
+  - Any node representing a concept, process, or data
+  - Any node that would benefit from visual design
 - **image_placeholder nodes**: always use vlm
 - **Complex modules**: neural networks, encoders, decoders, attention mechanisms, etc.
 - **Data representations**: datasets, trajectories, state-action pairs, etc.
 - **Comparison or contrast visualizations**: side-by-side comparisons, before/after, etc.
 
 **IMPORTANT Decision Rules:**
-1. When in doubt, prefer vlm over pptx - it's better to have a rich visual than a plain box
+1. When in doubt, prefer vlm over pptx - it's better to have a rich visual than a plain text box that might overflow
 2. If the desc mentions "module", "diagram", "visualization", "comparison", "flow", "structure" → use vlm
 3. If the desc mentions "labeled" with complex content inside → use vlm
-4. Only use pptx for truly simple elements: plain text, basic arrows, simple borders
-5. For shape nodes: default to vlm unless it's clearly just a simple container or connector
-6. For annotation nodes: use pptx if it's just text, use vlm if it describes a visual element
+4. Only use pptx for truly simple elements: very short labels (1-5 words)
+5. For shape nodes: default to vlm unless it's clearly just a simple connector
+6. For annotation nodes: use pptx only if it's very short text (1-5 words), otherwise use vlm
 
-**Expected ratio**: In a typical scientific figure, expect roughly 40-60% of nodes to use vlm rendering.
+**Expected ratio**: In a typical scientific figure, expect roughly 70-85% of nodes to use vlm rendering.
 """
 
     task_prompt_for_p2g_node_render_design_agent = """
@@ -1785,56 +1794,95 @@ chunk_summary: {chunk_summary}
 The following nodes belong to this chunk and need rendering design:
 {nodes_info}
 
+[GLOBAL STYLE GUIDANCE]
+The following style configuration should guide your vlm_spec design to ensure visual consistency across the entire figure:
+{global_style}
+
 [GLOBAL CONTEXT]
 Overall semantic description of the figure:
 {semantic_desc}
 
 [TASK]
-For each node in this chunk, determine the rendering method and provide specifications:
+For each node in this chunk, determine the rendering method and provide **structured** specifications.
 
 1. **Analyze** each node's type, description, and role
-2. **Decide** rendering method: "pptx" or "vlm"
+2. **Decide** rendering method: "pptx" or "vlm" (prefer vlm for most nodes)
 3. **Provide specifications**:
-   - For pptx: Describe how to render using native PowerPoint elements (shape type, text style, colors, etc.)
-   - For vlm: Write a detailed text2img prompt in English that includes:
-     * Specific visual content description
-     * Style requirements (e.g., "clean scientific illustration", "flat design icon")
-     * Background requirements (e.g., "white background", "transparent background")
-     * Any relevant size/proportion hints
 
-4. **Provide reasoning** for your decision
+**For vlm nodes (recommended for most nodes), output structured vlm_spec**:
+{{
+  "node_id": "n1",
+  "render_method": "vlm",
+  "vlm_spec": {{
+    "content": "Specific content description (What to draw)",
+    "style": "flat_2d_vector | scientific_diagram | icon | module_box",
+    "color_scheme": "muted_teal | calm_blue | warm_accent | neutral_gray | muted_green | light_purple | soft_orange",
+    "background": "white | transparent",
+    "label_text": "Text label to display (if any)",
+    "aspect_ratio_hint": "1:1 | 4:3 | 3:2 | 16:9 | auto"
+  }},
+  "reasoning": "..."
+}}
+
+**For pptx nodes (only for very short labels 1-5 words)**:
+{{
+  "node_id": "n2",
+  "render_method": "pptx",
+  "pptx_desc": "Short label text, 12pt, dark gray, center aligned",
+  "reasoning": "Very short label (2 words), suitable for native text"
+}}
+
+[STYLE PRESETS]
+- flat_2d_vector: Flat 2D vector style, clean geometric shapes, minimalist design
+- scientific_diagram: Clean scientific diagram, minimalist design, publication-ready
+- icon: Simple flat icon, single color, clear silhouette, centered
+- module_box: Rounded rectangle module box with clear label, professional look
+
+[COLOR PRESETS]
+- muted_teal: #66c2a5 - for data inputs, datasets
+- calm_blue: #4A90D9 - for main modules, processing blocks
+- warm_accent: #fc8d62 - for highlights, special operations
+- neutral_gray: #808080 - for backgrounds, less important elements
+- muted_green: #6BAA9B - for outputs, results
+- light_purple: #9B8EC2 - for models, neural networks
+- soft_orange: #E8A87C - for actions, interactions
 
 [OUTPUT FORMAT]
-Return a JSON object with the following structure:
 {{
   "chunk_id": "{chunk_id}",
   "nodes": [
     {{
       "node_id": "n1",
-      "render_method": "pptx",
-      "pptx_desc": "Title text box with centered alignment, bold 24pt font, dark blue color (#1a365d)",
-      "reasoning": "This is a simple title text that can be effectively rendered with native text formatting"
+      "render_method": "vlm",
+      "vlm_spec": {{
+        "content": "A data module representing expert dataset with document stack icon",
+        "style": "module_box",
+        "color_scheme": "muted_teal",
+        "background": "transparent",
+        "label_text": "D_expert",
+        "aspect_ratio_hint": "4:3"
+      }},
+      "reasoning": "Dataset module with icon and label"
     }},
     {{
-      "node_id": "n7",
-      "render_method": "vlm",
-      "vlm_prompt": "A clean scientific diagram showing multiple expert trajectories as sequences of state-action pairs, with arrows connecting circular state nodes (labeled s_i) to rectangular action nodes (labeled a_i), minimalist flat design style, white background, suitable for academic paper figures",
-      "reasoning": "This requires visual representation of trajectory data with specific node-edge structure that benefits from generated imagery"
+      "node_id": "n2",
+      "render_method": "pptx",
+      "pptx_desc": "IL, 14pt, bold, dark gray (#333333), center aligned",
+      "reasoning": "Very short label (1 word)"
     }}
   ],
   "chunk_style_hints": {{
     "dominant_color": "#4A90D9",
-    "visual_weight": "medium",
-    "style_notes": "Clean scientific illustration style consistent with academic papers"
+    "visual_weight": "medium"
   }}
 }}
 
 [IMPORTANT RULES]
 1. Every node in the input must have a corresponding entry in the output
-2. vlm_prompt must be in English and be detailed enough for image generation
-3. pptx_desc should specify concrete styling (colors, fonts, shape types)
-4. reasoning should explain why you chose that rendering method
-5. chunk_style_hints should suggest overall visual coherence for the chunk
+2. Prefer vlm for most nodes (70-85%), only use pptx for very short labels
+3. vlm_spec must include all required fields: content, style, color_scheme, background
+4. pptx_desc should specify concrete styling (colors, fonts, alignment)
+5. reasoning should explain why you chose that rendering method
 """
 
 
@@ -1845,90 +1893,1195 @@ class Paper2GraphNodeLayoutPlanner:
     system_prompt_for_p2g_node_layout_planner_agent = """
 你是科研图中「chunk 内部布局」的规划专家。
 
-用户会针对单个 chunk 提供：
-- 该 chunk 的摘要 (chunk_summary)；
-- 该 chunk 所包含的 nodes (chunk_nodes)，包含 node_id/node_type/desc 等信息；
-- 与该 chunk 相关的 edges (chunk_edges)，用于辅助判断主流程方向；
-- （可选）整张图的语义描述 semantic_desc。
-
 你的职责是：
-- 仅针对当前 chunk，规划 chunk 内各个 nodes 的布局；
-- 为每个 node 给出视觉角色 (role) 与相对 bbox (rel_bbox)，rel_bbox 使用 0~1 的归一化坐标，
-  表示相对于当前 chunk 内部区域的相对位置与尺寸。
+- 为当前 chunk 内的每个 node 规划相对位置 (rel_bbox)
+- rel_bbox 使用 0~1 的归一化坐标，表示相对于 chunk 内部区域的位置和尺寸
 
-你不负责：
-- 计算像素级坐标；
-- 规划多个 chunk 之间的位置关系（由 layout_plan 与其它模块负责）。
+[核心约束 - nodes 不能重叠！]
+1. 任意两个 node 的 rel_bbox 不能有交集
+2. 分配位置时，先放置主要 nodes，再在剩余空间放置次要 nodes
+3. 如果空间不足，优先保证主要 nodes 的尺寸
+
+[核心约束 - 内容感知布局]
+1. **根据 node 内容决定尺寸**：
+   - 短标签（单词/符号）：紧凑尺寸，w=0.08~0.15, h=0.06~0.12
+   - 简短文本（1-2 句）：中等尺寸，w=0.2~0.4, h=0.1~0.2
+   - 复杂内容（公式/多行）：较大尺寸，w=0.3~0.6, h=0.2~0.4
+   - 模块框/流程框：w=0.3~0.5, h=0.25~0.45
+
+2. **根据渲染方式约束比例**：
+   - render_method="vlm" 的 node：
+     * 宽高比应接近 1:1 ~ 4:3（避免极端比例导致图片扭曲）
+     * 推荐比例：1:1, 4:3, 3:2, 16:9
+     * 避免极端比例如 5:1 或 1:5
+   - render_method="pptx" 的 node：
+     * 文本框可以较宽（适应文字横排）
+     * 但高度需要足够容纳文字内容
+
+3. **禁止重叠**：任意两个 node 的 bbox 不能有交集
+4. **边距要求**：相邻 nodes 间距 ≥ 0.03
+5. **边界约束**：所有 bbox 必须在 [0.02, 0.98] 范围内
+
+[空间利用率]
+- 目标利用率: 50%~75%
+- 主要内容模块应占据视觉中心
 """
 
     task_prompt_for_p2g_node_layout_planner_agent = """
-[CHUNK CONTEXT]
+[INPUT]
 chunk_id: {chunk_id}
+chunk_summary: {chunk_summary}
+chunk_nodes: {chunk_nodes}
+chunk_edges: {chunk_edges}
+semantic_desc: {semantic_desc}
 
-chunk_summary:
-{chunk_summary}
+[TASK]
+为当前 chunk 内的每个 node 规划 rel_bbox（相对位置，0~1 范围）。
 
-chunk_nodes (仅包含当前 chunk 的 nodes):
-{chunk_nodes}
+[内容感知布局 - 核心原则]
+**必须根据 node 的 desc 内容来决定尺寸**：
+- 短标签（如 "IL"、"RL"、单词或符号）：使用紧凑尺寸，w=0.08~0.15，h=0.06~0.12
+- 简短文本（1-2 句话）：中等尺寸，w=0.2~0.4，h=0.1~0.2
+- 复杂内容（公式、多行文本、详细说明）：较大尺寸，w=0.3~0.6，h=0.2~0.4
+- 模块框/流程框：根据内部元素数量调整，w=0.3~0.5，h=0.25~0.45
 
-chunk_edges (与当前 chunk 相关的 edges, 可选):
-{chunk_edges}
+[渲染方式约束 - 重要！]
+**对于 render_method="vlm" 的 node（大多数 node）**：
+- 宽高比应接近 1:1 ~ 4:3，避免极端比例导致 VLM 图片扭曲
+- 推荐比例：1:1 (w/h=1.0), 4:3 (w/h=1.33), 3:2 (w/h=1.5), 16:9 (w/h=1.78)
+- **禁止**极端比例如 5:1 或 1:5
 
-整体语义描述 semantic_desc (可选):
-{semantic_desc}
+**对于 render_method="pptx" 的 node（仅短标签）**：
+- 文本框可以较宽（适应文字横排）
+- 高度需要足够容纳文字内容
 
-[LAYOUT GOAL]
-请仅针对上述 chunk, 规划 chunk 内所有 nodes 的布局 (node_layout_plan_for_chunk)。
+[布局角色参考]
+1. title: 顶部居中，宽度 0.6~0.9，高度 0.08~0.15
+2. main_block: 中部主体，宽度 0.3~0.6，高度 0.2~0.5
+3. shape/connector: 根据内容复杂度，宽度 0.1~0.4，高度 0.1~0.3
+4. annotation: 相关模块旁边，宽度 0.15~0.3，高度 0.08~0.18
+5. label（短标签）: 紧凑布局，宽度 0.08~0.18，高度 0.06~0.12
 
-请遵循以下启发式规则：
-1. 标题与副标题 (title/subtitle)
-   - 若 node_type 为 text_block, 且 desc 中显式包含“标题”、“Title”、“分支 A：”、“分支 B：”等字样,
-     则视为 title 或 subtitle;
-   - title 通常放在 chunk 的上方, 宽度较大 (例如 w≈0.8~0.95), 高度相对较小;
-   - 若存在多个文本说明, 可将主标题放在最上方, 副标题或简短说明紧随其下。
+[硬性约束 - 必须遵守]
+- **禁止重叠**: 任意两个 node 的 bbox 不能有交集
+- **边距要求**: 相邻 nodes 间距 ≥ 0.03
+- **边界约束**: 所有 bbox 必须在 [0.02, 0.98] 范围内
+- **宽高比约束**: VLM node 的 w/h 应在 0.5~2.0 之间
 
-2. 主体模块 / 容器节点 (main_block/container)
-   - 若 node_type 为 shape 或 image_placeholder, 且 desc 中包含“模块”、“容器”、“数据集”、“pipeline” 等,
-     视为 main_block 或 container;
-   - 这类节点应占用 chunk 内较大的面积, 通常位于中部, 并按照主流程方向排列
-     (例如从左到右或从上到下);
-   - 若存在多于一个 main_block, 可以并排或分层排列, 但应保持视觉上的对齐感。
-
-3. 注释 / 解释节点 (annotation)
-   - 若 node_type 为 annotation 或 text_block 且 desc 中主要为解释、说明、注释、符号说明等,
-     视为 annotation;
-   - 这类节点通常尺寸较小, 贴近相关的 main_block 或标题, 避免遮挡主模块。
-
-4. rel_bbox 说明:
-   - rel_bbox = {x, y, w, h}, 所有数值均在 [0.0, 1.0] 范围内;
-   - (x, y) 表示节点左上角相对于 chunk 内部区域的相对坐标;
-   - (w, h) 表示节点宽度与高度相对于 chunk 的比例;
-   - 请避免 nodes 之间重叠 , 且避免大面积未利用的空白区域。
+[空间利用率要求]
+- 目标利用率: 50%~75%（所有 nodes 面积之和 / chunk 面积）
+- 短标签类 node 不应占用过大面积
+- 主要内容模块应占据视觉中心
 
 [OUTPUT FORMAT]
-请仅返回一个 JSON 对象, 对应当前 chunk 的节点布局计划, 结构如下:
-
-{
-  "chunk_id": "c3",
+{{
+  "chunk_id": "{chunk_id}",
   "nodes": [
-    {
-      "node_id": "n10",
+    {{
+      "node_id": "n1",
       "role": "main_block",
-      "rel_bbox": { "x": 0.10, "y": 0.20, "w": 0.35, "h": 0.40 }
-    },
-    {
-      "node_id": "n11",
-      "role": "annotation",
-      "rel_bbox": { "x": 0.55, "y": 0.25, "w": 0.35, "h": 0.20 },
-      "reasoning": "说明为什么这样布局该 node"
-    }
+      "rel_bbox": {{"x": 0.1, "y": 0.2, "w": 0.4, "h": 0.35}},
+      "aspect_ratio": 1.14,
+      "reasoning": "布局说明（需说明为何选择此尺寸和比例）"
+    }}
   ]
-}
+}}
 
-- chunk_id 必须等于上文给出的 chunk_id;
-- nodes 数组中应尽量覆盖本 chunk 的所有 node_id;
-- rel_bbox.x, rel_bbox.y, rel_bbox.w, rel_bbox.h 均需在 [0,1] 区间内;
-- reasoning 使用简短自然语言, 解释该 node 的布局意图。
-
-请严格按照上述 JSON 结构返回, 不要添加任何额外字段或说明文字。
+仅输出 JSON，不要解释。
 """
+
+
+# ----------------------------------------------------------------------- #
+# 21. p2g_pptx_desc_parser (PPTX 描述解析为结构化渲染规格)
+# ----------------------------------------------------------------------- #
+class Paper2GraphPptxDescParser:
+    system_prompt_for_p2g_pptx_desc_parser_agent = """
+You are a PPTX rendering specification parser. Your task is to convert natural language descriptions of PowerPoint elements into structured JSON specifications that can be directly used by python-pptx library.
+
+[ELEMENT TYPES]
+- text_box: Pure text container, typically no shape background (use for titles, labels, annotations)
+- rectangle: Rectangular shape with optional fill and border
+- rounded_rectangle: Rectangle with rounded corners (for module boxes, containers)
+- arrow: Arrow shape or connector with directional indication
+- line: Simple line element
+
+[COLOR MAPPING]
+When you encounter color names in descriptions, convert them to hex codes:
+- "dark navy blue", "navy blue" → "#1a237e"
+- "dark gray" → "#333333"
+- "gray", "medium gray" → "#808080"
+- "light gray" → "#F5F5F5"
+- "white" → "#FFFFFF"
+- "black" → "#000000"
+- "blue", "primary blue" → "#4A90D9"
+- "teal", "muted teal" → "#66c2a5"
+- "green", "muted green" → "#6BAA9B"
+- If a hex color like "#XXXXXX" is explicitly mentioned, use it directly.
+
+[BORDER STYLES]
+- "solid", "thin border", or no mention of style → "solid"
+- "dashed", "dotted", "dashed border" → "dashed"
+- "no border", "without border", "no fill and no border" → "none"
+
+[ALIGNMENT]
+- "center", "centered", "center-aligned" → "center"
+- "left", "left-aligned" → "left"
+- "right", "right-aligned" → "right"
+- Default to "left" if not specified
+
+[TEXT EXTRACTION]
+Extract text content from patterns like:
+- Text: "actual content"
+- content: "actual content"
+- labeled "actual content"
+- containing the text "actual content"
+- with the content: "actual content"
+
+[FONT SIZE]
+Extract font size from patterns like:
+- "24pt", "12pt font", "font size 14"
+- Default to 12 if not specified
+"""
+
+    task_prompt_for_p2g_pptx_desc_parser_agent = """
+[INPUT]
+The following {node_count} PPTX nodes need to be parsed into structured rendering specifications:
+
+{pptx_nodes}
+
+[TASK]
+For each node, parse the pptx_desc into a structured PPTXRenderSpec with these fields:
+
+1. **element_type**: one of [text_box, rectangle, rounded_rectangle, arrow, line]
+   - Use "text_box" for pure text without shape background
+   - Use "rectangle" or "rounded_rectangle" for boxes with fill/border
+   - Use "arrow" for arrow shapes
+
+2. **text**: the actual text content to display (extract from quotes or context)
+   - Extract text from patterns like Text: "...", content: "...", labeled "..."
+   - If formula like "L_IWM = ..." is present, include it
+
+3. **text_lines**: array of strings if multiple lines are indicated, otherwise null
+
+4. **text_style**: object with:
+   - font_family: string (default "Arial")
+   - font_size: number in pt (extract from description, default 12)
+   - bold: boolean (true if "bold" mentioned)
+   - italic: boolean (true if "italic" mentioned)
+   - color: hex color string (default "#333333")
+   - alignment: "left" | "center" | "right" (default "left")
+
+5. **shape_style**: object with:
+   - fill_color: hex color string, or null for transparent/no fill
+   - border_color: hex color string, or null for no border
+   - border_width: number in pt (default 1.0)
+   - border_style: "none" | "solid" | "dashed"
+
+[OUTPUT FORMAT]
+Return a JSON object with "specs" containing node_id as keys:
+{{
+  "specs": {{
+    "n1": {{
+      "element_type": "text_box",
+      "text": "Title text here",
+      "text_lines": null,
+      "text_style": {{
+        "font_family": "Arial",
+        "font_size": 24,
+        "bold": true,
+        "italic": false,
+        "color": "#1a237e",
+        "alignment": "center"
+      }},
+      "shape_style": {{
+        "fill_color": null,
+        "border_color": null,
+        "border_width": 1.0,
+        "border_style": "none"
+      }}
+    }},
+    "n2": {{ ... }}
+  }}
+}}
+
+[RULES]
+1. Every input node MUST have a corresponding output entry in specs
+2. If text content is not explicitly quoted, infer from context
+3. Use sensible defaults when values are not specified
+4. fill_color=null means transparent/no fill
+5. border_style="none" with border_color=null means no visible border
+6. For "no fill and no border" descriptions: fill_color=null, border_color=null, border_style="none"
+7. Output ONLY the JSON object, no explanations
+"""
+
+
+# ==============================================================================
+# Chunk-Based P2G Pipeline Prompts (独立的 chunk 级别绘制 pipeline)
+# ==============================================================================
+
+# --------------------------------------------------------------------------- #
+# p2g_chunk_semantic_constructor_agent
+# 语义构建 Agent：从用户描述中构建 chunks 列表
+# --------------------------------------------------------------------------- #
+class p2g_chunk_semantic_constructor:
+    """Chunk-Based Pipeline 语义构建 Agent 的 Prompt 模板
+
+    从用户的 target 描述中分解出多个 chunks，每个 chunk 包含详细的绘制描述。
+    输出: {chunks: [{chunk_id, chunk_content}]}
+    """
+
+    system_prompt_for_p2g_chunk_semantic_constructor = """You are an expert scientific diagram architect specializing in creating clear, professional visualizations for top-tier CS conference papers (NeurIPS, ICML, CVPR, ACL).
+
+Your task is to analyze a research method description and decompose it into multiple visual chunks, each with a detailed content description that can be directly used for image generation.
+
+## Your Expertise
+- Understanding complex ML/AI pipelines and architectures
+- Decomposing systems into visually coherent chunks
+- Writing detailed visual descriptions for image generation
+- Creating clear visual hierarchies
+
+## Output Requirements
+You must output a valid JSON object following the exact schema provided."""
+
+    task_prompt_for_p2g_chunk_semantic_constructor = """## Task
+Analyze the following research method description and decompose it into multiple visual chunks for a scientific diagram.
+
+## Input Description
+{target}
+
+## Chunk Design Principles
+1. **Chunk Count**: Create {min_chunks}-{max_chunks} chunks (prefer 2-4 cohesive chunks for best visual effect)
+2. **Chunk Cohesion**: Each chunk should represent a visually complete sub-diagram with a clear theme
+3. **Merge Linear Flows**: Sequential steps (A→B→C) should be in ONE chunk, not separate chunks
+4. **Separate Parallel Branches**: Parallel processes should be separate chunks
+5. **Self-Contained**: Each chunk should be independently renderable without needing other chunks
+6. **Balanced Complexity**: Each chunk should have similar visual complexity (3-6 main elements)
+
+## chunk_content Writing Guidelines
+The `chunk_content` field should be a **detailed visual description** that includes:
+- All visual elements (modules, datasets, text labels, icons) to be drawn
+- The layout and arrangement of elements (left-to-right, top-to-bottom, etc.)
+- Connections and arrows between elements within the chunk
+- Colors, styles, and visual emphasis (if important)
+- Any text labels, formulas, or annotations to include
+
+Write `chunk_content` as if you are instructing an artist to draw this specific part of the diagram. Be specific and detailed.
+
+## Inter-Chunk Relations (IMPORTANT)
+You MUST define how chunks connect to each other visually. This creates a cohesive diagram where chunks are not isolated islands.
+
+## Output Schema
+```json
+{{
+  "chunks": [
+    {{
+      "chunk_id": "c1",
+      "chunk_content": "Detailed visual description...",
+      "suggested_position": "top-left | top-center | top-right | middle-left | middle-center | middle-right | bottom-left | bottom-center | bottom-right",
+      "suggested_ratio": "4:3 | 16:9 | 3:2 | 1:1"
+    }},
+    {{
+      "chunk_id": "c2",
+      "chunk_content": "...",
+      "suggested_position": "...",
+      "suggested_ratio": "..."
+    }}
+  ],
+  "inter_chunk_relations": [
+    {{
+      "from_chunk": "c1",
+      "to_chunk": "c2",
+      "relation_type": "data_flow | control_flow | reference | parallel",
+      "label": "optional label for the connector arrow",
+      "description": "brief description of what flows between chunks"
+    }}
+  ],
+  "layout_hint": "horizontal | vertical | grid",
+  "title": "Overall diagram title"
+}}
+```
+
+## Example chunk_content
+Good example:
+"Draw a data pipeline flowing left-to-right. On the left, show a cylinder-shaped 'Expert Dataset D_expert' container with the formula '{{(s_i, a_i)}}' inside. An arrow points right to a rounded rectangle labeled 'LLM Policy π_0'. From this policy box, multiple arrows fan out to a group of small boxes representing 'K sampled actions {{a_i^1, ..., a_i^K}}'. Use professional blue (#4A90D9) for the policy module and teal (#66c2a5) for the dataset. Include a small annotation below stating 'Non-expert action sampling'."
+
+Bad example (too vague):
+"Show the data preparation process."
+
+## Important Notes
+- Chunk IDs must be sequential (c1, c2, c3, ...)
+- Each chunk_content should be 100-300 words
+- Focus on visual details, not conceptual explanations
+- Include specific colors, shapes, and layout directions
+- Mention any text/labels that should appear in the image
+- **MUST define inter_chunk_relations** to show how chunks connect
+- **suggested_ratio** should be standard ratios only: 4:3, 16:9, 3:2, 16:10, 1:1 (NO extreme ratios like 21:9 or 3:1)
+
+Now analyze the input and generate the semantic JSON:"""
+
+
+# --------------------------------------------------------------------------- #
+# p2g_chunk_layout_planner_agent
+# 布局规划 Agent：为每个 chunk 规划位置和大小
+# --------------------------------------------------------------------------- #
+class p2g_chunk_layout_planner:
+    """Chunk-Based Pipeline 布局规划 Agent 的 Prompt 模板
+
+    根据 semantic_json 为每个 chunk 规划在画布上的位置和大小。
+    输出: {canvas: {width, height}, chunks: [{chunk_id, bbox: {x, y, w, h}}]}
+    """
+
+    system_prompt_for_p2g_chunk_layout_planner = """You are an expert layout designer for scientific diagrams. Your task is to create precise, professional layouts for publication-ready figures.
+
+## Your Expertise
+- Creating balanced, visually appealing layouts
+- Optimizing space utilization (target: 65-85%)
+- Ensuring clear visual hierarchy and flow
+- Preventing overlaps and maintaining proper spacing
+
+## Layout Principles
+1. **Flow Direction**: Main flow should be left-to-right or top-to-bottom
+2. **Hierarchy**: Important chunks should be larger and more central
+3. **Grouping**: Related chunks should be visually close
+4. **Balance**: Distribute visual weight evenly across the canvas
+5. **Spacing**: Maintain consistent gaps between chunks (min 30px)
+
+## Output Requirements
+You must output a valid JSON object with precise pixel coordinates."""
+
+    task_prompt_for_p2g_chunk_layout_planner = """## Task
+Create a layout plan for the following chunks.
+
+## Canvas Size
+- Width: {canvas_width}px
+- Height: {canvas_height}px
+- Margins: 50px on all sides (usable area: {usable_width}x{usable_height}px)
+
+## Chunks to Layout
+```json
+{semantic_json}
+```
+
+## Layout Requirements
+1. Position each chunk within the usable canvas area (50px margins)
+2. Chunks must NOT overlap
+3. Minimum gap between chunks: 40px
+4. Allocate space based on chunk_content complexity (longer content = larger area)
+5. Ensure total chunk area is 50-75% of usable canvas area
+6. Consider logical flow when positioning (e.g., data flow left-to-right)
+
+## CRITICAL: Aspect Ratio Constraints
+**VLM image generation works best with standard aspect ratios. Extreme ratios cause severe image distortion!**
+
+**ALLOWED ratios** (w/h should be within these ranges):
+- 1:1 (w/h = 1.0) - Square
+- 4:3 (w/h = 1.33) - Standard
+- 3:2 (w/h = 1.5) - Photo
+- 16:10 (w/h = 1.6) - Widescreen
+- 16:9 (w/h = 1.78) - Video
+
+**FORBIDDEN ratios** (NEVER use these):
+- 21:9 or wider (w/h > 2.0) - TOO WIDE, will cause horizontal stretching
+- 3:1 or wider (w/h > 2.5) - EXTREMELY TOO WIDE
+- 1:3 or taller (w/h < 0.5) - TOO TALL, will cause vertical stretching
+
+**Rule**: For every chunk, ensure 0.6 ≤ w/h ≤ 1.8
+
+## Grid Alignment Rules
+1. **Snap to grid**: All x, y coordinates should be multiples of 10px
+2. **Consistent heights**: Chunks in the same row should have similar heights (within 50px)
+3. **Consistent widths**: Chunks in the same column should have similar widths (within 50px)
+4. **Uniform gaps**: Use consistent 40px gaps between all chunks
+5. **Row-based layout**: Organize chunks into 1-3 rows with clear horizontal alignment
+
+## Inter-Chunk Connectors
+If the semantic_json contains `inter_chunk_relations`, you should output connector information:
+
+## Output Schema
+```json
+{{
+  "canvas": {{
+    "width": {canvas_width},
+    "height": {canvas_height}
+  }},
+  "chunks": [
+    {{
+      "chunk_id": "c1",
+      "bbox": {{
+        "x": 50,
+        "y": 50,
+        "w": 500,
+        "h": 400
+      }}
+    }},
+    {{
+      "chunk_id": "c2",
+      "bbox": {{
+        "x": 590,
+        "y": 50,
+        "w": 450,
+        "h": 400
+      }}
+    }}
+  ],
+  "inter_chunk_connectors": [
+    {{
+      "from_chunk": "c1",
+      "to_chunk": "c2",
+      "from_anchor": "right",
+      "to_anchor": "left",
+      "style": "arrow",
+      "label": "D_rollout"
+    }}
+  ]
+}}
+```
+
+## Important Notes
+- All coordinates are in pixels
+- bbox.x and bbox.y are the top-left corner position
+- bbox.w and bbox.h are width and height
+- Ensure all chunks fit within the canvas (considering margins)
+- **VERIFY aspect ratio**: For each chunk, calculate w/h and ensure 0.6 ≤ w/h ≤ 1.8
+- Anchor options: "top", "bottom", "left", "right", "center"
+
+Now create the layout JSON:"""
+
+
+# --------------------------------------------------------------------------- #
+# p2g_chunk_vlm_designer_agent
+# VLM Prompt 设计 Agent：调用 LLM 为每个 chunk 生成优化的 VLM 绘图 prompt
+# --------------------------------------------------------------------------- #
+class p2g_chunk_vlm_designer:
+    """Chunk-Based Pipeline VLM Prompt 设计 Agent 的 Prompt 模板
+
+    调用 LLM 根据 chunk_content 和 ratio 生成优化的 VLM 绘图 prompt。
+    输出: {chunk_id: {prompt, ratio}}
+    """
+
+    system_prompt_for_p2g_chunk_vlm_designer = """You are an expert prompt engineer specializing in text-to-image generation for scientific diagrams.
+
+Your task is to transform a semantic description of a diagram chunk into an optimized prompt for VLM (Vision Language Model) image generation.
+
+## Your Expertise
+- Writing effective prompts for image generation models (DALL-E, Midjourney, Stable Diffusion, Gemini)
+- Understanding scientific visualization best practices
+- Translating abstract concepts into concrete visual descriptions
+- Optimizing prompts for clarity, specificity, and visual coherence
+
+## Output Requirements
+You must output a single, well-crafted prompt string that can be directly used for image generation.
+The prompt should be comprehensive, specific, and follow best practices for VLM prompts."""
+
+    task_prompt_for_p2g_chunk_vlm_designer = """## Task
+Transform the following chunk description into an optimized VLM image generation prompt.
+
+## Chunk Content (Semantic Description)
+{chunk_content}
+
+## Image Constraints
+- Aspect Ratio: {ratio} (width:height) - The generated image MUST match this ratio
+- Target Use: Scientific diagram for top-tier CS conference paper (NeurIPS, ICML, CVPR style)
+
+## Prompt Writing Guidelines
+
+### 1. Visual Style Requirements
+- Style: Professional scientific illustration, flat 2D vector style
+- Design: Clean geometric shapes with rounded corners, minimalist
+- Colors: Professional muted tones (Morandi palette)
+  - Blues (#4A90D9, #5B9BD5) for main modules/processes
+  - Teals (#66c2a5, #7ECFC0) for data/datasets
+  - Coral (#fc8d62) for highlights/accents
+  - Dark gray (#333333) for text
+- Background: Solid white or very light gray
+- Typography: Clean sans-serif font style
+
+### 2. Prompt Structure
+Your prompt should include:
+1. **Opening**: State the overall image type and style
+2. **Layout**: Describe the spatial arrangement and flow direction
+3. **Elements**: List each visual element with specific details (shape, color, label, position)
+4. **Connections**: Describe arrows, lines, and relationships between elements
+5. **Style Emphasis**: Reinforce the professional, clean aesthetic
+6. **Negative Constraints**: What to avoid (photorealism, 3D effects, gradients, clutter)
+
+### 3. Best Practices
+- Be specific about positions (left, right, center, top, bottom)
+- Use concrete visual terms (rounded rectangle, cylinder, arrow, dashed line)
+- Include exact color codes when specifying colors
+- Mention text labels that should appear in the image
+- Keep the prompt focused and coherent (avoid contradictions)
+- Emphasize the aspect ratio constraint
+
+## Output Format
+Return ONLY the optimized prompt as a JSON object:
+```json
+{{
+  "prompt": "Your optimized VLM prompt here..."
+}}
+```
+
+## Example Output
+```json
+{{
+  "prompt": "Create a professional scientific diagram illustration in flat 2D vector style. Aspect ratio 4:3. Layout flows left-to-right. On the left side, draw a teal (#66c2a5) cylinder shape labeled 'Dataset D' containing the text '(s, a) pairs'. A bold arrow points right to a blue (#4A90D9) rounded rectangle labeled 'Policy π'. From this box, three thin arrows fan out to the right, each ending at a small gray box. Below, add a subtle annotation 'Action Sampling'. Use clean sans-serif typography. White background. No gradients, no 3D effects, no photorealistic elements. Minimalist professional style suitable for NeurIPS/ICML paper."
+}}
+```
+
+Now generate the optimized prompt:"""
+
+
+# --------------------------------------------------------------------------- #
+# p2g_chunk_renderer_agent
+# Chunk 渲染 Agent：并行调用 VLM 渲染各 chunk 图片
+# 注意：这是一个纯执行 Agent，不使用 LLM prompt
+# --------------------------------------------------------------------------- #
+class p2g_chunk_renderer:
+    """Chunk-Based Pipeline 渲染 Agent
+
+    这是一个纯执行 Agent，不使用 LLM。
+    并行调用 VLM API 渲染各 chunk 图片。
+    输入: chunk_vlm_designs {chunk_id: {prompt, ratio}}
+    输出: chunk_images {chunk_id: {path, render_status, render_time_ms}}
+    """
+    pass  # 无 LLM prompt，纯执行逻辑
+
+
+# --------------------------------------------------------------------------- #
+# p2g_chunk_pptx_composer_agent
+# PPTX 组装 Agent：将渲染好的 chunk 图片组装成 PPTX
+# 注意：这是一个纯执行 Agent，不使用 LLM prompt
+# --------------------------------------------------------------------------- #
+class p2g_chunk_pptx_composer:
+    """Chunk-Based Pipeline PPTX 组装 Agent
+
+    这是一个纯执行 Agent，不使用 LLM。
+    将渲染好的 chunk 图片按照 bbox 位置放置到 PPTX 幻灯片中。
+    输入: chunk_images, chunk_layout_json
+    输出: pptx_output_path
+    """
+    pass  # 无 LLM prompt，纯执行逻辑
+
+
+# --------------------------------------------------------------------------- #
+# Film-Strip Bottom-Up P2G Pipeline
+# 连环画式 Bottom-Up 绘图流程：先生成素材（VLM连环画+PPTX原生形状），再基于实际尺寸布局
+# --------------------------------------------------------------------------- #
+
+# --------------------------------------------------------------------------- #
+# Stage 1: p2g_filmstrip_node_graph_constructor_agent
+# 从 target 构建节点图（nodes + edges），不做布局、不做渲染方式决策
+# --------------------------------------------------------------------------- #
+class FilmStripNodeGraphConstructor:
+    """Film-Strip Pipeline Stage 1: Node Graph Constructor
+
+    从用户描述中构建节点图（nodes + edges），只定义语义结构，不做布局和渲染决策。
+    输入: state.request.target
+    输出: state.node_graph_json {title, global_style, nodes, edges}
+    """
+
+    system_prompt_for_filmstrip_node_graph_constructor = """You are an expert scientific diagram architect specializing in creating clear, professional visualizations for top-tier CS conference papers (NeurIPS, ICML, CVPR, ACL).
+
+Your task is to analyze a research method description and construct a node graph (nodes + edges) that represents the system architecture or workflow. You will NOT do layout or rendering decisions - only define what nodes and edges exist.
+
+## Your Expertise
+- Understanding complex ML/AI pipelines and architectures
+- Identifying key components (modules, data, processes) as nodes
+- Defining relationships and data flows as edges
+- Creating clear semantic descriptions for each component
+
+## Output Requirements
+You must output a valid JSON object following the exact schema provided. The output must be pure JSON without any markdown formatting or code blocks."""
+
+    task_prompt_for_filmstrip_node_graph_constructor = """## Task
+Analyze the following research method description and construct a node graph (nodes + edges) for a scientific diagram.
+
+## Input Description
+{target}
+
+## Node Design Principles
+1. **Node Count**: Create 8-20 nodes (prefer clarity over completeness)
+2. **Node Types**: Identify different roles:
+   - `input`: Input data, datasets, images
+   - `process`: Processing modules, models, algorithms
+   - `output`: Output results, predictions, visualizations
+   - `aux`: Auxiliary components (loss functions, metrics, annotations)
+3. **Node Descriptions**: Each node needs:
+   - `label`: Short name (2-5 words)
+   - `semantic_desc`: What it represents conceptually
+   - `visual_desc`: What it should look like (shape/icon/data visualization)
+4. **Node IDs**: Must be sequential (n1, n2, n3, ...)
+
+## Edge Design Principles
+1. **Edge Types**:
+   - `data_flow`: Data passing from one component to another
+   - `control_flow`: Sequential execution or dependency
+   - `annotation`: Explanatory connection (e.g., "optimized by", "evaluated on")
+2. **Edge IDs**: Must be sequential (e1, e2, e3, ...)
+3. **Direction**: Specify `direction_hint` (e.g., "left_to_right", "top_to_bottom")
+
+## Output Schema
+```json
+{{
+  "title": "Figure Title (concise, descriptive)",
+  "global_style": {{
+    "theme": "scientific_diagram",
+    "palette": {{
+      "primary": "#4A90D9",
+      "accent": "#fc8d62",
+      "text": "#333333"
+    }}
+  }},
+  "nodes": [
+    {{
+      "node_id": "n1",
+      "label": "Input Image",
+      "role": "input",
+      "semantic_desc": "The input RGB image to be processed",
+      "visual_desc": "A sample street scene image (Cityscapes style) showing cars and buildings",
+      "constraints": {{
+        "no_text_inside": false
+      }}
+    }},
+    {{
+      "node_id": "n2",
+      "label": "Encoder",
+      "role": "process",
+      "semantic_desc": "Feature extraction backbone network",
+      "visual_desc": "A rounded rectangle module box with centered text 'Encoder'",
+      "constraints": {{
+        "no_text_inside": false
+      }}
+    }}
+  ],
+  "edges": [
+    {{
+      "edge_id": "e1",
+      "from": "n1",
+      "to": "n2",
+      "edge_type": "data_flow",
+      "label": "",
+      "direction_hint": "left_to_right"
+    }}
+  ]
+}}
+```
+
+## Important Guidelines
+1. **Visual Description Quality**:
+   - For visual/data nodes (images, heatmaps, charts): Describe the actual visual content
+   - For module/process nodes: Describe the shape and text label
+   - Be specific about what should be rendered
+
+2. **Constraints Field**:
+   - `no_text_inside`: Set to `true` if the node should be pure visual (no text labels inside the image)
+   - For most process/module nodes, this should be `false`
+   - For input images, heatmaps, visualizations, this should be `true`
+
+3. **Node Count**: Keep it manageable (8-20 nodes). Merge similar sequential steps if needed.
+
+4. **Edge Labels**: Only add labels if they provide essential information (e.g., "K samples", "gradient")
+
+## Example Nodes
+
+Good input node:
+```json
+{{
+  "node_id": "n1",
+  "label": "Input Image",
+  "role": "input",
+  "semantic_desc": "Original RGB image from Cityscapes dataset",
+  "visual_desc": "A street scene photograph showing urban environment with cars, buildings, and road",
+  "constraints": {{"no_text_inside": true}}
+}}
+```
+
+Good process node:
+```json
+{{
+  "node_id": "n3",
+  "label": "SegFormer",
+  "role": "process",
+  "semantic_desc": "Semantic segmentation model backbone",
+  "visual_desc": "A rounded rectangle with solid blue fill (#4A90D9) and white text 'SegFormer' centered",
+  "constraints": {{"no_text_inside": false}}
+}}
+```
+
+Good output node:
+```json
+{{
+  "node_id": "n5",
+  "label": "Segmentation Map",
+  "role": "output",
+  "semantic_desc": "Per-pixel semantic class predictions",
+  "visual_desc": "A color-coded segmentation mask overlaid on the street scene, with different colors for road, car, building, etc.",
+  "constraints": {{"no_text_inside": true}}
+}}
+```
+
+Now analyze the input and generate the node graph JSON:"""
+
+
+# --------------------------------------------------------------------------- #
+# Stage 2: p2g_filmstrip_render_method_classifier_agent
+# 对 nodes 做渲染策略分类：VLM（具象视觉）vs PPTX（可编辑形状/文本）
+# --------------------------------------------------------------------------- #
+class FilmStripRenderMethodClassifier:
+    """Film-Strip Pipeline Stage 2: Render Method Classifier
+
+    对 Stage 1 的 nodes 做渲染策略分类。
+    输入: state.node_graph_json
+    输出: state.render_plan_json {vlm_nodes, pptx_nodes, by_node}
+    """
+
+    system_prompt_for_filmstrip_render_method_classifier = """You are an expert at classifying scientific diagram elements for optimal rendering.
+
+Your task is to analyze each node in a node graph and decide the best rendering method:
+- **VLM (Vision Language Model)**: For concrete visual content that requires image generation
+- **PPTX (PowerPoint Native)**: For editable shapes, text boxes, and simple geometric elements
+
+## Classification Criteria
+
+### Use VLM for:
+- Input/output images (photos, screenshots, sample data visualizations)
+- Heatmaps, attention maps, feature maps
+- Segmentation masks, depth maps
+- Charts, plots, graphs with data
+- Icons, illustrations, visual metaphors
+- Any node where `visual_desc` describes actual visual content (not just a shape with text)
+- Nodes with `no_text_inside: true`
+
+### Use PPTX for:
+- Module boxes with text labels (e.g., "Encoder", "Decoder", "Loss")
+- Text blocks, titles, annotations
+- Simple geometric shapes (rectangles, circles, arrows)
+- Flow connectors, brackets, grouping boxes
+- Any node that is primarily a labeled container or text element
+- Nodes where the visual is just "a box with text X"
+
+## Output Requirements
+You must output a valid JSON object with the exact schema provided."""
+
+    task_prompt_for_filmstrip_render_method_classifier = """## Task
+Classify each node in the following node graph by rendering method (VLM or PPTX).
+
+## Input Node Graph
+```json
+{node_graph_json}
+```
+
+## Classification Rules (Priority Order)
+1. If `constraints.no_text_inside` is `true` → VLM
+2. If `role` is "input" or "output" AND `visual_desc` mentions image/photo/map/visualization → VLM
+3. If `visual_desc` describes concrete visual content (scene, data visualization, icon) → VLM
+4. If `visual_desc` describes a shape with text label → PPTX
+5. If `role` is "process" and it's just a module box → PPTX
+6. If `role` is "aux" and it's annotation/text → PPTX
+
+## Output Schema
+```json
+{{
+  "vlm_nodes": ["n1", "n2"],
+  "pptx_nodes": ["n3", "n4"],
+  "by_node": {{
+    "n1": {{
+      "render_method": "vlm",
+      "vlm_desc": "Pure visual description for VLM rendering. Describe what the image should show WITHOUT any text labels. Focus on visual content only.",
+      "size_hint": {{"w_px": 360, "h_px": 240, "aspect_ratio": "3:2"}}
+    }},
+    "n3": {{
+      "render_method": "pptx",
+      "pptx_intent": "Description of the PPTX element: shape type, text content, style hints",
+      "size_hint": {{"w_px": 200, "h_px": 80}}
+    }}
+  }}
+}}
+```
+
+## Field Descriptions
+
+### For VLM nodes:
+- `vlm_desc`: A pure visual description for image generation. NO text labels should appear in the generated image. Describe the visual content, colors, composition.
+- `size_hint`: Suggested dimensions. Use aspect ratios like 1:1, 4:3, 3:2, 16:9 based on content type.
+
+### For PPTX nodes:
+- `pptx_intent`: Describe the intended PPTX element - shape type (rectangle, rounded_rectangle, ellipse), text content, and any style hints.
+- `size_hint`: Suggested dimensions based on text length and shape type.
+
+## Size Hint Guidelines
+- Small icons/thumbnails: 80-120px
+- Module boxes: 150-250px width, 60-100px height
+- Input/output images: 240-400px width
+- Feature maps/visualizations: 200-360px
+- Text annotations: based on text length
+
+Now classify each node and generate the render plan JSON:"""
+
+
+class FilmStripVLMGroupPlanner:
+    """Film-Strip Pipeline Stage 3: VLM Group Planner
+
+    对 VLM 节点进行分组，并为每组生成连环画 prompt。
+    输入: state.node_graph_json + state.render_plan_json
+    输出: state.vlm_group_plan_json {groups: [{group_id, node_ids, subject, prompt}]}
+    """
+
+    system_prompt_for_filmstrip_vlm_group_planner = """You are an expert at planning visual consistency groups for scientific diagram generation.
+
+Your task is to group VLM nodes that should be rendered together in a single "film-strip" image to ensure visual consistency.
+
+## Why Grouping Matters
+When generating scientific diagrams, related visual elements (e.g., input image and its segmentation output) must share the same visual style, scene, and subject. By generating them together in one image (as side-by-side panels), we ensure perfect consistency.
+
+## Grouping Principles
+
+### Group Together:
+- Input/output pairs that show the same scene (e.g., RGB image → segmentation mask)
+- Multiple views of the same data (e.g., original → processed → result)
+- Comparison sets (e.g., before/after, method A vs method B)
+- Sequential transformations of the same subject
+- Nodes connected by direct data flow edges that share visual content
+
+### Keep Separate:
+- Unrelated visual content (e.g., a street scene vs. a network architecture icon)
+- Nodes that don't need visual consistency
+- Auxiliary visualizations that are independent
+
+## Group Size Constraints
+- Maximum nodes per group: {max_vlm_group_size} (typically 3-4)
+- If more related nodes exist, split into multiple groups with overlapping context
+- Single-node groups are allowed for independent visuals
+
+## Orphan Node Handling (IMPORTANT)
+- **Every VLM node MUST be assigned to exactly one group**
+- Any VLM node that does not fit into a multi-node visual consistency group MUST be placed in its own single-node group
+- Do NOT leave any VLM node unassigned
+
+## Output Requirements
+You must output a valid JSON object with the exact schema provided."""
+
+    task_prompt_for_filmstrip_vlm_group_planner = """## Task
+Group the VLM nodes and generate a film-strip prompt for each group.
+
+## Input
+
+### Node Graph
+```json
+{node_graph_json}
+```
+
+### Render Plan (VLM nodes to group)
+```json
+{render_plan_json}
+```
+
+## Configuration
+- Maximum nodes per group: {max_vlm_group_size}
+
+## Grouping Instructions
+
+1. **Identify Related Nodes**: Look at edges and semantic relationships to find nodes that should share visual consistency.
+
+2. **Order by Data Flow (CRITICAL)**:
+   - The `node_ids` order in each group determines the panel order (left to right).
+   - **Follow the data flow direction from the Node Graph edges**: upstream nodes (sources/inputs) should come BEFORE downstream nodes (outputs/results).
+   - Example: If edge shows `n1 → n12` (Input Image → Predicted Seg Map), then `node_ids` should be `["n1", "n12"]`, NOT `["n12", "n1"]`.
+   - This ensures logical left-to-right reading: Input → Processing → Output.
+
+3. **Define Subject**: For each group, identify a common visual subject/scene that all panels will share.
+
+4. **Generate Prompt**: Create a detailed prompt for the VLM to generate a film-strip image with multiple panels.
+
+5. **Handle Orphan Nodes**: Any VLM node that cannot be grouped with others for visual consistency MUST be placed in its own single-node group. Every VLM node in `render_plan_json.vlm_nodes` must appear in exactly one group.
+
+## Output Schema
+```json
+{{
+  "groups": [
+    {{
+      "group_id": "g1",
+      "node_ids": ["n1", "n12", "n14"],
+      "subject": "A street scene (Cityscapes style) with cars and pedestrians, consistent lighting and perspective across all panels",
+      "prompt": "You are a scientific illustrator generating images for an academic paper figure.\\n\\nGenerate ONE single image composed of 3 EQUAL-SIZED sub-panels arranged horizontally (side-by-side) with clear white gaps (about 20-30 pixels) between them.\\n\\nSubject: A street scene (Cityscapes style) with cars and pedestrians, consistent lighting and perspective across all panels\\n\\nPanel 1 (Left): The original RGB photograph of the street scene showing cars, pedestrians, buildings, and road.\\nPanel 2 (Middle): The same street scene showing semantic segmentation with distinct colors for each class (road=purple, car=blue, person=red, building=gray, sky=light blue).\\nPanel 3 (Right): The same street scene showing pseudo-label segmentation, similar to Panel 2 but with slightly noisier boundaries to indicate uncertainty.\\n\\nCRITICAL Constraints:\\n- All panels MUST depict the EXACT SAME scene/subject for visual consistency (same viewpoint, same objects, same composition).\\n- Each panel MUST be a SQUARE or near-square frame of EQUAL size.\\n- Content within each panel should be CENTERED and NOT stretched. If the natural aspect ratio differs, add white padding (letterbox/pillarbox) to maintain the square frame without distortion.\\n- Do NOT add any text, labels, numbers, legends, watermarks, or captions inside the image.\\n- Pure visual data only - no annotations.\\n- Use solid pure white (#FFFFFF) background and pure white gaps between panels.\\n- The white gaps between panels must be clearly visible and consistent width."
+    }},
+    {{
+      "group_id": "g2",
+      "node_ids": ["n2"],
+      "subject": "Abstract representation of image-level class labels",
+      "prompt": "You are a scientific illustrator generating images for an academic paper figure.\\n\\nGenerate ONE single image showing a visual representation of image-level classification labels.\\n\\nContent: A compact visual showing multi-label class tags or a multi-hot vector visualization. Show small colored chips or icons representing different semantic classes (e.g., 'car', 'person', 'road') arranged in a clean grid or row.\\n\\nCRITICAL Constraints:\\n- The image should be SQUARE or near-square.\\n- Content should be CENTERED with white padding if needed.\\n- Do NOT add any text, labels, or captions inside the image.\\n- Use solid pure white (#FFFFFF) background.\\n- Clean, minimal scientific illustration style."
+    }}
+  ]
+}}
+```
+
+## Prompt Template
+For each group, generate a prompt following this structure:
+
+```
+You are a scientific illustrator generating images for an academic paper figure.
+
+Generate ONE single image composed of {{panel_count}} EQUAL-SIZED sub-panels arranged horizontally (side-by-side) with clear white gaps (about 20-30 pixels) between them.
+
+Subject: {{subject}}
+
+Panel 1 (Left): {{vlm_desc for first node - following data flow order}}
+Panel 2 (Middle): {{vlm_desc for second node}}
+[... more panels as needed, ordered by data flow ...]
+
+CRITICAL Constraints:
+- All panels MUST depict the EXACT SAME scene/subject for visual consistency (same viewpoint, same objects, same composition).
+- Each panel MUST be a SQUARE or near-square frame of EQUAL size.
+- Content within each panel should be CENTERED and NOT stretched. If the natural aspect ratio differs, add white padding (letterbox/pillarbox) to maintain the square frame without distortion.
+- Do NOT add any text, labels, numbers, legends, watermarks, or captions inside the image.
+- Pure visual data only - no annotations.
+- Use solid pure white (#FFFFFF) background and pure white gaps between panels.
+- The white gaps between panels must be clearly visible and consistent width.
+```
+
+For single-node groups:
+```
+You are a scientific illustrator generating images for an academic paper figure.
+
+Generate ONE single image showing: {{vlm_desc}}
+
+CRITICAL Constraints:
+- The image should be SQUARE or near-square.
+- Content should be CENTERED with white padding if needed to maintain aspect ratio without distortion.
+- Do NOT add any text, labels, numbers, legends, watermarks, or captions inside the image.
+- Use solid pure white (#FFFFFF) background.
+- Clean, minimal scientific illustration style.
+```
+
+## Panel Position Labels
+- 1 panel: (Center) - use single-node template
+- 2 panels: (Left), (Right)
+- 3 panels: (Left), (Middle), (Right)
+- 4 panels: (Far Left), (Middle Left), (Middle Right), (Far Right)
+
+## Important Notes
+- **Data Flow Order**: The `node_ids` order MUST follow the data flow direction from the Node Graph edges (upstream → downstream, input → output)
+- **Complete Coverage**: Every node in `render_plan_json.vlm_nodes` MUST appear in exactly one group
+- Use the `vlm_desc` from `render_plan_json.by_node[node_id].vlm_desc` for each panel description
+- The `subject` should describe the common visual theme that unifies all panels
+- The prompt MUST explicitly require EQUAL-SIZED panels and CENTERED content with padding (not stretching)
+
+Now analyze the VLM nodes and generate the grouping plan:"""
+
+
+class FilmStripPPTXSpecGenerator:
+    """Film-Strip Pipeline Stage 4: PPTX Spec Generator
+
+    为 PPTX 节点生成结构化渲染规格。
+    输入: state.node_graph_json + state.render_plan_json
+    输出: state.pptx_render_specs {node_id: PPTXRenderSpec}
+    """
+
+    system_prompt_for_filmstrip_pptx_spec_generator = """You are an expert at designing PowerPoint shapes and text elements for scientific diagrams.
+
+Your task is to generate detailed rendering specifications for PPTX nodes - elements that will be rendered as native PowerPoint shapes (rectangles, text boxes, etc.) rather than images.
+
+## Supported Element Types
+
+### 1. `rounded_rectangle` (Most Common)
+Best for: Module boxes, process blocks, components with labels
+- Has rounded corners for a modern look
+- Can contain centered text
+- Supports fill color and border
+
+### 2. `rectangle`
+Best for: Simple containers, data blocks, strict geometric shapes
+- Sharp corners
+- Can contain centered text
+- Supports fill color and border
+
+### 3. `text_box`
+Best for: Labels, annotations, titles, descriptions
+- No visible shape boundary (transparent)
+- Pure text element
+- Supports text styling
+
+### 4. `arrow`
+Best for: Directional annotations, flow indicators
+- Currently rendered as styled text box
+- Use for annotation purposes
+
+### 5. `line`
+Best for: Simple connectors, separators
+- Straight line element
+
+## Style Guidelines for Scientific Diagrams
+
+### Color Palette (Professional Scientific Style)
+- **Primary modules**: #4A90D9 (blue), #66c2a5 (teal), #fc8d62 (orange)
+- **Secondary/aux**: #8da0cb (light purple), #e78ac3 (pink), #a6d854 (green)
+- **Loss/error nodes**: #e41a1c (red), #ff7f00 (orange)
+- **Text on dark fill**: #FFFFFF (white)
+- **Text on light/no fill**: #333333 (dark gray)
+- **Borders**: Darker shade of fill color (e.g., #2E5A8C for #4A90D9)
+
+### Font Guidelines
+- **Font family**: "Arial" (universal compatibility)
+- **Module labels**: 12-14pt, bold, center-aligned
+- **Annotations**: 10-12pt, regular
+- **Titles**: 14-16pt, bold
+
+### Shape Sizing Hints
+- **Small module box**: 120-180px width, 50-70px height
+- **Medium module box**: 180-260px width, 70-100px height
+- **Large module box**: 260-350px width, 90-120px height
+- **Text annotation**: Based on text length, typically 100-200px width
+
+## Output Requirements
+You must output a valid JSON object mapping node_id to PPTXRenderSpec."""
+
+    task_prompt_for_filmstrip_pptx_spec_generator = """## Task
+Generate PPTX rendering specifications for all PPTX nodes.
+
+## Input
+
+### Node Graph
+```json
+{node_graph_json}
+```
+
+### Render Plan (PPTX nodes to process)
+```json
+{render_plan_json}
+```
+
+## Instructions
+
+For each node in `render_plan_json.pptx_nodes`, generate a PPTXRenderSpec based on:
+1. The node's `label` from node_graph_json (use as display text)
+2. The node's `role` (input/process/output/aux) to determine styling
+3. The `pptx_intent` from render_plan_json.by_node[node_id] for design guidance
+4. The `size_hint` from render_plan_json.by_node[node_id] for dimensions
+
+## Output Schema
+```json
+{{
+  "n3": {{
+    "element_type": "rounded_rectangle",
+    "text": "SegFormer Backbone",
+    "text_style": {{
+      "font_family": "Arial",
+      "font_size": 14,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true
+    }},
+    "shape_style": {{
+      "fill_color": "#4A90D9",
+      "border_style": "solid",
+      "border_color": "#2E5A8C",
+      "border_width": 1.5
+    }},
+    "auto_fit": "shrink"
+  }},
+  "n5": {{
+    "element_type": "rounded_rectangle",
+    "text": "Decoder",
+    "text_style": {{
+      "font_family": "Arial",
+      "font_size": 12,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true
+    }},
+    "shape_style": {{
+      "fill_color": "#66c2a5",
+      "border_style": "solid",
+      "border_color": "#3A7F73",
+      "border_width": 1.0
+    }},
+    "auto_fit": "shrink"
+  }},
+  "n10": {{
+    "element_type": "rounded_rectangle",
+    "text": "L_cls",
+    "text_style": {{
+      "font_family": "Arial",
+      "font_size": 11,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true
+    }},
+    "shape_style": {{
+      "fill_color": "#e41a1c",
+      "border_style": "solid",
+      "border_color": "#a31515",
+      "border_width": 1.0
+    }},
+    "auto_fit": "shrink"
+  }}
+}}
+```
+
+## Field Descriptions
+
+### element_type (required)
+One of: "rounded_rectangle", "rectangle", "text_box", "arrow", "line"
+- Use "rounded_rectangle" for most module boxes (process, aux nodes)
+- Use "text_box" for pure text annotations without shape background
+- Use "rectangle" for strict geometric containers
+
+### text (required)
+The display text for the element. Usually the node's `label` from node_graph_json.
+- Keep it concise (1-3 words for module boxes)
+- Can use abbreviations for loss functions (e.g., "L_cls", "L_ce")
+
+### text_style (required)
+```json
+{{
+  "font_family": "Arial",
+  "font_size": 12,
+  "color": "#FFFFFF",
+  "alignment": "center",
+  "bold": true,
+  "italic": false
+}}
+```
+- Use white text (#FFFFFF) on dark fills
+- Use dark text (#333333) on light/no fills
+- alignment: "left", "center", or "right"
+
+### shape_style (required)
+```json
+{{
+  "fill_color": "#4A90D9",
+  "border_style": "solid",
+  "border_color": "#2E5A8C",
+  "border_width": 1.5
+}}
+```
+- fill_color: Hex color or null for transparent
+- border_style: "solid", "dashed", or "none"
+- border_color: Hex color (typically darker than fill)
+- border_width: Line width in points (1.0-2.0 typical)
+
+### auto_fit (optional)
+- "shrink": Auto-shrink text to fit shape (recommended)
+- "expand": Auto-expand shape to fit text
+- "none": No auto-fitting
+
+## Role-Based Styling Guidelines
+
+### role: "process" (Main processing modules)
+- element_type: "rounded_rectangle"
+- fill_color: Primary colors (#4A90D9, #66c2a5, #8da0cb)
+- text: Bold, white, centered
+- border: Solid, darker shade
+
+### role: "aux" (Auxiliary elements like losses)
+- element_type: "rounded_rectangle" (smaller)
+- fill_color: Accent colors (#e41a1c for loss, #fc8d62 for auxiliary)
+- text: Bold, white, centered, smaller font
+- border: Solid, darker shade
+
+### role: "input" / "output" (If rendered as PPTX)
+- element_type: "rounded_rectangle" or "text_box"
+- fill_color: Lighter colors or transparent
+- text: Regular or bold
+
+Now generate the PPTX render specs for all PPTX nodes:"""

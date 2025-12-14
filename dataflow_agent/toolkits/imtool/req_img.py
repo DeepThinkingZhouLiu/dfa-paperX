@@ -55,13 +55,42 @@ async def _post_chat_completions(
     log.info(f"POST {url}")
     log.debug(f"payload: {payload}")
 
-    async with httpx.AsyncClient(timeout=httpx.Timeout(timeout), http2=False) as client:
+    # 图像生成需要较长的 read 超时，因为模型推理可能很慢
+    timeout_config = httpx.Timeout(
+        connect=30.0,  # 连接超时 30 秒
+        read=float(timeout),  # 读取超时使用配置的值
+        write=60.0,  # 写入超时 60 秒
+        pool=30.0,  # 连接池超时 30 秒
+    )
+    async with httpx.AsyncClient(timeout=timeout_config, http2=False) as client:
         try:
             resp = await client.post(url, headers=headers, json=payload)
             log.info(f"status={resp.status_code}")
-            log.debug(f"resp.text[:500]={resp.text[:500]}")
+            # 打印更多响应信息用于调试
+            resp_text = resp.text
+            log.info(f"resp.text length={len(resp_text)}")
+            log.debug(f"resp.text[:1000]={resp_text[:1000]}")
             resp.raise_for_status()
-            return resp.json()
+            data = resp.json()
+            # 打印响应结构
+            log.info(f"response keys: {data.keys()}")
+            if "choices" in data and data["choices"]:
+                msg = data["choices"][0].get("message", {})
+                log.info(f"message keys: {list(msg.keys())}")
+                content = msg.get("content", "")
+                log.info(f"content type: {type(content).__name__}, length: {len(str(content)) if content else 0}")
+                # 打印 content 的实际内容（前500字符）- 用 WARNING 级别确保打印
+                if content:
+                    content_preview = str(content)[:500] if len(str(content)) > 500 else str(content)
+                    log.warning(f"[DEBUG] content preview: {content_preview}")
+                    # 如果 content 很短（小于 100 字符），很可能不是 base64 图片，打印警告
+                    if len(str(content)) < 100:
+                        log.warning(f"⚠️ content 太短，可能不是 base64 图片！实际内容: {content}")
+                # 如果 content 是空的，打印完整的 message
+                if not content:
+                    log.warning(f"content is empty! Full message: {msg}")
+                    log.warning(f"Full response: {data}")
+            return data
         except httpx.HTTPStatusError as e:
             log.error(f"HTTPError {e}")
             log.error(f"Response body: {e.response.text}")
@@ -73,7 +102,7 @@ async def call_gemini_image_generation_async(
     api_key: str,
     model: str,
     prompt: str,
-    timeout: int = 120,
+    timeout: int = 300,
 ) -> str:
     """
     纯文生图
@@ -89,7 +118,60 @@ async def call_gemini_image_generation_async(
         "temperature": 0.7,
     }
     data = await _post_chat_completions(api_url, api_key, payload, timeout)
-    return data["choices"][0]["message"]["content"]
+
+    # 调试：打印完整响应结构
+    message = data.get("choices", [{}])[0].get("message", {})
+    content = message.get("content", "")
+    log.debug(f"[call_gemini_image_generation_async] message keys: {message.keys()}")
+    log.debug(f"[call_gemini_image_generation_async] content length: {len(content)}, content[:100]: {content[:100] if content else '(empty)'}")
+
+    # 检查是否有其他可能包含图像的字段
+    if not content:
+        log.warning(f"[call_gemini_image_generation_async] content is empty, checking other fields...")
+        log.warning(f"[call_gemini_image_generation_async] Full message: {message}")
+        log.warning(f"[call_gemini_image_generation_async] All response keys: {list(data.keys())}")
+
+        # 尝试从其他可能的位置获取图像数据
+        # 一些 API 可能使用 message.image 或 message.images
+        if "image" in message:
+            log.info(f"[call_gemini_image_generation_async] Found 'image' field in message")
+            content = message["image"]
+        elif "images" in message:
+            log.info(f"[call_gemini_image_generation_async] Found 'images' field in message")
+            content = message["images"][0] if message["images"] else ""
+        # 一些 API 可能使用 content 数组格式（OpenAI vision 格式）
+        elif isinstance(message.get("content"), list):
+            log.info(f"[call_gemini_image_generation_async] Found list content in message")
+            for item in message["content"]:
+                if isinstance(item, dict):
+                    if item.get("type") == "image_url":
+                        url = item.get("image_url", {}).get("url", "")
+                        if url.startswith("data:"):
+                            # 提取 base64 部分
+                            content = url.split(",", 1)[-1] if "," in url else ""
+                            log.info(f"[call_gemini_image_generation_async] Extracted base64 from image_url")
+                            break
+                    elif item.get("type") == "image" and "data" in item:
+                        content = item["data"]
+                        log.info(f"[call_gemini_image_generation_async] Found image data in content item")
+                        break
+        # 一些 API 可能在 data 字段返回
+        elif "data" in data:
+            log.info(f"[call_gemini_image_generation_async] Found 'data' field in response")
+            if isinstance(data["data"], list) and data["data"]:
+                content = data["data"][0].get("b64_json", "") or data["data"][0].get("url", "")
+        # 检查 choices[0] 是否有其他字段
+        choice = data.get("choices", [{}])[0]
+        if not content:
+            log.warning(f"[call_gemini_image_generation_async] choice keys: {list(choice.keys())}")
+            for key in ["image", "images", "b64_json", "url"]:
+                if key in choice:
+                    log.info(f"[call_gemini_image_generation_async] Found '{key}' in choice")
+                    val = choice[key]
+                    content = val[0] if isinstance(val, list) else val
+                    break
+
+    return content
 
 
 async def call_gemini_image_edit_async(
@@ -98,7 +180,7 @@ async def call_gemini_image_edit_async(
     model: str,
     prompt: str,
     image_path: str,
-    timeout: int = 120,
+    timeout: int = 300,
 ) -> str:
     """
     图像 Edit（输入文本 + 原图 -> 返回新图）
@@ -139,7 +221,7 @@ async def generate_or_edit_and_save_image_async(
     *,
     image_path: Optional[str] = None,
     use_edit: bool = False,
-    timeout: int = 120,
+    timeout: int = 300,
 ) -> str:
     """
     根据开关选择生图或编辑，并将返回的 Base64 图片保存到本地。

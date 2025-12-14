@@ -1,9 +1,9 @@
 {
   "global": {
-    "grid_rows": 5,
+    "grid_rows": 4,
     "grid_cols": 3,
-    "flow_direction": "left-to-right",
-    "notes": "整体采用5行3列布局。Row 0为总览标题；Row 1为数据构建主流程（左至右）；Row 2为分支路由层；Row 3为双方法分支与策略更新（并列）；Row 4为底部范式定位说明。"
+    "flow_direction": "left-to-right-then-down",
+    "notes": "4x3 网格。第1行顶部总览；第2行数据输入与环境/rollout；第3行数据收束与双分支；第4行联合训练与策略输出及图例注释。部分 chunk 采用横向或纵向跨格以体现主干与收束结构。"
   },
   "chunks": [
     {
@@ -12,8 +12,8 @@
       "col": 0,
       "span_row": 1,
       "span_col": 3,
-      "size_hint": "medium",
-      "relation_note": "顶层标题与框架总览，统领全图。"
+      "size_hint": "large",
+      "relation_note": "第1行顶端横跨全宽的范式总览与 IL-RL 背景入口块，作为整图起点。"
     },
     {
       "chunk_id": "c2",
@@ -22,7 +22,7 @@
       "span_row": 1,
       "span_col": 1,
       "size_hint": "medium",
-      "relation_note": "主流程起点，提供专家数据集输入。"
+      "relation_note": "第2行左列，专家数据集 D_expert 输入块，主流程起点。"
     },
     {
       "chunk_id": "c3",
@@ -31,7 +31,7 @@
       "span_row": 1,
       "span_col": 1,
       "size_hint": "medium",
-      "relation_note": "接收专家状态，采样非专家候选动作。"
+      "relation_note": "第2行中列，初始 LLM 策略与非专家动作采样模块，位于 D_expert 与环境之间。"
     },
     {
       "chunk_id": "c4",
@@ -40,52 +40,61 @@
       "span_row": 1,
       "span_col": 1,
       "size_hint": "medium",
-      "relation_note": "环境交互核心，构建Rollout数据集，输出至分支节点。"
+      "relation_note": "第2行右列，环境执行与 D_rollout 构建，承接来自 D_expert 和初始策略的输入。"
     },
     {
       "chunk_id": "c5",
       "row": 2,
-      "col": 0,
+      "col": 1,
       "span_row": 1,
-      "span_col": 3,
+      "span_col": 1,
       "size_hint": "small",
-      "relation_note": "路由节点，将Rollout数据分发至IWM和SR两个分支。"
+      "relation_note": "第3行中列，小型 Early Experience 数据收束/小结块，从上方 D_expert 与 D_rollout 汇合，为下方双分支入口。"
     },
     {
       "chunk_id": "c6",
-      "row": 3,
+      "row": 2,
       "col": 0,
       "span_row": 1,
       "span_col": 1,
-      "size_hint": "large",
-      "relation_note": "分支A（IWM）：基于未来状态预测的隐式世界建模。"
+      "size_hint": "medium",
+      "relation_note": "第3行左列，IWM 分支入口与主体简化视图（可向下延展细节），与中间 Early Experience 数据块相连。"
     },
     {
       "chunk_id": "c7",
+      "row": 2,
+      "col": 2,
+      "span_row": 1,
+      "span_col": 1,
+      "size_hint": "medium",
+      "relation_note": "第3行右列，SR 分支入口与主体简化视图（可向下延展细节），与中间 Early Experience 数据块相连。"
+    },
+    {
+      "chunk_id": "c8",
       "row": 3,
       "col": 1,
       "span_row": 1,
       "span_col": 1,
       "size_hint": "large",
-      "relation_note": "分支B（SR）：基于对比与解释的自我反思模块。"
+      "relation_note": "第4行中列，联合训练与策略更新核心块，来自上方 IWM 与 SR 分支的训练信号在此汇合。"
     },
     {
-      "chunk_id": "c8",
+      "chunk_id": "c9",
       "row": 3,
       "col": 2,
       "span_row": 1,
       "span_col": 1,
       "size_hint": "medium",
-      "relation_note": "汇聚两个分支的信号，进行策略更新与联合训练。"
+      "relation_note": "第4行右列，输出策略与 IL-RL 融合展示块，由联合训练块输出，位于整图终点。"
     },
     {
-      "chunk_id": "c9",
-      "row": 4,
+      "chunk_id": "c10",
+      "row": 3,
       "col": 0,
       "span_row": 1,
-      "span_col": 3,
+      "span_col": 1,
       "size_hint": "small",
-      "relation_note": "底部概念说明，阐述Early Experience在IL与RL之间的桥接作用。"
+      "relation_note": "第4行左列，全局注释与图例块，解释 early experience、IWM、SR 以及视觉符号含义，贴近下部训练与输出区域。"
     }
   ]
 }

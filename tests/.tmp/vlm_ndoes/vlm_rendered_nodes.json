@@ -1,0 +1,97 @@
+{
+  "rendered_nodes": {
+    "n2": {
+      "chunk_id": "c1",
+      "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/vlm_ndoes/chunk1_node2.png",
+      "filename": "chunk1_node2.png"
+    },
+    "n4": {
+      "chunk_id": "c1",
+      "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/vlm_ndoes/chunk1_node4.png",
+      "filename": "chunk1_node4.png"
+    },
+    "n28": {
+      "chunk_id": "c6",
+      "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/vlm_ndoes/chunk6_node28.png",
+      "filename": "chunk6_node28.png"
+    },
+    "n29": {
+      "chunk_id": "c6",
+      "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/vlm_ndoes/chunk6_node29.png",
+      "filename": "chunk6_node29.png"
+    },
+    "n30": {
+      "chunk_id": "c6",
+      "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/vlm_ndoes/chunk6_node30.png",
+      "filename": "chunk6_node30.png"
+    },
+    "n31": {
+      "chunk_id": "c6",
+      "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/vlm_ndoes/chunk6_node31.png",
+      "filename": "chunk6_node31.png"
+    },
+    "n35": {
+      "chunk_id": "c7",
+      "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/vlm_ndoes/chunk7_node35.png",
+      "filename": "chunk7_node35.png"
+    },
+    "n36": {
+      "chunk_id": "c7",
+      "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/vlm_ndoes/chunk7_node36.png",
+      "filename": "chunk7_node36.png"
+    },
+    "n37": {
+      "chunk_id": "c7",
+      "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/vlm_ndoes/chunk7_node37.png",
+      "filename": "chunk7_node37.png"
+    },
+    "n38": {
+      "chunk_id": "c7",
+      "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/vlm_ndoes/chunk7_node38.png",
+      "filename": "chunk7_node38.png"
+    },
+    "n39": {
+      "chunk_id": "c7",
+      "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/vlm_ndoes/chunk7_node39.png",
+      "filename": "chunk7_node39.png"
+    },
+    "n40": {
+      "chunk_id": "c7",
+      "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/vlm_ndoes/chunk7_node40.png",
+      "filename": "chunk7_node40.png"
+    },
+    "n42": {
+      "chunk_id": "c8",
+      "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/vlm_ndoes/chunk8_node42.png",
+      "filename": "chunk8_node42.png"
+    },
+    "n43": {
+      "chunk_id": "c8",
+      "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/vlm_ndoes/chunk8_node43.png",
+      "filename": "chunk8_node43.png"
+    },
+    "n44": {
+      "chunk_id": "c8",
+      "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/vlm_ndoes/chunk8_node44.png",
+      "filename": "chunk8_node44.png"
+    },
+    "n45": {
+      "chunk_id": "c9",
+      "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/vlm_ndoes/chunk9_node45.png",
+      "filename": "chunk9_node45.png"
+    }
+  },
+  "errors": {},
+  "stats": {
+    "total": 51,
+    "success": 16,
+    "failed": 0
+  },
+  "elapsed_seconds": 1763.549917,
+  "config": {
+    "concurrency": 5,
+    "timeout": 180,
+    "bg_method": "edge_floodfill",
+    "bg_threshold": 245
+  }
+}

@@ -1,0 +1,325 @@
+{
+  "title": "Single-Stage Weakly Supervised Segmentation with Localization Token and Memory Bank",
+  "global_style": {
+    "theme": "scientific_diagram",
+    "palette": {
+      "primary": "#4A90D9",
+      "accent": "#fc8d62",
+      "text": "#333333"
+    }
+  },
+  "nodes": [
+    {
+      "node_id": "n1",
+      "label": "Input Image",
+      "role": "input",
+      "semantic_desc": "An RGB training image used for weakly supervised semantic segmentation.",
+      "visual_desc": "A generic natural scene photo (e.g., street/indoor) without any overlaid text or annotations.",
+      "constraints": {
+        "no_text_inside": true
+      }
+    },
+    {
+      "node_id": "n2",
+      "label": "Image-level Labels",
+      "role": "input",
+      "semantic_desc": "Multi-class image-level supervision indicating which semantic categories appear in the image (no pixel masks).",
+      "visual_desc": "A tag/list panel with small class icons (e.g., car, person, road) shown as symbols, not text.",
+      "constraints": {
+        "no_text_inside": true
+      }
+    },
+    {
+      "node_id": "n3",
+      "label": "Patch Tokenizer",
+      "role": "process",
+      "semantic_desc": "Splits the image into smaller patches/tokens (smaller patch size to improve localization granularity).",
+      "visual_desc": "A module box labeled 'Patch Tokenizer' with an inset grid icon representing fine patches.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n4",
+      "label": "Localization Token",
+      "role": "process",
+      "semantic_desc": "A dedicated token injected at the input stage to encourage localization-aware representation learning under weak supervision.",
+      "visual_desc": "A small token vector icon (circle with 'L' symbol) feeding into the backbone alongside patch tokens.",
+      "constraints": {
+        "no_text_inside": true
+      }
+    },
+    {
+      "node_id": "n5",
+      "label": "SegFormer Backbone",
+      "role": "process",
+      "semantic_desc": "Transformer encoder backbone (SegFormer) extracting multi-scale feature maps from tokens.",
+      "visual_desc": "A large rounded rectangle labeled 'SegFormer Backbone' with stacked feature pyramid glyphs inside.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n6",
+      "label": "Adapter Module",
+      "role": "process",
+      "semantic_desc": "Lightweight adaptation layer to improve pixel-level learning capacity without changing the main backbone heavily.",
+      "visual_desc": "A slim plug-in block attached to the backbone output labeled 'Adapter'.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n7",
+      "label": "Classification Head",
+      "role": "process",
+      "semantic_desc": "Image-level classifier operating on global features to match image-level labels (weak supervision).",
+      "visual_desc": "A small module box labeled 'Cls Head' outputting a bar-chart probability vector icon.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n8",
+      "label": "Classification Loss",
+      "role": "aux",
+      "semantic_desc": "Supervises image-level predictions using image-level labels (e.g., multi-label BCE / CE).",
+      "visual_desc": "A diamond-shaped loss node labeled 'L_cls' with a small sigma icon.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n9",
+      "label": "Segmentation Decoder",
+      "role": "process",
+      "semantic_desc": "Decoder transforming backbone feature maps into dense per-pixel segmentation logits.",
+      "visual_desc": "A module box labeled 'Decoder' with an upsampling arrow icon.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n10",
+      "label": "Predicted Segmentation",
+      "role": "output",
+      "semantic_desc": "Model predicted per-pixel semantic map (softmax probabilities or hard labels).",
+      "visual_desc": "A color-coded segmentation mask overlay on the input image with multiple class colors.",
+      "constraints": {
+        "no_text_inside": true
+      }
+    },
+    {
+      "node_id": "n11",
+      "label": "Patch Clustering",
+      "role": "process",
+      "semantic_desc": "Clusters fine-grained patch features to form region/group prototypes supporting pseudo-label generation and pixel-level learning.",
+      "visual_desc": "A clustering diagram icon (points grouped into colored clusters) inside a labeled module box.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n12",
+      "label": "Memory Bank",
+      "role": "aux",
+      "semantic_desc": "Stores and updates feature prototypes/embeddings across iterations to stabilize clustering and pseudo-label quality.",
+      "visual_desc": "A database cylinder icon labeled 'Memory Bank' with arrows indicating enqueue/dequeue.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n13",
+      "label": "Pseudo-label Generator",
+      "role": "process",
+      "semantic_desc": "Generates pseudo pixel-level labels from predictions and/or clustered features guided by image-level labels.",
+      "visual_desc": "A module box labeled 'Pseudo-label Gen' outputting a mask icon with dashed boundaries.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n14",
+      "label": "Pseudo Labels",
+      "role": "aux",
+      "semantic_desc": "Auto-generated pixel-level supervision masks used to train the segmentation branch.",
+      "visual_desc": "A noisy segmentation mask (speckled/partial regions) shown as a dashed-outline colored mask.",
+      "constraints": {
+        "no_text_inside": true
+      }
+    },
+    {
+      "node_id": "n15",
+      "label": "Segmentation CE Loss",
+      "role": "aux",
+      "semantic_desc": "Cross-entropy loss between predicted segmentation and pseudo labels to provide dense supervision.",
+      "visual_desc": "A diamond-shaped loss node labeled 'L_seg (CE)' with a pixel-grid icon.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "e1",
+      "from": "n1",
+      "to": "n3",
+      "edge_type": "data_flow",
+      "label": "RGB",
+      "direction_hint": "left_to_right"
+    },
+    {
+      "edge_id": "e2",
+      "from": "n3",
+      "to": "n5",
+      "edge_type": "data_flow",
+      "label": "patch tokens",
+      "direction_hint": "left_to_right"
+    },
+    {
+      "edge_id": "e3",
+      "from": "n4",
+      "to": "n5",
+      "edge_type": "data_flow",
+      "label": "loc token",
+      "direction_hint": "top_to_bottom"
+    },
+    {
+      "edge_id": "e4",
+      "from": "n5",
+      "to": "n6",
+      "edge_type": "data_flow",
+      "label": "feature maps",
+      "direction_hint": "left_to_right"
+    },
+    {
+      "edge_id": "e5",
+      "from": "n6",
+      "to": "n7",
+      "edge_type": "data_flow",
+      "label": "global features",
+      "direction_hint": "top_to_bottom"
+    },
+    {
+      "edge_id": "e6",
+      "from": "n7",
+      "to": "n8",
+      "edge_type": "data_flow",
+      "label": "class scores",
+      "direction_hint": "left_to_right"
+    },
+    {
+      "edge_id": "e7",
+      "from": "n2",
+      "to": "n8",
+      "edge_type": "data_flow",
+      "label": "weak labels",
+      "direction_hint": "top_to_bottom"
+    },
+    {
+      "edge_id": "e8",
+      "from": "n6",
+      "to": "n9",
+      "edge_type": "data_flow",
+      "label": "multi-scale features",
+      "direction_hint": "left_to_right"
+    },
+    {
+      "edge_id": "e9",
+      "from": "n9",
+      "to": "n10",
+      "edge_type": "data_flow",
+      "label": "seg logits",
+      "direction_hint": "left_to_right"
+    },
+    {
+      "edge_id": "e10",
+      "from": "n6",
+      "to": "n11",
+      "edge_type": "data_flow",
+      "label": "patch features",
+      "direction_hint": "bottom_to_top"
+    },
+    {
+      "edge_id": "e11",
+      "from": "n11",
+      "to": "n12",
+      "edge_type": "data_flow",
+      "label": "cluster prototypes",
+      "direction_hint": "left_to_right"
+    },
+    {
+      "edge_id": "e12",
+      "from": "n12",
+      "to": "n11",
+      "edge_type": "control_flow",
+      "label": "prototype retrieval",
+      "direction_hint": "right_to_left"
+    },
+    {
+      "edge_id": "e13",
+      "from": "n10",
+      "to": "n13",
+      "edge_type": "data_flow",
+      "label": "pred mask",
+      "direction_hint": "top_to_bottom"
+    },
+    {
+      "edge_id": "e14",
+      "from": "n11",
+      "to": "n13",
+      "edge_type": "data_flow",
+      "label": "clusters",
+      "direction_hint": "left_to_right"
+    },
+    {
+      "edge_id": "e15",
+      "from": "n2",
+      "to": "n13",
+      "edge_type": "annotation",
+      "label": "label constraint",
+      "direction_hint": "left_to_right"
+    },
+    {
+      "edge_id": "e16",
+      "from": "n13",
+      "to": "n14",
+      "edge_type": "data_flow",
+      "label": "pseudo mask",
+      "direction_hint": "left_to_right"
+    },
+    {
+      "edge_id": "e17",
+      "from": "n10",
+      "to": "n15",
+      "edge_type": "data_flow",
+      "label": "pixel probs",
+      "direction_hint": "left_to_right"
+    },
+    {
+      "edge_id": "e18",
+      "from": "n14",
+      "to": "n15",
+      "edge_type": "data_flow",
+      "label": "targets",
+      "direction_hint": "top_to_bottom"
+    },
+    {
+      "edge_id": "e19",
+      "from": "n8",
+      "to": "n5",
+      "edge_type": "annotation",
+      "label": "optimize",
+      "direction_hint": "right_to_left"
+    },
+    {
+      "edge_id": "e20",
+      "from": "n15",
+      "to": "n5",
+      "edge_type": "annotation",
+      "label": "optimize",
+      "direction_hint": "right_to_left"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "g1": {
+    "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/filmstrip_p2g_pipeline/filmstrips/g1.png",
+    "render_time_ms": 85531,
+    "status": "ok"
+  },
+  "g2": {
+    "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/filmstrip_p2g_pipeline/filmstrips/g2.png",
+    "render_time_ms": 71024,
+    "status": "ok"
+  }
+}

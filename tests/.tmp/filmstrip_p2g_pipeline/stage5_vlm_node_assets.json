@@ -1,0 +1,30 @@
+{
+  "n1": {
+    "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/filmstrip_p2g_pipeline/vlm_nodes/n1.png",
+    "width_px": 376,
+    "height_px": 389,
+    "source_group_id": "g1",
+    "panel_index": 0
+  },
+  "n10": {
+    "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/filmstrip_p2g_pipeline/vlm_nodes/n10.png",
+    "width_px": 469,
+    "height_px": 390,
+    "source_group_id": "g1",
+    "panel_index": 1
+  },
+  "n14": {
+    "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/filmstrip_p2g_pipeline/vlm_nodes/n14.png",
+    "width_px": 377,
+    "height_px": 389,
+    "source_group_id": "g1",
+    "panel_index": 2
+  },
+  "n2": {
+    "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/filmstrip_p2g_pipeline/vlm_nodes/n2.png",
+    "width_px": 498,
+    "height_px": 483,
+    "source_group_id": "g2",
+    "panel_index": 0
+  }
+}

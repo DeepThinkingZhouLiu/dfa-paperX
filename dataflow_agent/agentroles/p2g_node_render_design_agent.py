@@ -62,23 +62,27 @@ class P2gNodeRenderDesignAgent(BaseAgent):
           "chunk_summary": str,
           "nodes_info": list[dict],  # 包含 node_id, node_type, desc, role
           "semantic_desc": str,
+          "global_style": dict,  # 全局样式配置
         }
         """
         chunk_ctx: Dict[str, Any] = pre_tool_results.get("chunk_ctx", {}) or {}
-        
+
         nodes_info = chunk_ctx.get("nodes_info", [])
-        
+        global_style = chunk_ctx.get("global_style", {})
+
         # 转换为格式化的 JSON 字符串
         nodes_info_str = json.dumps(nodes_info, ensure_ascii=False, indent=2) if nodes_info else "[]"
-        
+        global_style_str = json.dumps(global_style, ensure_ascii=False, indent=2) if global_style else "{}"
+
         params = {
             "chunk_id": chunk_ctx.get("chunk_id", ""),
             "chunk_summary": chunk_ctx.get("chunk_summary", ""),
             "nodes_info": nodes_info_str,
             "semantic_desc": chunk_ctx.get("semantic_desc", ""),
+            "global_style": global_style_str,
         }
-        
-        log.info("[node_render_design] Processing chunk: %s with %d nodes", 
+
+        log.info("[node_render_design] Processing chunk: %s with %d nodes",
                  params["chunk_id"], len(nodes_info))
         return params
 
@@ -188,20 +192,49 @@ async def _process_single_chunk(
         return {"chunk_id": chunk_id, "nodes": [], "error": str(e)}
 
 
+def _get_default_global_style() -> Dict[str, Any]:
+    """获取默认的全局样式配置。
+
+    Returns:
+        全局样式字典，包含主题、配色指导、字体、背景等信息
+    """
+    return {
+        "theme": "Top-tier CS conference scientific illustration style (NeurIPS, ICML, CVPR, ACL). Clean, professional, publication-ready diagrams with clear visual hierarchy.",
+        "color_guidance": {
+            "primary": "Use calm, professional blues as the primary color for main modules and processing blocks.",
+            "secondary": "Use soft warm tones (peach, coral, light orange) for attention mechanisms, special operations, or highlighted elements.",
+            "accent": "Use muted greens or teals for data inputs, datasets, and source elements.",
+            "neutral": "Use light grays and off-whites for backgrounds, containers, and less important elements.",
+            "text": "Use dark gray or navy blue for text to ensure high contrast and readability.",
+            "overall": "Prefer Morandi-style muted, desaturated colors that look professional in academic papers. Avoid overly saturated or neon colors.",
+        },
+        "visual_style": {
+            "design": "Flat 2D vector style, clean lines, no photorealism, no heavy 3D effects.",
+            "shapes": "Use rounded rectangles for modules, circles for states/nodes, straight arrows with clean arrowheads.",
+            "layout": "Prefer horizontal left-to-right flow for main pipelines. Use Manhattan-style routing (90-degree turns) for arrows when needed.",
+            "spacing": "Maintain consistent spacing between elements. Avoid cluttered layouts.",
+        },
+        "background": "Solid white or very light gray. No gradients, no shadows, no textures on background.",
+        "font_family": "Sans-serif fonts (Arial, Helvetica) for clean readability.",
+    }
+
+
 def _build_chunk_context(
     chunk: Dict[str, Any],
     all_nodes: List[Dict[str, Any]],
     node_layout_plan: Dict[str, Any],
     semantic_desc: str,
+    global_style: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """为单个 chunk 构建上下文信息。
-    
+
     Args:
         chunk: semantic_json 中的 chunk 对象
         all_nodes: semantic_json 中的所有 nodes
         node_layout_plan: node_layout_plan 结果，包含 nodes 的 role 信息
         semantic_desc: 整体语义描述
-        
+        global_style: 全局样式配置
+
     Returns:
         chunk 上下文字典
     """
@@ -239,6 +272,7 @@ def _build_chunk_context(
         "chunk_summary": chunk.get("summary", ""),
         "nodes_info": nodes_info,
         "semantic_desc": semantic_desc,
+        "global_style": global_style or _get_default_global_style(),
     }
 
 
@@ -365,12 +399,7 @@ async def p2g_node_render_design_agent(
     # 汇总结果，构建 node_render_design
     node_render_design = {
         "chunks": [],
-        "global_style": {
-            "theme": "NeurIPS-style clean diagram with light background",
-            "color_palette": ["#4A90D9", "#7B68EE", "#50C878", "#FFB347"],
-            "font_family": "Arial",
-            "background": "white",
-        }
+        "global_style": _get_default_global_style(),
     }
     
     for ch_res in chunks_result:

@@ -185,13 +185,13 @@ async def _run_pipeline(state: Paper2GraphState) -> Paper2GraphState:
     }
     
     # 3. 语义构建为 semantic_json
-    state = await p2g_semantic_constructor_agent(state, model_name="gpt-5.1", parser_type="json")
+    state = await p2g_semantic_constructor_agent(state, model_name="gpt-5.1", parser_type="json") #gemini-3-pro-preview
     
     # 4. chunk级布局规划为 layout_plan
-    state = await p2g_layout_chunk_planner_agent(state, model_name="gemini-3-pro-preview", parser_type="json")
+    state = await p2g_layout_chunk_planner_agent(state, model_name="gpt-5.1", parser_type="json")
     
     # 5. 节点级布局规划为 node_layout_plan
-    state = await plan_node_layout_for_all_chunks(state, model_name="gemini-3-pro-preview", parser_type="json")
+    state = await plan_node_layout_for_all_chunks(state, model_name="gpt-5.1", parser_type="json")
     
     # 6. 布局构建为最终的 layout_json（包含完整 bbox 坐标）
     state = await p2g_layout_constructor_agent(state, model_name="gpt-5.1", parser_type="json")
@@ -250,7 +250,7 @@ def test_target_to_layout_json():
         assert key in positions, f"layout_json.positions missing key: {key}"
 
     # 保存生成的内容到 .tmp/layout_pipeline 路径下
-    tmp_dir = os.path.join(os.path.dirname(__file__), '.tmp/layout_pipeline')
+    tmp_dir = os.path.join(os.path.dirname(__file__), '.tmp/layout_pipeline_1129')
     os.makedirs(tmp_dir, exist_ok=True)
     
     # 保存 enriched_description
