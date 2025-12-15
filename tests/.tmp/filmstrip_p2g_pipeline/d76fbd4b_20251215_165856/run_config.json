@@ -1,8 +1,8 @@
 {
-  "run_time": "2025-12-15T16:00:14.323173",
+  "run_time": "2025-12-15T16:58:56.855263",
   "test_target": "\n论文提出的 Early Experience（早期经验）范式，是衔接模仿学习（IL）与强化学习（RL）的核心框架，模型图需突出‘数据构建 - 双方法训练’核心流程：1. 基础输入与数据构建：以专家数据集 D_expert = {(s_i, a_i)}（s_i 为专家状态，a_i 为对应专家动作）为起点，对每个 s_i，从初始 LLM 策略中采样 K 个非专家备选动作 {a_i^1, a_i^2, ..., a_i^K}；在环境中分别执行 a_i（得到未来状态 s_{i+1}）与各 a_i^j（得到未来状态 s_i^j），构建 rollout 三元组数据集 D_rollout = {(s_i, a_i^j, s_i^j)}，以未来状态作为无奖励监督信号。2. 双核心方法分支：① 隐式世界建模（IWM）：输入 D_rollout 中的 (s_i, a_i^j)，让 LLM 策略学习预测对应未来状态 s_i^j，转化为 LLM 的下 token 预测任务，通过负对数似然损失使策略内化环境动态；② 自我反思（SR）：对每个 s_i，对比 a_i 对应的 s_{i+1} 与 a_i^j 对应的 s_i^j，引导 LLM 生成‘专家动作更优’的自然语言解释 c_i^j，构建反思数据集 D_refl = {(s_i, a_i^j, c_i^j)}，联合 D_expert 训练策略，使模型同时预测 c_i^j 与专家动作 a_i。\n",
   "test_target_hash": "d76fbd4b",
-  "stage": "7",
+  "stage": "full",
   "models": {
     "node_graph": "gpt-5.2",
     "edge_planner": "gpt-4o",
@@ -11,10 +11,10 @@
     "pptx_spec": "gpt-5.2",
     "vlm_render": "gemini-3-pro-image-preview"
   },
-  "run_id": "edge_opt_test",
+  "run_id": null,
   "api_config": {
-    "df_api_url": null,
-    "vlm_api_url": null,
-    "vlm_api_source": "DF_API_URL"
+    "df_api_url": "http://123.129.219.111:3000/v1",
+    "vlm_api_url": "https://api.apiyi.com/v1",
+    "vlm_api_source": "VLM_API_URL"
   }
 }

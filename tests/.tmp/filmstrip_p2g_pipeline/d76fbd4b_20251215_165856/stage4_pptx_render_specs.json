@@ -1,0 +1,249 @@
+{
+  "n1": {
+    "element_type": "rounded_rectangle",
+    "text": "Expert Dataset\nD_expert\n(s_i, a_i)",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 12,
+      "color": "#333333",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#FFFFFF",
+      "border_style": "solid",
+      "border_color": "#2E5A8C",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink"
+  },
+  "n2": {
+    "element_type": "rounded_rectangle",
+    "text": "Initial LLM Policy\n(π₀)",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 13,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#4A90D9",
+      "border_style": "solid",
+      "border_color": "#2E5A8C",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink"
+  },
+  "n3": {
+    "element_type": "rounded_rectangle",
+    "text": "Candidate Action Sampler\nSample K Alternatives",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 12,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#66C2A5",
+      "border_style": "solid",
+      "border_color": "#3A7F73",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink"
+  },
+  "n4": {
+    "element_type": "rounded_rectangle",
+    "text": "Environment\nRollouts (Env)",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 13,
+      "color": "#333333",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#FFFFFF",
+      "border_style": "solid",
+      "border_color": "#C8653F",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink"
+  },
+  "n5": {
+    "element_type": "rectangle",
+    "text": "Future-State Signals\ns_{i+1}  vs  s_i^j\n(supervision)",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 12,
+      "color": "#333333",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#F4F6F8",
+      "border_style": "solid",
+      "border_color": "#2E5A8C",
+      "border_width": 1.25
+    },
+    "auto_fit": "shrink"
+  },
+  "n6": {
+    "element_type": "rounded_rectangle",
+    "text": "Rollout Dataset\nD_rollout\n(s_i, a_i^j, s_i^j)",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 12,
+      "color": "#333333",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#FFFFFF",
+      "border_style": "solid",
+      "border_color": "#2E5A8C",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink"
+  },
+  "n7": {
+    "element_type": "rounded_rectangle",
+    "text": "IWM Branch\nPredict Future State",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 12,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#8DA0CB",
+      "border_style": "solid",
+      "border_color": "#5C6C97",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink"
+  },
+  "n8": {
+    "element_type": "rounded_rectangle",
+    "text": "NLL Loss\n(Dynamics)",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 11,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#E41A1C",
+      "border_style": "solid",
+      "border_color": "#A31515",
+      "border_width": 1.25
+    },
+    "auto_fit": "shrink"
+  },
+  "n9": {
+    "element_type": "rectangle",
+    "text": "Expert vs Candidate\nComparator\n(Compare Outcomes)",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 12,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#4A90D9",
+      "border_style": "solid",
+      "border_color": "#2E5A8C",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink"
+  },
+  "n10": {
+    "element_type": "rounded_rectangle",
+    "text": "SR Branch\nGenerate c_i^j",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 12,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#FC8D62",
+      "border_style": "solid",
+      "border_color": "#C8653F",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink"
+  },
+  "n11": {
+    "element_type": "rounded_rectangle",
+    "text": "Reflection Dataset\nD_refl\n(s_i, a_i^j, c_i^j)",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 12,
+      "color": "#333333",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#FFFFFF",
+      "border_style": "solid",
+      "border_color": "#C8653F",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink"
+  },
+  "n12": {
+    "element_type": "rounded_rectangle",
+    "text": "Joint Supervised Training\n(Action + Reflection)",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 14,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#4A90D9",
+      "border_style": "solid",
+      "border_color": "#2E5A8C",
+      "border_width": 2.0
+    },
+    "auto_fit": "shrink"
+  },
+  "n13": {
+    "element_type": "rounded_rectangle",
+    "text": "Updated LLM Policy\n(π)",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 13,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#66C2A5",
+      "border_style": "solid",
+      "border_color": "#3A7F73",
+      "border_width": 1.75
+    },
+    "auto_fit": "shrink"
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "vlm_nodes": [],
+  "pptx_nodes": [
+    "n1",
+    "n2",
+    "n3",
+    "n4",
+    "n5",
+    "n6",
+    "n7",
+    "n8",
+    "n9",
+    "n10",
+    "n11",
+    "n12",
+    "n13"
+  ],
+  "by_node": {
+    "n1": {
+      "render_method": "pptx",
+      "pptx_intent": "Dataset cylinder shape (can be approximated with PowerPoint 'Can' shape). Text: 'Expert Dataset D_expert'. Add subtle internal mini-table/rows as thin gray lines; optionally include a small secondary text '(s_i, a_i)' inside or beneath in smaller font. Style: light fill (white), primary outline (#4A90D9), text color #333.",
+      "size_hint": {
+        "w_px": 240,
+        "h_px": 120
+      }
+    },
+    "n2": {
+      "render_method": "pptx",
+      "pptx_intent": "Rounded rectangle module. Text: 'Initial LLM Policy (π_0)'. Optional small transformer icon can be simplified as a tiny stacked-rectangle glyph on the left inside the box. Style: white fill, primary outline (#4A90D9), medium stroke, text #333.",
+      "size_hint": {
+        "w_px": 240,
+        "h_px": 80
+      }
+    },
+    "n3": {
+      "render_method": "pptx",
+      "pptx_intent": "Rounded rectangle module. Text: 'Sample K Alternatives'. Add a small fan-out glyph (one line splitting into multiple short lines) on the right side inside the box. Style consistent with other modules.",
+      "size_hint": {
+        "w_px": 240,
+        "h_px": 80
+      }
+    },
+    "n4": {
+      "render_method": "pptx",
+      "pptx_intent": "Hexagon (environment symbol). Text: 'Env'. Add two small input arrows on left edge and small 'next-state' icon(s) (e.g., tiny document/state cards) near the right edge. Style: white fill, accent or primary outline, text #333.",
+      "size_hint": {
+        "w_px": 200,
+        "h_px": 120
+      }
+    },
+    "n5": {
+      "render_method": "pptx",
+      "pptx_intent": "Two stacked small rectangles (state cards) grouped, with a right-side bracket indicating 'supervision'. Text inside top card: 's_{i+1}', bottom card: 's_i^j'. Optional small label 'supervision' near bracket in small font. Light gray fills for cards, primary outline.",
+      "size_hint": {
+        "w_px": 240,
+        "h_px": 120
+      }
+    },
+    "n6": {
+      "render_method": "pptx",
+      "pptx_intent": "Dataset cylinder ('Can' shape). Text: 'Rollout Dataset D_rollout'. Include a small example row '(s_i, a_i^j, s_i^j)' in smaller font. Style matches n1.",
+      "size_hint": {
+        "w_px": 260,
+        "h_px": 120
+      }
+    },
+    "n7": {
+      "render_method": "pptx",
+      "pptx_intent": "Rounded rectangle module. Text: 'IWM: Predict Future State'. Add small token-strip icon (a short row of tiny squares/rectangles) inside. Style consistent with modules.",
+      "size_hint": {
+        "w_px": 260,
+        "h_px": 80
+      }
+    },
+    "n8": {
+      "render_method": "pptx",
+      "pptx_intent": "Small pill/rounded capsule shape. Text: 'NLL Loss (Dynamics)' or compact 'NLL'. Add tiny sigma/loss glyph if desired. Accent outline (#fc8d62) to denote loss/aux.",
+      "size_hint": {
+        "w_px": 170,
+        "h_px": 60
+      }
+    },
+    "n9": {
+      "render_method": "pptx",
+      "pptx_intent": "Diamond (decision/comparison) shape. Text: 'Compare Outcomes'. Optionally show two tiny state cards on left within/adjacent and a '>' symbol between, kept simple. Style: white fill, primary outline, text #333.",
+      "size_hint": {
+        "w_px": 240,
+        "h_px": 140
+      }
+    },
+    "n10": {
+      "render_method": "pptx",
+      "pptx_intent": "Rounded rectangle module. Text: 'SR: Generate c_i^j'. Add small chat-bubble icon inside (simple outline bubble). Style consistent with modules.",
+      "size_hint": {
+        "w_px": 240,
+        "h_px": 80
+      }
+    },
+    "n11": {
+      "render_method": "pptx",
+      "pptx_intent": "Dataset cylinder. Text: 'Reflection Dataset D_refl'. Include small example '(s_i, a_i^j, c_i^j)' in smaller font. Style matches other datasets.",
+      "size_hint": {
+        "w_px": 260,
+        "h_px": 120
+      }
+    },
+    "n12": {
+      "render_method": "pptx",
+      "pptx_intent": "Large rounded rectangle module. Text: 'Joint Training (Action + Reflection)'. Add two small output ports on right edge (two small squares/circles) to suggest multitask outputs. Style: white fill, primary outline, slightly thicker stroke.",
+      "size_hint": {
+        "w_px": 320,
+        "h_px": 100
+      }
+    },
+    "n13": {
+      "render_method": "pptx",
+      "pptx_intent": "Rounded rectangle output module. Text: 'Updated Policy (π)'. Add small transformer icon and a small upward arrow indicating improvement. Style consistent with n2; optionally accent arrow (#fc8d62).",
+      "size_hint": {
+        "w_px": 260,
+        "h_px": 80
+      }
+    }
+  }
+}

@@ -2995,6 +2995,9 @@ class FilmStripPPTXSpecGenerator:
 
 Your task is to generate detailed rendering specifications for PPTX nodes - elements that will be rendered as native PowerPoint shapes (rectangles, text boxes, etc.) rather than images.
 
+You are creating camera-ready figures for top-tier ML/CV/NLP conferences (for example NeurIPS, ICML, ICLR, CVPR, ACL).
+All designs must look appropriate as LaTeX paper figures: clean white background, professional and information-dense but not cluttered, with consistent style across nodes.
+
 ## Supported Element Types
 
 ### 1. `rounded_rectangle` (Most Common)
@@ -3014,6 +3017,7 @@ Best for: Labels, annotations, titles, descriptions
 - No visible shape boundary (transparent)
 - Pure text element
 - Supports text styling
+- Do NOT overuse `text_box` for main modules; only use it when a node is a pure annotation without a visual container.
 
 ### 4. `arrow`
 Best for: Directional annotations, flow indicators
@@ -3027,6 +3031,7 @@ Best for: Simple connectors, separators
 ## Style Guidelines for Scientific Diagrams
 
 ### Color Palette (Professional Scientific Style)
+- Overall palette should feel like a top-tier conference figure: 2-4 main colors plus neutral grays.
 - **Primary modules**: #4A90D9 (blue), #66c2a5 (teal), #fc8d62 (orange)
 - **Secondary/aux**: #8da0cb (light purple), #e78ac3 (pink), #a6d854 (green)
 - **Loss/error nodes**: #e41a1c (red), #ff7f00 (orange)
@@ -3041,16 +3046,21 @@ Best for: Simple connectors, separators
 - **Titles**: 14-16pt, bold
 
 ### Shape Sizing Hints
+- Think in terms of reusable size categories, so the figure looks consistent and well-balanced.
 - **Small module box**: 120-180px width, 50-70px height
 - **Medium module box**: 180-260px width, 70-100px height
 - **Large module box**: 260-350px width, 90-120px height
 - **Text annotation**: Based on text length, typically 100-200px width
 
 ## Output Requirements
-You must output a valid JSON object mapping node_id to PPTXRenderSpec."""
+You must output a valid JSON object mapping node_id to PPTXRenderSpec.
+Each spec should make the node visually expressive and clear when placed next to VLM-generated panels, following the same conference-figure style."""
 
     task_prompt_for_filmstrip_pptx_spec_generator = """## Task
 Generate PPTX rendering specifications for all PPTX nodes.
+
+You are designing these specs for camera-ready figures in top-tier ML/CV/NLP conference papers.
+The resulting diagram should look like a clean, information-dense NeurIPS/ICML/ICLR/CVPR/ACL figure when rendered.
 
 ## Input
 
@@ -3071,6 +3081,11 @@ For each node in `render_plan_json.pptx_nodes`, generate a PPTXRenderSpec based 
 2. The node's `role` (input/process/output/aux) to determine styling
 3. The `pptx_intent` from render_plan_json.by_node[node_id] for design guidance
 4. The `size_hint` from render_plan_json.by_node[node_id] for dimensions
+
+When choosing `element_type`:
+- Prefer `rounded_rectangle` or `rectangle` for main modules and meaningful blocks.
+- Use `text_box` only for pure annotations, captions, or titles that should have no visible container.
+- Make sure the overall mix of element types and colors makes the figure visually rich but still clean and readable.
 
 ## Output Schema
 ```json

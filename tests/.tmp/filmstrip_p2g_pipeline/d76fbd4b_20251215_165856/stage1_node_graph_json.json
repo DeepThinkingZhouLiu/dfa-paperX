@@ -1,0 +1,275 @@
+{
+  "title": "Early Experience: Data Construction + Dual-Branch Training (IWM & SR)",
+  "global_style": {
+    "theme": "scientific_diagram",
+    "palette": {
+      "primary": "#4A90D9",
+      "accent": "#fc8d62",
+      "text": "#333333"
+    }
+  },
+  "nodes": [
+    {
+      "node_id": "n1",
+      "label": "Expert Dataset D_expert",
+      "role": "input",
+      "semantic_desc": "Expert demonstrations consisting of state-action pairs (s_i, a_i); provides expert states for candidate sampling and expert actions for supervised training targets.",
+      "visual_desc": "A dataset cylinder labeled 'D_expert' with small rows showing '(s_i, a_i)' examples.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n2",
+      "label": "Initial LLM Policy",
+      "role": "process",
+      "semantic_desc": "Pretrained/initial LLM-based policy; takes state s_i (as text/representation) and outputs an action distribution used to sample non-expert candidate actions.",
+      "visual_desc": "Rounded rectangle module labeled 'Initial LLM Policy (π_0)' with a small transformer icon.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n3",
+      "label": "Candidate Action Sampler",
+      "role": "process",
+      "semantic_desc": "Sampling module; takes each expert state s_i and the initial policy output distribution and samples K alternative non-expert actions {a_i^1...a_i^K}.",
+      "visual_desc": "Rounded rectangle labeled 'Sample K Alternatives' with a small fan-out glyph indicating K samples.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n4",
+      "label": "Environment Rollouts",
+      "role": "process",
+      "semantic_desc": "Environment execution process; takes (s_i, a_i) and (s_i, a_i^j) and returns corresponding next/future states s_{i+1} and s_i^j.",
+      "visual_desc": "Hexagon (environment symbol) labeled 'Env' with two small input arrows and next-state icons.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n5",
+      "label": "Future-State Signals",
+      "role": "aux",
+      "semantic_desc": "Collected future states used as reward-free supervision; aggregates s_{i+1} from expert actions and s_i^j from sampled actions for comparison and prediction targets.",
+      "visual_desc": "Two stacked state cards labeled 's_{i+1}' and 's_i^j' with a bracket indicating 'supervision'.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n6",
+      "label": "Rollout Dataset D_rollout",
+      "role": "input",
+      "semantic_desc": "Rollout triples (s_i, a_i^j, s_i^j) built from executing sampled actions; serves as training data for implicit world modeling.",
+      "visual_desc": "Dataset cylinder labeled 'D_rollout' with a row example '(s_i, a_i^j, s_i^j)'.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n7",
+      "label": "IWM Branch",
+      "role": "process",
+      "semantic_desc": "Implicit World Modeling training branch; takes (s_i, a_i^j) from D_rollout and trains the LLM policy to predict the corresponding future state s_i^j as a next-token prediction problem.",
+      "visual_desc": "Rounded rectangle labeled 'IWM: Predict Future State' with a small 'token' strip icon.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n8",
+      "label": "NLL Loss (Dynamics)",
+      "role": "aux",
+      "semantic_desc": "Negative log-likelihood loss for state prediction; takes predicted future-state tokens and ground-truth s_i^j tokens and outputs a scalar training objective for IWM.",
+      "visual_desc": "Small pill-shaped node labeled 'NLL' with a sigma/loss icon.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n9",
+      "label": "Expert vs Candidate Comparator",
+      "role": "process",
+      "semantic_desc": "Comparison module for self-reflection; takes paired outcomes (s_{i+1} from expert action, s_i^j from candidate action) and forms a contrast signal that expert is better.",
+      "visual_desc": "Diamond (decision/comparison) labeled 'Compare Outcomes' showing two state cards on left and a '>' symbol.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n10",
+      "label": "SR Branch (Explanation Gen)",
+      "role": "process",
+      "semantic_desc": "Self-Reflection generation; takes (s_i, a_i^j) plus comparison context and outputs natural-language critique/explanation c_i^j stating why the expert action is preferable.",
+      "visual_desc": "Rounded rectangle labeled 'SR: Generate c_i^j' with a chat-bubble icon.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n11",
+      "label": "Reflection Dataset D_refl",
+      "role": "input",
+      "semantic_desc": "Reflection pairs/triples (s_i, a_i^j, c_i^j); provides supervised targets for generating self-reflection text conditioned on state and candidate action.",
+      "visual_desc": "Dataset cylinder labeled 'D_refl' with a row example '(s_i, a_i^j, c_i^j)'.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n12",
+      "label": "Joint Supervised Training",
+      "role": "process",
+      "semantic_desc": "Unified training stage; takes D_expert and D_refl and updates the LLM policy to output expert actions a_i and reflections c_i^j (multi-task / joint objective).",
+      "visual_desc": "Large rounded rectangle labeled 'Joint Training (Action + Reflection)' with two output ports.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n13",
+      "label": "Updated LLM Policy",
+      "role": "output",
+      "semantic_desc": "Trained policy after Early Experience; outputs improved action predictions (aligned with expert) and optionally self-reflection text, internalizing environment dynamics via IWM.",
+      "visual_desc": "Rounded rectangle labeled 'Updated Policy (π)' with a transformer icon and a small upward arrow indicating improvement.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "e1",
+      "from": "n1",
+      "from_anchor": "right",
+      "to": "n3",
+      "to_anchor": "left",
+      "edge_type": "data_flow",
+      "label": "",
+      "direction_hint": "left_to_right"
+    },
+    {
+      "edge_id": "e2",
+      "from": "n2",
+      "from_anchor": "right",
+      "to": "n3",
+      "to_anchor": "left",
+      "edge_type": "data_flow",
+      "label": "",
+      "direction_hint": "left_to_right"
+    },
+    {
+      "edge_id": "e3",
+      "from": "n3",
+      "from_anchor": "right",
+      "to": "n4",
+      "to_anchor": "left",
+      "edge_type": "data_flow",
+      "label": "",
+      "direction_hint": "left_to_right"
+    },
+    {
+      "edge_id": "e4",
+      "from": "n4",
+      "from_anchor": "right",
+      "to": "n5",
+      "to_anchor": "left",
+      "edge_type": "data_flow",
+      "label": "",
+      "direction_hint": "left_to_right"
+    },
+    {
+      "edge_id": "e5",
+      "from": "n5",
+      "from_anchor": "right",
+      "to": "n9",
+      "to_anchor": "left",
+      "edge_type": "data_flow",
+      "label": "",
+      "direction_hint": "left_to_right"
+    },
+    {
+      "edge_id": "e6",
+      "from": "n4",
+      "from_anchor": "bottom",
+      "to": "n6",
+      "to_anchor": "top",
+      "edge_type": "data_flow",
+      "label": "",
+      "direction_hint": "top_to_bottom"
+    },
+    {
+      "edge_id": "e7",
+      "from": "n6",
+      "from_anchor": "right",
+      "to": "n7",
+      "to_anchor": "left",
+      "edge_type": "data_flow",
+      "label": "",
+      "direction_hint": "left_to_right"
+    },
+    {
+      "edge_id": "e8",
+      "from": "n7",
+      "from_anchor": "right",
+      "to": "n8",
+      "to_anchor": "left",
+      "edge_type": "data_flow",
+      "label": "",
+      "direction_hint": "left_to_right"
+    },
+    {
+      "edge_id": "e9",
+      "from": "n9",
+      "from_anchor": "right",
+      "to": "n10",
+      "to_anchor": "left",
+      "edge_type": "data_flow",
+      "label": "",
+      "direction_hint": "left_to_right"
+    },
+    {
+      "edge_id": "e10",
+      "from": "n10",
+      "from_anchor": "bottom",
+      "to": "n11",
+      "to_anchor": "top",
+      "edge_type": "data_flow",
+      "label": "",
+      "direction_hint": "top_to_bottom"
+    },
+    {
+      "edge_id": "e11",
+      "from": "n1",
+      "from_anchor": "bottom",
+      "to": "n12",
+      "to_anchor": "top",
+      "edge_type": "data_flow",
+      "label": "",
+      "direction_hint": "top_to_bottom"
+    },
+    {
+      "edge_id": "e12",
+      "from": "n11",
+      "from_anchor": "right",
+      "to": "n12",
+      "to_anchor": "left",
+      "edge_type": "data_flow",
+      "label": "",
+      "direction_hint": "left_to_right"
+    },
+    {
+      "edge_id": "e13",
+      "from": "n12",
+      "from_anchor": "right",
+      "to": "n13",
+      "to_anchor": "left",
+      "edge_type": "data_flow",
+      "label": "",
+      "direction_hint": "left_to_right"
+    }
+  ]
+}
