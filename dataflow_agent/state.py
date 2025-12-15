@@ -428,12 +428,30 @@ class FilmStripP2GState(MainState):
     request: FilmStripP2GRequest = field(default_factory=FilmStripP2GRequest)
 
     # ==================== Stage 1: Node Graph ====================
+    # Stage 1A (node_graph_constructor): 生成 nodes，edges=[]
+    # Stage 1B (edge_planner): 填充 edges，包含 from_anchor/to_anchor
     node_graph_json: Dict[str, Any] = field(default_factory=dict)
     # {
     #   "title": "...",
     #   "global_style": {...},
-    #   "nodes": [{...}],
-    #   "edges": [{...}]
+    #   "nodes": [{
+    #     "node_id": "n1",
+    #     "label": "...",
+    #     "role": "input|process|output|aux",
+    #     "semantic_desc": "...",
+    #     "visual_desc": "...",
+    #     "constraints": {"no_text_inside": false}
+    #   }],
+    #   "edges": [{
+    #     "edge_id": "e1",
+    #     "from": "n1",
+    #     "from_anchor": "left|right|top|bottom",  # 可选，绘图提示
+    #     "to": "n2",
+    #     "to_anchor": "left|right|top|bottom",    # 可选，绘图提示
+    #     "edge_type": "data_flow|control_flow|annotation",
+    #     "label": "",
+    #     "direction_hint": "left_to_right|top_to_bottom|..."
+    #   }]
     # }
 
     # ==================== Stage 2: Render Plan ====================

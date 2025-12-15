@@ -1,209 +1,228 @@
 {
-  "n3": {
-    "element_type": "rounded_rectangle",
-    "text": "Patch Embedding\n(Small Patches)",
+  "n1": {
+    "element_type": "rectangle",
+    "text": "Expert Dataset D_expert",
     "text_style": {
       "font_family": "Arial",
-      "font_size": 12,
-      "color": "#FFFFFF",
+      "font_size": 13,
+      "color": "#333333",
       "alignment": "center",
       "bold": true,
       "italic": false
     },
     "shape_style": {
-      "fill_color": "#4A90D9",
+      "fill_color": "#D9E9F8",
       "border_style": "solid",
       "border_color": "#2E5A8C",
       "border_width": 1.5
     },
     "auto_fit": "shrink"
   },
-  "n4": {
+  "n2": {
     "element_type": "rounded_rectangle",
-    "text": "Localization\nToken",
+    "text": "Environment",
     "text_style": {
       "font_family": "Arial",
-      "font_size": 12,
-      "color": "#FFFFFF",
+      "font_size": 14,
+      "color": "#333333",
       "alignment": "center",
       "bold": true,
       "italic": false
     },
     "shape_style": {
-      "fill_color": "#fc8d62",
+      "fill_color": "#D9E9F8",
       "border_style": "solid",
-      "border_color": "#C46B4A",
+      "border_color": "#2E5A8C",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink"
+  },
+  "n3": {
+    "element_type": "rounded_rectangle",
+    "text": "Initial LLM Policy",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 14,
+      "color": "#333333",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#D9E9F8",
+      "border_style": "solid",
+      "border_color": "#2E5A8C",
       "border_width": 1.5
     },
     "auto_fit": "shrink"
   },
   "n5": {
     "element_type": "rounded_rectangle",
-    "text": "SegFormer\nBackbone",
+    "text": "Expert Action Rollout",
     "text_style": {
       "font_family": "Arial",
-      "font_size": 14,
-      "color": "#FFFFFF",
+      "font_size": 13,
+      "color": "#333333",
       "alignment": "center",
       "bold": true,
       "italic": false
     },
     "shape_style": {
-      "fill_color": "#4A90D9",
+      "fill_color": "#D9E9F8",
       "border_style": "solid",
       "border_color": "#2E5A8C",
-      "border_width": 1.75
+      "border_width": 1.5
     },
     "auto_fit": "shrink"
   },
   "n6": {
     "element_type": "rounded_rectangle",
-    "text": "Adapter\nModule",
+    "text": "Alt Action Rollouts",
     "text_style": {
       "font_family": "Arial",
-      "font_size": 12,
-      "color": "#FFFFFF",
+      "font_size": 13,
+      "color": "#333333",
       "alignment": "center",
       "bold": true,
       "italic": false
     },
     "shape_style": {
-      "fill_color": "#fc8d62",
+      "fill_color": "#D9E9F8",
       "border_style": "solid",
-      "border_color": "#C46B4A",
+      "border_color": "#2E5A8C",
       "border_width": 1.5
     },
     "auto_fit": "shrink"
   },
   "n7": {
-    "element_type": "rounded_rectangle",
-    "text": "Classification\nHead",
+    "element_type": "rectangle",
+    "text": "Rollout Dataset D_rollout",
     "text_style": {
       "font_family": "Arial",
-      "font_size": 12,
-      "color": "#FFFFFF",
+      "font_size": 13,
+      "color": "#333333",
       "alignment": "center",
       "bold": true,
       "italic": false
     },
     "shape_style": {
-      "fill_color": "#8da0cb",
+      "fill_color": "#D9E9F8",
       "border_style": "solid",
-      "border_color": "#5F6F9B",
+      "border_color": "#2E5A8C",
       "border_width": 1.5
     },
     "auto_fit": "shrink"
   },
   "n8": {
     "element_type": "rounded_rectangle",
-    "text": "L_cls",
+    "text": "Implicit World Modeling",
     "text_style": {
       "font_family": "Arial",
-      "font_size": 12,
-      "color": "#FFFFFF",
+      "font_size": 13,
+      "color": "#333333",
       "alignment": "center",
       "bold": true,
       "italic": false
     },
     "shape_style": {
-      "fill_color": "#e41a1c",
+      "fill_color": "#D9E9F8",
       "border_style": "solid",
-      "border_color": "#A31515",
+      "border_color": "#2E5A8C",
       "border_width": 1.5
     },
     "auto_fit": "shrink"
   },
-  "n9": {
+  "n10": {
     "element_type": "rounded_rectangle",
-    "text": "Segmentation\nDecoder",
+    "text": "NLL Loss (IWM)",
     "text_style": {
       "font_family": "Arial",
       "font_size": 12,
-      "color": "#FFFFFF",
+      "color": "#333333",
       "alignment": "center",
       "bold": true,
       "italic": false
     },
     "shape_style": {
-      "fill_color": "#66c2a5",
+      "fill_color": "#FBE2D7",
       "border_style": "solid",
-      "border_color": "#3A7F73",
+      "border_color": "#C65F3C",
       "border_width": 1.5
     },
     "auto_fit": "shrink"
   },
   "n11": {
     "element_type": "rounded_rectangle",
-    "text": "Patch\nClustering",
-    "text_style": {
-      "font_family": "Arial",
-      "font_size": 12,
-      "color": "#FFFFFF",
-      "alignment": "center",
-      "bold": true,
-      "italic": false
-    },
-    "shape_style": {
-      "fill_color": "#8da0cb",
-      "border_style": "solid",
-      "border_color": "#5F6F9B",
-      "border_width": 1.5
-    },
-    "auto_fit": "shrink"
-  },
-  "n12": {
-    "element_type": "rounded_rectangle",
-    "text": "Memory\nBank",
+    "text": "Self-Reflection Generator",
     "text_style": {
       "font_family": "Arial",
       "font_size": 13,
-      "color": "#FFFFFF",
+      "color": "#333333",
       "alignment": "center",
       "bold": true,
       "italic": false
     },
     "shape_style": {
-      "fill_color": "#fc8d62",
+      "fill_color": "#D9E9F8",
       "border_style": "solid",
-      "border_color": "#C46B4A",
+      "border_color": "#2E5A8C",
       "border_width": 1.5
     },
     "auto_fit": "shrink"
   },
   "n13": {
-    "element_type": "rounded_rectangle",
-    "text": "Pseudo-label\nGenerator",
+    "element_type": "rectangle",
+    "text": "Reflection Dataset D_refl",
     "text_style": {
       "font_family": "Arial",
-      "font_size": 12,
-      "color": "#FFFFFF",
+      "font_size": 13,
+      "color": "#333333",
       "alignment": "center",
       "bold": true,
       "italic": false
     },
     "shape_style": {
-      "fill_color": "#66c2a5",
+      "fill_color": "#D9E9F8",
       "border_style": "solid",
-      "border_color": "#3A7F73",
+      "border_color": "#2E5A8C",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink"
+  },
+  "n14": {
+    "element_type": "rounded_rectangle",
+    "text": "Joint Training Objective",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 13,
+      "color": "#333333",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#D9E9F8",
+      "border_style": "solid",
+      "border_color": "#2E5A8C",
       "border_width": 1.5
     },
     "auto_fit": "shrink"
   },
   "n15": {
     "element_type": "rounded_rectangle",
-    "text": "L_ce",
+    "text": "Updated LLM Policy",
     "text_style": {
       "font_family": "Arial",
-      "font_size": 12,
-      "color": "#FFFFFF",
+      "font_size": 14,
+      "color": "#333333",
       "alignment": "center",
       "bold": true,
       "italic": false
     },
     "shape_style": {
-      "fill_color": "#e41a1c",
+      "fill_color": "#D9E9F8",
       "border_style": "solid",
-      "border_color": "#A31515",
+      "border_color": "#2E5A8C",
       "border_width": 1.5
     },
     "auto_fit": "shrink"

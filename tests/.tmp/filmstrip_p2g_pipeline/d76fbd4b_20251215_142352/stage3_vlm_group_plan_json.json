@@ -1,0 +1,14 @@
+{
+  "groups": [
+    {
+      "group_id": "g1",
+      "node_ids": [
+        "n4",
+        "n9",
+        "n12"
+      ],
+      "subject": "Abstract representation of action tokens and their outcomes",
+      "prompt": "You are a scientific illustrator generating images for an academic paper figure.\n\nGenerate ONE single image composed of 3 EQUAL-SIZED sub-panels arranged horizontally (side-by-side) with clear white gaps (about 20-30 pixels) between them.\n\nSubject: Abstract representation of action tokens and their outcomes\n\nPanel 1 (Left): A compact fan-out stack of small rounded token cards arranged diagonally, suggesting multiple candidate actions. Use 5–7 tiny pill/rect tokens with subtle shadows; each token has abstract glyph marks (not readable text). Scientific flat style, primary blue accents with light grey background.\nPanel 2 (Middle): A short horizontal strip of 6–10 small rectangular token blocks forming a sequence, with subtle variation in shades of blue/grey. No readable characters; just abstract marks or blanks to imply tokens. Clean scientific diagram style on transparent/white background.\nPanel 3 (Right): A speech bubble containing several grey placeholder lines representing text, intentionally blurred/unreadable. Minimal flat style, light fill with a primary blue outline; small tail on the bubble.\n\nCRITICAL Constraints:\n- All panels MUST depict the EXACT SAME scene/subject for visual consistency (same viewpoint, same objects, same composition).\n- Each panel MUST be a SQUARE or near-square frame of EQUAL size.\n- Content within each panel should be CENTERED and NOT stretched. If the natural aspect ratio differs, add white padding (letterbox/pillarbox) to maintain the square frame without distortion.\n- Do NOT add any text, labels, numbers, legends, watermarks, or captions inside the image.\n- Pure visual data only - no annotations.\n- Use solid pure white (#FFFFFF) background and pure white gaps between panels.\n- The white gaps between panels must be clearly visible and consistent width."
+    }
+  ]
+}

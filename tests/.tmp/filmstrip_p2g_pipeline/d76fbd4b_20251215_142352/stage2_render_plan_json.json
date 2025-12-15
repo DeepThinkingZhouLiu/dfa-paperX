@@ -1,0 +1,146 @@
+{
+  "vlm_nodes": [
+    "n4",
+    "n9",
+    "n12"
+  ],
+  "pptx_nodes": [
+    "n1",
+    "n2",
+    "n3",
+    "n5",
+    "n6",
+    "n7",
+    "n8",
+    "n10",
+    "n11",
+    "n13",
+    "n14",
+    "n15"
+  ],
+  "by_node": {
+    "n1": {
+      "render_method": "pptx",
+      "pptx_intent": "Dataset cylinder (can shape) with editable text label: 'Expert Dataset D_expert'. Optional tiny rows of example tuples can be omitted or shown as small grey lines for detail. Fill primary light blue (#4A90D9 at ~15-25% tint), outline #4A90D9, text #333333.",
+      "size_hint": {
+        "w_px": 220,
+        "h_px": 120
+      }
+    },
+    "n2": {
+      "render_method": "pptx",
+      "pptx_intent": "Rounded rectangle module with text 'Environment'. Add a small simple icon in corner (grid/world) using PPTX shapes (thin lines). Fill light blue tint, outline primary blue, text #333333.",
+      "size_hint": {
+        "w_px": 210,
+        "h_px": 80
+      }
+    },
+    "n3": {
+      "render_method": "pptx",
+      "pptx_intent": "Rounded rectangle module with text 'Initial LLM Policy' (or 'LLM Policy (init)' if preferred). Optional small transformer-stack icon using simple stacked rectangles. Fill light blue tint, outline primary blue.",
+      "size_hint": {
+        "w_px": 240,
+        "h_px": 85
+      }
+    },
+    "n4": {
+      "render_method": "vlm",
+      "vlm_desc": "A compact fan-out stack of small rounded token cards arranged diagonally, suggesting multiple candidate actions. Use 5–7 tiny pill/rect tokens with subtle shadows; each token has abstract glyph marks (not readable text). Scientific flat style, primary blue accents with light grey background.",
+      "size_hint": {
+        "w_px": 280,
+        "h_px": 160,
+        "aspect_ratio": "7:4"
+      }
+    },
+    "n5": {
+      "render_method": "pptx",
+      "pptx_intent": "Rounded rectangle module with editable text 'Expert Action Rollout' (or 'Execute a_i'). Include a small decorative arrow glyph inside via PPTX icon/shape. Fill light blue tint, outline primary blue.",
+      "size_hint": {
+        "w_px": 230,
+        "h_px": 80
+      }
+    },
+    "n6": {
+      "render_method": "pptx",
+      "pptx_intent": "Rounded rectangle module with text 'Alt Action Rollouts' (or 'Execute a_i^j (j=1..K)'). Add small multi-branch icon using 1-to-3 split arrows. Fill light blue tint, outline primary blue.",
+      "size_hint": {
+        "w_px": 260,
+        "h_px": 85
+      }
+    },
+    "n7": {
+      "render_method": "pptx",
+      "pptx_intent": "Dataset cylinder with editable text 'Rollout Dataset D_rollout'. Optionally add faint internal lines indicating rows. Fill light blue tint, outline primary blue.",
+      "size_hint": {
+        "w_px": 240,
+        "h_px": 125
+      }
+    },
+    "n8": {
+      "render_method": "pptx",
+      "pptx_intent": "Rounded rectangle module with text 'Implicit World Modeling' (or 'IWM'). Add a simple tiny schematic icon (arrow from one small block to another) in corner using PPTX shapes. Fill light blue tint, outline primary blue.",
+      "size_hint": {
+        "w_px": 260,
+        "h_px": 85
+      }
+    },
+    "n9": {
+      "render_method": "vlm",
+      "vlm_desc": "A short horizontal strip of 6–10 small rectangular token blocks forming a sequence, with subtle variation in shades of blue/grey. No readable characters; just abstract marks or blanks to imply tokens. Clean scientific diagram style on transparent/white background.",
+      "size_hint": {
+        "w_px": 260,
+        "h_px": 90,
+        "aspect_ratio": "3:1"
+      }
+    },
+    "n10": {
+      "render_method": "pptx",
+      "pptx_intent": "Small hexagon (or small rounded rectangle) labeled 'NLL Loss (IWM)' or compact 'NLL'. Optional tiny sigma/penalty icon as simple line art. Accent color #fc8d62 for outline or fill tint; text #333333.",
+      "size_hint": {
+        "w_px": 150,
+        "h_px": 90
+      }
+    },
+    "n11": {
+      "render_method": "pptx",
+      "pptx_intent": "Rounded rectangle module with text 'Self-Reflection Generator' (or 'Self-Reflection (SR)'). Add a small speech-bubble icon using PPTX shapes. Fill light blue tint, outline primary blue.",
+      "size_hint": {
+        "w_px": 280,
+        "h_px": 85
+      }
+    },
+    "n12": {
+      "render_method": "vlm",
+      "vlm_desc": "A speech bubble containing several grey placeholder lines representing text, intentionally blurred/unreadable. Minimal flat style, light fill with a primary blue outline; small tail on the bubble.",
+      "size_hint": {
+        "w_px": 280,
+        "h_px": 160,
+        "aspect_ratio": "7:4"
+      }
+    },
+    "n13": {
+      "render_method": "pptx",
+      "pptx_intent": "Dataset cylinder with editable text 'Reflection Dataset D_refl'. Optional faint internal row lines. Fill light blue tint, outline primary blue.",
+      "size_hint": {
+        "w_px": 250,
+        "h_px": 125
+      }
+    },
+    "n14": {
+      "render_method": "pptx",
+      "pptx_intent": "Rounded rectangle module with text 'Joint Training Objective' (or 'Joint Training'). Include two small task icons (a small token block + small speech bubble) using PPTX shapes. Fill light blue tint, outline primary blue.",
+      "size_hint": {
+        "w_px": 290,
+        "h_px": 90
+      }
+    },
+    "n15": {
+      "render_method": "pptx",
+      "pptx_intent": "Rounded rectangle module with text 'Updated LLM Policy' (or 'LLM Policy (trained)'). Add a small upward arrow or badge using PPTX shapes. Fill light blue tint, outline primary blue.",
+      "size_hint": {
+        "w_px": 260,
+        "h_px": 85
+      }
+    }
+  }
+}

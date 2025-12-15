@@ -2469,56 +2469,57 @@ class p2g_chunk_pptx_composer:
 # --------------------------------------------------------------------------- #
 
 # --------------------------------------------------------------------------- #
-# Stage 1: p2g_filmstrip_node_graph_constructor_agent
-# 从 target 构建节点图（nodes + edges），不做布局、不做渲染方式决策
+# Stage 1A: p2g_filmstrip_node_graph_constructor_agent
+# 从 target 构建节点图（只有 nodes，edges 置空），不做布局、不做渲染方式决策
 # --------------------------------------------------------------------------- #
 class FilmStripNodeGraphConstructor:
-    """Film-Strip Pipeline Stage 1: Node Graph Constructor
+    """Film-Strip Pipeline Stage 1A: Node Graph Constructor (Nodes Only)
 
-    从用户描述中构建节点图（nodes + edges），只定义语义结构，不做布局和渲染决策。
+    从用户描述中构建节点图（只有 nodes，edges 置空），只定义语义结构，不做布局和渲染决策。
     输入: state.request.target
-    输出: state.node_graph_json {title, global_style, nodes, edges}
+    输出: state.node_graph_json {title, global_style, nodes, edges=[]}
+
+    注意：edges 由 Stage1B (FilmStripEdgePlanner) 单独生成。
     """
 
     system_prompt_for_filmstrip_node_graph_constructor = """You are an expert scientific diagram architect specializing in creating clear, professional visualizations for top-tier CS conference papers (NeurIPS, ICML, CVPR, ACL).
 
-Your task is to analyze a research method description and construct a node graph (nodes + edges) that represents the system architecture or workflow. You will NOT do layout or rendering decisions - only define what nodes and edges exist.
+Your task is to analyze a research method description and identify the key nodes (components) that should appear in the diagram. You will NOT define edges (connections) - that will be done in a separate stage. You will NOT do layout or rendering decisions - only define what nodes exist.
 
 ## Your Expertise
 - Understanding complex ML/AI pipelines and architectures
 - Identifying key components (modules, data, processes) as nodes
-- Defining relationships and data flows as edges
 - Creating clear semantic descriptions for each component
+- Designing nodes with appropriate granularity for readability
 
 ## Output Requirements
-You must output a valid JSON object following the exact schema provided. The output must be pure JSON without any markdown formatting or code blocks."""
+You must output a valid JSON object following the exact schema provided. The output must be pure JSON without any markdown formatting or code blocks.
+
+IMPORTANT: The "edges" field MUST be an empty array []. Edge connections will be defined in a separate stage."""
 
     task_prompt_for_filmstrip_node_graph_constructor = """## Task
-Analyze the following research method description and construct a node graph (nodes + edges) for a scientific diagram.
+Analyze the following research method description and identify the nodes (components) for a scientific diagram.
+
+**IMPORTANT**: You are ONLY responsible for defining nodes. The "edges" field MUST be an empty array [].
 
 ## Input Description
 {target}
 
 ## Node Design Principles
 1. **Node Count**: Create 8-20 nodes (prefer clarity over completeness)
-2. **Node Types**: Identify different roles:
+2. **Node Granularity**: Focus on readability - avoid splitting mechanism details into too many auxiliary nodes
+   - Group related sub-components into a single node when they serve one conceptual purpose
+   - Each node should represent a meaningful, self-contained unit
+3. **Node Types**: Identify different roles:
    - `input`: Input data, datasets, images
    - `process`: Processing modules, models, algorithms
    - `output`: Output results, predictions, visualizations
-   - `aux`: Auxiliary components (loss functions, metrics, annotations)
-3. **Node Descriptions**: Each node needs:
+   - `aux`: Auxiliary components (loss functions, metrics, annotations) - use sparingly
+4. **Node Descriptions**: Each node needs:
    - `label`: Short name (2-5 words)
-   - `semantic_desc`: What it represents conceptually
+   - `semantic_desc`: What it represents conceptually, written in an input/output oriented way to help downstream edge planning
    - `visual_desc`: What it should look like (shape/icon/data visualization)
-4. **Node IDs**: Must be sequential (n1, n2, n3, ...)
-
-## Edge Design Principles
-1. **Edge Types**:
-   - `data_flow`: Data passing from one component to another
-   - `control_flow`: Sequential execution or dependency
-   - `annotation`: Explanatory connection (e.g., "optimized by", "evaluated on")
-2. **Edge IDs**: Must be sequential (e1, e2, e3, ...)
-3. **Direction**: Specify `direction_hint` (e.g., "left_to_right", "top_to_bottom")
+5. **Node IDs**: Must be sequential (n1, n2, n3, ...)
 
 ## Output Schema
 ```json
@@ -2537,7 +2538,7 @@ Analyze the following research method description and construct a node graph (no
       "node_id": "n1",
       "label": "Input Image",
       "role": "input",
-      "semantic_desc": "The input RGB image to be processed",
+      "semantic_desc": "The input RGB image to be processed; outputs raw pixel data to downstream feature extractors",
       "visual_desc": "A sample street scene image (Cityscapes style) showing cars and buildings",
       "constraints": {{
         "no_text_inside": false
@@ -2547,23 +2548,14 @@ Analyze the following research method description and construct a node graph (no
       "node_id": "n2",
       "label": "Encoder",
       "role": "process",
-      "semantic_desc": "Feature extraction backbone network",
+      "semantic_desc": "Feature extraction backbone network; takes raw image input and outputs multi-scale feature maps",
       "visual_desc": "A rounded rectangle module box with centered text 'Encoder'",
       "constraints": {{
         "no_text_inside": false
       }}
     }}
   ],
-  "edges": [
-    {{
-      "edge_id": "e1",
-      "from": "n1",
-      "to": "n2",
-      "edge_type": "data_flow",
-      "label": "",
-      "direction_hint": "left_to_right"
-    }}
-  ]
+  "edges": []
 }}
 ```
 
@@ -2573,14 +2565,19 @@ Analyze the following research method description and construct a node graph (no
    - For module/process nodes: Describe the shape and text label
    - Be specific about what should be rendered
 
-2. **Constraints Field**:
+2. **Semantic Description Quality** (Important for downstream edge planning):
+   - Write semantic_desc in an input/output oriented way
+   - Mention what the node takes as input and what it produces as output
+   - Example: "takes feature maps, outputs pixel logits" instead of just "decoder module"
+
+3. **Constraints Field**:
    - `no_text_inside`: Set to `true` if the node should be pure visual (no text labels inside the image)
    - For most process/module nodes, this should be `false`
    - For input images, heatmaps, visualizations, this should be `true`
 
-3. **Node Count**: Keep it manageable (8-20 nodes). Merge similar sequential steps if needed.
+4. **Node Count**: Keep it manageable (8-20 nodes). Merge similar sequential steps if needed.
 
-4. **Edge Labels**: Only add labels if they provide essential information (e.g., "K samples", "gradient")
+5. **CRITICAL**: The "edges" field MUST be an empty array []. Do NOT define any edges.
 
 ## Example Nodes
 
@@ -2590,7 +2587,7 @@ Good input node:
   "node_id": "n1",
   "label": "Input Image",
   "role": "input",
-  "semantic_desc": "Original RGB image from Cityscapes dataset",
+  "semantic_desc": "Original RGB image from Cityscapes dataset; provides raw visual input to the segmentation pipeline",
   "visual_desc": "A street scene photograph showing urban environment with cars, buildings, and road",
   "constraints": {{"no_text_inside": true}}
 }}
@@ -2602,7 +2599,7 @@ Good process node:
   "node_id": "n3",
   "label": "SegFormer",
   "role": "process",
-  "semantic_desc": "Semantic segmentation model backbone",
+  "semantic_desc": "Semantic segmentation model backbone; takes input image and outputs multi-scale feature representations",
   "visual_desc": "A rounded rectangle with solid blue fill (#4A90D9) and white text 'SegFormer' centered",
   "constraints": {{"no_text_inside": false}}
 }}
@@ -2614,13 +2611,130 @@ Good output node:
   "node_id": "n5",
   "label": "Segmentation Map",
   "role": "output",
-  "semantic_desc": "Per-pixel semantic class predictions",
+  "semantic_desc": "Per-pixel semantic class predictions; receives decoder output and visualizes final segmentation result",
   "visual_desc": "A color-coded segmentation mask overlaid on the street scene, with different colors for road, car, building, etc.",
   "constraints": {{"no_text_inside": true}}
 }}
 ```
 
-Now analyze the input and generate the node graph JSON:"""
+Now analyze the input and generate the node graph JSON (with edges as empty array):"""
+
+
+# --------------------------------------------------------------------------- #
+# Stage 1B: p2g_filmstrip_edge_planner_agent
+# 根据 nodes 规划 edges，包含连接锚点信息
+# --------------------------------------------------------------------------- #
+class FilmStripEdgePlanner:
+    """Film-Strip Pipeline Stage 1B: Edge Planner
+
+    根据 Stage 1A 的 nodes 规划 edges，包含连接锚点信息（from_anchor/to_anchor）。
+    输入: state.request.target + state.node_graph_json (只有 nodes)
+    输出: edges 数组，写回到 state.node_graph_json["edges"]
+    """
+
+    system_prompt_for_filmstrip_edge_planner = """You are an expert at designing edge connections for scientific diagrams in top-tier CS conference papers.
+
+Your task is to analyze a set of nodes and define the edges (connections) between them. You will specify:
+1. Which nodes connect to which
+2. The type of connection (data_flow, control_flow, annotation)
+3. Connection anchor points (from_anchor/to_anchor) as drawing hints
+
+## Your Expertise
+- Understanding data flow and dependencies in ML/AI pipelines
+- Creating clear, readable diagram layouts
+- Minimizing visual clutter while preserving essential information flow
+
+## Edge Design Philosophy
+- Only connect nodes where the reader needs to see the relationship
+- If a relationship can be inferred from context or module names, you may omit the edge
+- Prefer a single main flow path with minimal branches over a fully-connected graph
+- Think about visual clarity: fewer, well-placed edges are better than many crossing edges
+
+## Output Requirements
+You must output a valid JSON object containing only the "edges" array. The output must be pure JSON without any markdown formatting or code blocks."""
+
+    task_prompt_for_filmstrip_edge_planner = """## Task
+Analyze the following nodes and define the edges (connections) between them.
+
+## Input Description (Original Target)
+{target}
+
+## Nodes to Connect
+```json
+{node_graph_json}
+```
+
+## Edge Design Principles
+
+### 1. Edge Types
+- `data_flow`: Data passing from one component to another (most common)
+- `control_flow`: Sequential execution or dependency
+- `annotation`: Explanatory connection (e.g., "optimized by", "evaluated on")
+
+### 2. Connection Anchors (Drawing Hints)
+Each edge should specify `from_anchor` and `to_anchor` to indicate where the edge connects:
+- `left`: Connect from/to the left side of the node
+- `right`: Connect from/to the right side of the node
+- `top`: Connect from/to the top of the node
+- `bottom`: Connect from/to the bottom of the node
+
+**Anchor Heuristics** (soft guidelines, not hard rules):
+- Main data flow typically uses `right` → `left` (left-to-right reading)
+- Top-to-bottom branches use `bottom` → `top`
+- Loss/supervision signals often use `right`/`bottom` from source → `left`/`top` to loss node
+- If unsure, you may leave anchors as empty strings and let the renderer decide
+
+### 3. Edge Selection Guidelines
+- **Only connect key dependencies/information flows** that readers need to see
+- **Avoid redundant edges**: If A→B→C, you don't need A→C unless it's a separate path
+- **Prefer a main spine** with few branches over a fully-connected graph
+- **Use labels sparingly**: Only when they provide essential information (e.g., "K samples", "gradient")
+
+## Output Schema
+```json
+{{
+  "edges": [
+    {{
+      "edge_id": "e1",
+      "from": "n1",
+      "from_anchor": "right",
+      "to": "n3",
+      "to_anchor": "left",
+      "edge_type": "data_flow",
+      "label": "",
+      "direction_hint": "left_to_right"
+    }},
+    {{
+      "edge_id": "e2",
+      "from": "n3",
+      "from_anchor": "bottom",
+      "to": "n5",
+      "to_anchor": "top",
+      "edge_type": "data_flow",
+      "label": "feature maps",
+      "direction_hint": "top_to_bottom"
+    }}
+  ]
+}}
+```
+
+## Field Descriptions
+- `edge_id`: Sequential ID (e1, e2, e3, ...)
+- `from`: Source node ID
+- `from_anchor`: Which side of the source node the edge starts from (left|right|top|bottom)
+- `to`: Target node ID
+- `to_anchor`: Which side of the target node the edge ends at (left|right|top|bottom)
+- `edge_type`: Type of connection (data_flow|control_flow|annotation)
+- `label`: Optional label for the edge (use sparingly)
+- `direction_hint`: Overall direction hint for layout (left_to_right|top_to_bottom|right_to_left|bottom_to_top)
+
+## Important Notes
+1. Edge IDs must be sequential (e1, e2, e3, ...)
+2. All node IDs in `from` and `to` must exist in the provided nodes
+3. Anchors are drawing hints - the renderer may adjust them for optimal layout
+4. Focus on clarity: a diagram with 8-15 well-placed edges is better than one with 30 edges
+
+Now analyze the nodes and generate the edges JSON:"""
 
 
 # --------------------------------------------------------------------------- #

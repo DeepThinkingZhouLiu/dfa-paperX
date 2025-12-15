@@ -1,29 +1,29 @@
 {
   "n1": {
     "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/filmstrip_p2g_pipeline/vlm_nodes/n1.png",
-    "width_px": 455,
-    "height_px": 453,
+    "width_px": 459,
+    "height_px": 466,
     "source_group_id": "g1",
     "panel_index": 0
   },
   "n10": {
     "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/filmstrip_p2g_pipeline/vlm_nodes/n10.png",
-    "width_px": 454,
-    "height_px": 453,
+    "width_px": 460,
+    "height_px": 466,
     "source_group_id": "g1",
     "panel_index": 1
   },
   "n14": {
     "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/filmstrip_p2g_pipeline/vlm_nodes/n14.png",
-    "width_px": 451,
-    "height_px": 451,
+    "width_px": 459,
+    "height_px": 466,
     "source_group_id": "g1",
     "panel_index": 2
   },
   "n2": {
     "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/filmstrip_p2g_pipeline/vlm_nodes/n2.png",
-    "width_px": 402,
-    "height_px": 409,
+    "width_px": 302,
+    "height_px": 390,
     "source_group_id": "g2",
     "panel_index": 0
   }

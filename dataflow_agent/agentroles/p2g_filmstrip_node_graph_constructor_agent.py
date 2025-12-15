@@ -1,15 +1,17 @@
 """p2g_filmstrip_node_graph_constructor_agent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Film-Strip Pipeline Stage 1: Node Graph Constructor Agent
+Film-Strip Pipeline Stage 1A: Node Graph Constructor Agent (Nodes Only)
 
-从用户的 target 描述中构建节点图（nodes + edges），不做布局、不做渲染方式决策。
+从用户的 target 描述中构建节点图（只有 nodes，edges 置空），不做布局、不做渲染方式决策。
 
 输入：
 - state.request.target: 用户的论文方法描述
 
 输出：
-- state.node_graph_json: 节点图结构 {title, global_style, nodes, edges}
+- state.node_graph_json: 节点图结构 {title, global_style, nodes, edges=[]}
+
+注意：edges 由 Stage1B (p2g_filmstrip_edge_planner_agent) 单独生成。
 """
 
 from __future__ import annotations
@@ -93,49 +95,42 @@ class P2gFilmstripNodeGraphConstructorAgent(BaseAgent):
         result: Dict[str, Any],
         pre_tool_results: Dict[str, Any],
     ):
-        """更新 state.node_graph_json"""
+        """更新 state.node_graph_json (Stage 1A: nodes only, edges forced to [])"""
         if isinstance(result, dict):
-            # 验证必要字段
-            required_fields = ["title", "nodes", "edges"]
+            # 验证必要字段 (edges 不再是必须的，会被强制置空)
+            required_fields = ["title", "nodes"]
             missing_fields = [f for f in required_fields if f not in result]
 
             if not missing_fields:
+                # Stage 1A: 强制将 edges 置为空数组
+                result["edges"] = []
+
                 setattr(state, "node_graph_json", result)
 
                 nodes = result.get("nodes", [])
-                edges = result.get("edges", [])
 
                 log.info(
-                    "[NodeGraphConstructor] node_graph_json updated: %d nodes, %d edges",
+                    "[NodeGraphConstructor] Stage 1A: node_graph_json updated: %d nodes (edges forced to [])",
                     len(nodes),
-                    len(edges),
                 )
 
-                # 验证 node_id 和 edge_id 格式
+                # 验证 node_id 格式
                 node_ids = [n.get("node_id", "") for n in nodes]
-                edge_ids = [e.get("edge_id", "") for e in edges]
 
                 invalid_node_ids = [nid for nid in node_ids if not nid.startswith("n")]
-                invalid_edge_ids = [eid for eid in edge_ids if not eid.startswith("e")]
 
                 if invalid_node_ids:
                     log.warning(
                         "[NodeGraphConstructor] Invalid node_ids found: %s",
                         invalid_node_ids,
                     )
-                if invalid_edge_ids:
-                    log.warning(
-                        "[NodeGraphConstructor] Invalid edge_ids found: %s",
-                        invalid_edge_ids,
-                    )
 
                 state.agent_results[self.role_name] = {
                     "status": "ok",
                     "stats": {
                         "nodes": len(nodes),
-                        "edges": len(edges),
+                        "edges": 0,  # Stage 1A always outputs 0 edges
                         "node_ids": node_ids,
-                        "edge_ids": edge_ids,
                     },
                 }
             else:
