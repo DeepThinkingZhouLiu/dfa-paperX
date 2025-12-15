@@ -7,11 +7,13 @@ from .coordinate_utils import CoordinateConverter
 from .node_renderer import PPTXNodeRenderer
 from .edge_renderer import EdgeRenderer
 from .pptx_builder import PPTXBuilder
+from .pptx_to_image import convert_pptx_to_images
 
 __all__ = [
     "CoordinateConverter",
-    "PPTXNodeRenderer", 
+    "PPTXNodeRenderer",
     "EdgeRenderer",
     "PPTXBuilder",
+    "convert_pptx_to_images",
 ]
 

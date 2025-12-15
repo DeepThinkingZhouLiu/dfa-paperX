@@ -454,8 +454,8 @@ async def p2g_filmstrip_renderer_agent(
         vlm_model: VLM 模型名称
         vlm_timeout: VLM 超时时间（秒）
         concurrency: 并发数
-        api_url: API URL（默认从环境变量读取）
-        api_key: API Key（默认从环境变量读取）
+        api_url: API URL（默认从环境变量读取，优先使用 VLM_API_URL）
+        api_key: API Key（默认从环境变量读取，优先使用 VLM_API_KEY）
 
     Returns:
         更新后的 FilmStripP2GState
@@ -464,11 +464,17 @@ async def p2g_filmstrip_renderer_agent(
     if vlm_model is None:
         vlm_model = getattr(state.request, "vlm_model", "gemini-2.0-flash-exp-image-generation")
 
+    # VLM 生图优先使用 VLM_API_URL 和 VLM_API_KEY，如果没有设置则回退到 DF_API_URL 和 DF_API_KEY
     if api_url is None:
-        api_url = os.getenv("DF_API_URL", "http://123.129.219.111:3000/v1")
+        api_url = os.getenv("VLM_API_URL") or os.getenv("DF_API_URL", "http://123.129.219.111:3000/v1")
 
     if api_key is None:
-        api_key = os.getenv("DF_API_KEY", "")
+        api_key = os.getenv("VLM_API_KEY") or os.getenv("DF_API_KEY", "")
+
+    # 打印使用的 API 配置来源
+    vlm_url_source = "VLM_API_URL" if os.getenv("VLM_API_URL") else "DF_API_URL"
+    vlm_key_source = "VLM_API_KEY" if os.getenv("VLM_API_KEY") else "DF_API_KEY"
+    log.info(f"[FilmstripRenderer] Using API config: url from {vlm_url_source}, key from {vlm_key_source}")
 
     output_dir = getattr(state.request, "output_dir", ".tmp/filmstrip_p2g")
 

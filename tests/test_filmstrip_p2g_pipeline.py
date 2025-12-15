@@ -706,6 +706,34 @@ async def test_stage7_pptx_composer(state: FilmStripP2GState = None):
         if stats.get("errors"):
             print(f"  Errors: {stats['errors']}")
 
+    # 自动将 PPTX 转换为预览图片
+    if pptx_output_path and os.path.exists(pptx_output_path):
+        print("\n--- Generating PPTX preview image ---")
+        try:
+            from dataflow_agent.toolkits.pptx_composer.pptx_to_image import convert_pptx_to_images
+
+            success, image_paths = convert_pptx_to_images(
+                pptx_path=pptx_output_path,
+                output_dir=str(OUTPUT_DIR),
+                output_format="png",
+                dpi=150,
+            )
+
+            if success and image_paths:
+                print(f"  Preview image(s) generated:")
+                for img_path in image_paths:
+                    print(f"    - {img_path}")
+                # 保存预览图路径到 state
+                state.agent_results["pptx_preview_images"] = image_paths
+            else:
+                print("  Warning: Failed to generate preview image")
+                print("  Make sure LibreOffice and pdftoppm (poppler-utils) are installed:")
+                print("    sudo apt-get install libreoffice poppler-utils")
+        except Exception as e:
+            print(f"  Warning: Failed to generate preview image: {e}")
+            print("  Make sure LibreOffice and pdftoppm (poppler-utils) are installed:")
+            print("    sudo apt-get install libreoffice poppler-utils")
+
     return state
 
 
@@ -881,6 +909,18 @@ Environment variables (alternative to command line args):
         print(f"  VLM Render: {MODEL_VLM_RENDER}")
         print()
 
+        # 打印 API 配置
+        vlm_api_url = os.getenv("VLM_API_URL")
+        df_api_url = os.getenv("DF_API_URL")
+        print("API Configuration:")
+        print(f"  DF_API_URL: {df_api_url or '(not set)'}")
+        print(f"  VLM_API_URL: {vlm_api_url or '(not set, using DF_API_URL)'}")
+        if vlm_api_url:
+            print(f"  -> VLM image generation will use VLM_API_URL")
+        else:
+            print(f"  -> VLM image generation will use DF_API_URL")
+        print()
+
         # 保存运行配置
         models_config = {
             "node_graph": MODEL_NODE_GRAPH,
@@ -890,8 +930,14 @@ Environment variables (alternative to command line args):
             "pptx_spec": MODEL_PPTX_SPEC,
             "vlm_render": MODEL_VLM_RENDER,
         }
+        api_config = {
+            "df_api_url": df_api_url,
+            "vlm_api_url": vlm_api_url,
+            "vlm_api_source": "VLM_API_URL" if vlm_api_url else "DF_API_URL",
+        }
         save_run_config(OUTPUT_DIR, TEST_TARGET, args.stage, models_config, {
             "run_id": args.run_id,
+            "api_config": api_config,
         })
         print()
 

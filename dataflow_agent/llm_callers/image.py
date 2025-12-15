@@ -145,23 +145,32 @@ class VisionLLMCaller(BaseLLMCaller):
     async def _call_image_output(self, messages: List[BaseMessage]) -> AIMessage:
         """图像生成/编辑模式 - 输出图像"""
         from dataflow_agent.toolkits.imtool.req_img import generate_or_edit_and_save_image_async
-        
+
         # 提取prompt（最后一条用户消息）
         prompt = ""
         for msg in reversed(messages):
             if hasattr(msg, 'content'):
                 prompt = msg.content
                 break
-        
+
         # 调用图像生成函数
         save_path = self.vlm_config.get("output_image", "./generated_image.png")
         image_path = self.vlm_config.get("input_image") if self.mode == "edit" else None
-        
+
+        # VLM 生图优先使用 VLM_API_URL 和 VLM_API_KEY，如果没有设置则回退到 state 中的配置
+        api_url = os.getenv("VLM_API_URL") or self.state.request.chat_api_url
+        api_key = os.getenv("VLM_API_KEY") or self.state.request.api_key
+
+        # 记录使用的 API 配置来源
+        vlm_url_source = "VLM_API_URL" if os.getenv("VLM_API_URL") else "state.request"
+        vlm_key_source = "VLM_API_KEY" if os.getenv("VLM_API_KEY") else "state.request"
+        log.debug(f"VLM image generation using: url from {vlm_url_source}, key from {vlm_key_source}")
+
         b64 = await generate_or_edit_and_save_image_async(
             prompt=prompt,
             save_path=save_path,
-            api_url=self.state.request.chat_api_url,
-            api_key=self.state.request.api_key,
+            api_url=api_url,
+            api_key=api_key,
             model=self.model_name,
             image_path=image_path,
             use_edit=(self.mode == "edit"),
@@ -195,9 +204,13 @@ class VisionLLMCaller(BaseLLMCaller):
     async def _post_chat_completions(self, payload: dict) -> dict:
         """调用chat completions API"""
         import httpx
-        
-        base_url = self.state.request.chat_api_url.rstrip("/")
-        
+
+        # VLM 优先使用 VLM_API_URL 和 VLM_API_KEY，如果没有设置则回退到 state 中的配置
+        chat_api_url = os.getenv("VLM_API_URL") or self.state.request.chat_api_url
+        api_key = os.getenv("VLM_API_KEY") or self.state.request.api_key
+
+        base_url = chat_api_url.rstrip("/")
+
         # 检查是否是 Google AI Studio API（generativelanguage.googleapis.com）
         # 如果是，URL 已经是完整端点，不需要添加 /chat/completions
         if "generativelanguage.googleapis.com" in base_url:
@@ -208,9 +221,9 @@ class VisionLLMCaller(BaseLLMCaller):
         else:
             # URL 已经是完整端点，直接使用
             url = base_url
-        
+
         headers = {
-            "Authorization": f"Bearer {self.state.request.api_key}",
+            "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
         }
         
