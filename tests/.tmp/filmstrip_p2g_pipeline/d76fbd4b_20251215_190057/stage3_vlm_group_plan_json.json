@@ -1,0 +1,20 @@
+{
+  "groups": [
+    {
+      "group_id": "g1",
+      "node_ids": [
+        "n10"
+      ],
+      "subject": "Abstract representation of model-predicted future state tokens",
+      "prompt": "You are a scientific illustrator generating images for an academic paper figure.\n\nGenerate ONE single image showing: A minimal flat-design icon of generated text tokens: a short horizontal strip of small rectangular token tiles in the foreground, with a slightly offset, semi-transparent strip behind it to suggest target vs prediction. Neutral light background, subtle drop shadow, clean scientific style, no readable characters on the tokens.\n\nCRITICAL Constraints:\n- The image should be SQUARE or near-square.\n- Content should be CENTERED with white padding if needed to maintain aspect ratio without distortion.\n- Do NOT add any text, labels, numbers, legends, watermarks, or captions inside the image.\n- Use solid pure white (#FFFFFF) background.\n- Clean, minimal scientific illustration style."
+    },
+    {
+      "group_id": "g2",
+      "node_ids": [
+        "n13"
+      ],
+      "subject": "Abstract representation of reflection text in a speech bubble",
+      "prompt": "You are a scientific illustrator generating images for an academic paper figure.\n\nGenerate ONE single image showing: A clean paper-like speech bubble icon containing several short gray dummy lines (illegible strokes) representing text, with a subtle outline and light shadow. Beneath the bubble, a small bold token-like tag shape without readable characters. Minimal scientific style on a transparent or very light background.\n\nCRITICAL Constraints:\n- The image should be SQUARE or near-square.\n- Content should be CENTERED with white padding if needed to maintain aspect ratio without distortion.\n- Do NOT add any text, labels, numbers, legends, watermarks, or captions inside the image.\n- Use solid pure white (#FFFFFF) background.\n- Clean, minimal scientific illustration style."
+    }
+  ]
+}

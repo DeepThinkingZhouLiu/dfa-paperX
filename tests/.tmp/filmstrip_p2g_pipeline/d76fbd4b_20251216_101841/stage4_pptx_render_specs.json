@@ -1,0 +1,173 @@
+{
+  "n1": {
+    "element_type": "rounded_rectangle",
+    "text": "Expert Dataset\nD_expert",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 13,
+      "color": "#333333",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#EAF2FB",
+      "border_style": "solid",
+      "border_color": "#2E5A8C",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink"
+  },
+  "n2": {
+    "element_type": "rounded_rectangle",
+    "text": "Initial LLM Policy",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 14,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#4A90D9",
+      "border_style": "solid",
+      "border_color": "#2E5A8C",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink"
+  },
+  "n4": {
+    "element_type": "rounded_rectangle",
+    "text": "Environment Rollout",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 13,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#66C2A5",
+      "border_style": "solid",
+      "border_color": "#3A7F73",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink"
+  },
+  "n7": {
+    "element_type": "rounded_rectangle",
+    "text": "Rollout Triples\nD_rollout",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 13,
+      "color": "#333333",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#EAF2FB",
+      "border_style": "solid",
+      "border_color": "#2E5A8C",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink"
+  },
+  "n9": {
+    "element_type": "rounded_rectangle",
+    "text": "Implicit World Modeling\n(IWM)",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 13,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#8DA0CB",
+      "border_style": "solid",
+      "border_color": "#5F6F96",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink"
+  },
+  "n10": {
+    "element_type": "rounded_rectangle",
+    "text": "NLL Loss (IWM)\n−log p(·) ↓",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 11,
+      "color": "#333333",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#F2F2F2",
+      "border_style": "solid",
+      "border_color": "#5F6F96",
+      "border_width": 1.25
+    },
+    "auto_fit": "shrink"
+  },
+  "n11": {
+    "element_type": "rounded_rectangle",
+    "text": "Self-Reflection (SR)",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 13,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#4A90D9",
+      "border_style": "solid",
+      "border_color": "#2E5A8C",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink"
+  },
+  "n13": {
+    "element_type": "rounded_rectangle",
+    "text": "Reflection Dataset\nD_refl",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 13,
+      "color": "#333333",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#FFF2E9",
+      "border_style": "solid",
+      "border_color": "#C65E3B",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink"
+  },
+  "n14": {
+    "element_type": "rounded_rectangle",
+    "text": "Joint Policy Training",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 14,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#FC8D62",
+      "border_style": "solid",
+      "border_color": "#C65E3B",
+      "border_width": 1.75
+    },
+    "auto_fit": "shrink"
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "vlm_nodes": [
+    "n10",
+    "n13"
+  ],
+  "pptx_nodes": [
+    "n1",
+    "n2",
+    "n3",
+    "n4",
+    "n5",
+    "n6",
+    "n7",
+    "n8",
+    "n9",
+    "n11",
+    "n12",
+    "n14",
+    "n15",
+    "n16"
+  ],
+  "by_node": {
+    "n1": {
+      "render_method": "pptx",
+      "pptx_intent": "Database cylinder shape with centered text 'Expert Dataset D_expert' and smaller 'D_expert' emphasis if desired; include two tiny column markers labeled 's_i' and 'a_i' as small text near/inside cylinder; clean minimal line style, primary accent as outline.",
+      "size_hint": {
+        "w_px": 260,
+        "h_px": 140
+      }
+    },
+    "n2": {
+      "render_method": "pptx",
+      "pptx_intent": "Small rounded_rectangle with text 'Expert State s_i'; optionally add a tiny stacked-token glyph using 2-3 small rectangles on the left inside the box.",
+      "size_hint": {
+        "w_px": 200,
+        "h_px": 70
+      }
+    },
+    "n3": {
+      "render_method": "pptx",
+      "pptx_intent": "Rounded_rectangle module box, solid fill #4A90D9, white centered text 'Initial LLM Policy π0'; optional small transformer icon in corner using simple stacked blocks/lines.",
+      "size_hint": {
+        "w_px": 240,
+        "h_px": 80
+      }
+    },
+    "n4": {
+      "render_method": "pptx",
+      "pptx_intent": "Group of small pill-shaped rounded rectangles arranged in a row (fan-out feel) labeled 'a_i^1', 'a_i^2', '…', 'a_i^K'; light fill, thin outline.",
+      "size_hint": {
+        "w_px": 300,
+        "h_px": 90
+      }
+    },
+    "n5": {
+      "render_method": "pptx",
+      "pptx_intent": "Rounded_rectangle with neutral gray outline and white/light fill; text 'Environment Simulator' (or 'Environment'); optional tiny grid/cube+arrow icon built from simple shapes on left.",
+      "size_hint": {
+        "w_px": 240,
+        "h_px": 80
+      }
+    },
+    "n6": {
+      "render_method": "pptx",
+      "pptx_intent": "Small rounded_rectangle or compact box labeled 'Expert Next State s_{i+1}'; include a small rightward arrow overlay icon (simple arrow) near a minimal token/stack glyph.",
+      "size_hint": {
+        "w_px": 220,
+        "h_px": 70
+      }
+    },
+    "n7": {
+      "render_method": "pptx",
+      "pptx_intent": "Group of 3-5 small state boxes/icons arranged horizontally or stacked, labeled 's_i^1', 's_i^2', '…'; add faint branching arrows from a single point to the set (thin light-gray arrows).",
+      "size_hint": {
+        "w_px": 320,
+        "h_px": 110
+      }
+    },
+    "n8": {
+      "render_method": "pptx",
+      "pptx_intent": "Database cylinder labeled 'Rollout Triples D_rollout'; include small text '(s, a, s′)' as a tiny side annotation; clean minimal styling.",
+      "size_hint": {
+        "w_px": 260,
+        "h_px": 140
+      }
+    },
+    "n9": {
+      "render_method": "pptx",
+      "pptx_intent": "Rounded_rectangle with primary fill #4A90D9 and white centered text 'IWM Branch' (or 'IWM'); add a small token→token arrow icon (two tiny squares with arrow) in corner.",
+      "size_hint": {
+        "w_px": 220,
+        "h_px": 80
+      }
+    },
+    "n10": {
+      "render_method": "vlm",
+      "vlm_desc": "A minimal flat-design icon of generated text tokens: a short horizontal strip of small rectangular token tiles in the foreground, with a slightly offset, semi-transparent strip behind it to suggest target vs prediction. Neutral light background, subtle drop shadow, clean scientific style, no readable characters on the tokens.",
+      "size_hint": {
+        "w_px": 260,
+        "h_px": 140,
+        "aspect_ratio": "3:2"
+      }
+    },
+    "n11": {
+      "render_method": "pptx",
+      "pptx_intent": "Small hexagon (or diamond) labeled 'NLL Loss (IWM)' with bold 'NLL' as main text; optional tiny downward curve/arrow indicating minimization; accent or gray outline.",
+      "size_hint": {
+        "w_px": 160,
+        "h_px": 90
+      }
+    },
+    "n12": {
+      "render_method": "pptx",
+      "pptx_intent": "Rounded_rectangle with white fill and accent outline #fc8d62; centered text 'SR Branch' (or 'SR'); add a small speech-bubble icon in corner using simple shape.",
+      "size_hint": {
+        "w_px": 220,
+        "h_px": 80
+      }
+    },
+    "n13": {
+      "render_method": "vlm",
+      "vlm_desc": "A clean paper-like speech bubble icon containing several short gray dummy lines (illegible strokes) representing text, with a subtle outline and light shadow. Beneath the bubble, a small bold token-like tag shape without readable characters. Minimal scientific style on a transparent or very light background.",
+      "size_hint": {
+        "w_px": 260,
+        "h_px": 160,
+        "aspect_ratio": "3:2"
+      }
+    },
+    "n14": {
+      "render_method": "pptx",
+      "pptx_intent": "Database cylinder labeled 'Reflection Dataset D_refl'; add a small speech-bubble + action-pill icon on the side using simple shapes; clean minimal styling.",
+      "size_hint": {
+        "w_px": 260,
+        "h_px": 140
+      }
+    },
+    "n15": {
+      "render_method": "pptx",
+      "pptx_intent": "Large rounded_rectangle module with primary fill; centered title text 'Joint IL Training'; add a subtle vertical split or two lanes inside with smaller text 'predict a_i' and 'predict c_i^j'; thin accent stripe (#fc8d62) along one edge to indicate multitask.",
+      "size_hint": {
+        "w_px": 320,
+        "h_px": 120
+      }
+    },
+    "n16": {
+      "render_method": "pptx",
+      "pptx_intent": "Prominent rounded_rectangle with bold border; text 'Updated LLM Policy π' and smaller '(trained)' if desired; optional small combined corner icons (token arrow + speech bubble) made from simple shapes; primary-themed styling.",
+      "size_hint": {
+        "w_px": 260,
+        "h_px": 90
+      }
+    }
+  }
+}

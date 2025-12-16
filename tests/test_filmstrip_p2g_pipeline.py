@@ -788,7 +788,7 @@ Environment variables (alternative to command line args):
     parser.add_argument(
         "--continue-from",
         type=str,
-        default=None,
+        default='latest',
         help="Continue from existing run directory (use 'latest' for most recent, or full dir name)"
     )
     parser.add_argument(

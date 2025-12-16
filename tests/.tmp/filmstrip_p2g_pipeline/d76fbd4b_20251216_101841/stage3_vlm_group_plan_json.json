@@ -1,0 +1,38 @@
+{
+  "groups": [
+    {
+      "group_id": "g1",
+      "node_ids": [
+        "n3",
+        "n5",
+        "n6"
+      ],
+      "subject": "State transitions and action outcomes in a reinforcement learning environment",
+      "prompt": "You are a scientific illustrator generating images for an academic paper figure.\n\nGenerate ONE single image composed of 3 EQUAL-SIZED sub-panels arranged horizontally (side-by-side) with clear white gaps (about 20-30 pixels) between them.\n\nSubject: State transitions and action outcomes in a reinforcement learning environment\n\nPanel 1 (Left): A clean flat-design icon showing a fan-out of multiple small action cards/tokens arranged in a slight arc or row, implying K alternatives. Each card is a small rounded rectangle with minimal generic markings (no readable characters). Use a scientific diagram style with muted blues and a small accent color on a few cards; white background, crisp vector edges.\nPanel 2 (Middle): A minimal glyph: a single small filled circle representing a state, with a bold arrow pointing to it from the left where a tiny tag-like shape sits near the arrow tail. No text. Clean vector style, blue/gray palette on white background.\nPanel 3 (Right): A branching futures glyph: one origin point on the left with multiple curved arrows splitting into several small circles on the right (representing different next states). No text. Flat scientific diagram style with primary blue lines and light gray circles on white background.\n\nCRITICAL Constraints:\n- All panels MUST depict the EXACT SAME scene/subject for visual consistency (same viewpoint, same objects, same composition).\n- Each panel MUST be a SQUARE or near-square frame of EQUAL size.\n- Content within each panel should be CENTERED and NOT stretched. If the natural aspect ratio differs, add white padding (letterbox/pillarbox) to maintain the square frame without distortion.\n- Do NOT add any text, labels, numbers, legends, watermarks, or captions inside the image.\n- Pure visual data only - no annotations.\n- Use solid pure white (#FFFFFF) background and pure white gaps between panels.\n- The white gaps between panels must be clearly visible and consistent width."
+    },
+    {
+      "group_id": "g2",
+      "node_ids": [
+        "n8"
+      ],
+      "subject": "Future state prediction in reinforcement learning",
+      "prompt": "You are a scientific illustrator generating images for an academic paper figure.\n\nGenerate ONE single image showing: A target/bullseye icon overlaid with a small generic state glyph (small circle or node). No text, no reward symbols. Clean flat vector look with a subtle accent color for the bullseye and blue/gray for the state mark on white background.\n\nCRITICAL Constraints:\n- The image should be SQUARE or near-square.\n- Content should be CENTERED with white padding if needed to maintain aspect ratio without distortion.\n- Do NOT add any text, labels, numbers, legends, watermarks, or captions inside the image.\n- Use solid pure white (#FFFFFF) background.\n- Clean, minimal scientific illustration style."
+    },
+    {
+      "group_id": "g3",
+      "node_ids": [
+        "n12"
+      ],
+      "subject": "Natural language explanations in reinforcement learning",
+      "prompt": "You are a scientific illustrator generating images for an academic paper figure.\n\nGenerate ONE single image showing: A speech bubble containing 2–3 short horizontal gray lines to suggest text placeholders, with no readable characters. Flat vector style, light gray bubble with subtle blue outline on white background.\n\nCRITICAL Constraints:\n- The image should be SQUARE or near-square.\n- Content should be CENTERED with white padding if needed to maintain aspect ratio without distortion.\n- Do NOT add any text, labels, numbers, legends, watermarks, or captions inside the image.\n- Use solid pure white (#FFFFFF) background.\n- Clean, minimal scientific illustration style."
+    },
+    {
+      "group_id": "g4",
+      "node_ids": [
+        "n15"
+      ],
+      "subject": "Final policy representation in reinforcement learning",
+      "prompt": "You are a scientific illustrator generating images for an academic paper figure.\n\nGenerate ONE single image showing: A transformer-style module icon (stacked layers) with a small checkmark badge in a corner. Two small output port glyphs on the right: one token/card symbol and one speech-bubble symbol. No text. Flat scientific diagram style with blue and a small accent color on white background.\n\nCRITICAL Constraints:\n- The image should be SQUARE or near-square.\n- Content should be CENTERED with white padding if needed to maintain aspect ratio without distortion.\n- Do NOT add any text, labels, numbers, legends, watermarks, or captions inside the image.\n- Use solid pure white (#FFFFFF) background.\n- Clean, minimal scientific illustration style."
+    }
+  ]
+}

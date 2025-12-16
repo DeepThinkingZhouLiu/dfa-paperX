@@ -1,0 +1,1216 @@
+{
+  "n1": {
+    "element_type": "rounded_rectangle",
+    "text": "Expert Dataset\nD_expert",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 13,
+      "color": "#333333",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#FFFFFF",
+      "border_style": "solid",
+      "border_color": "#2E5A8C",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink",
+    "size": {
+      "w_px": 260,
+      "h_px": 90
+    },
+    "icon_specs": [
+      {
+        "name": "dataset_stack",
+        "kind": "shape_group",
+        "anchor": "left",
+        "bbox_rel": {
+          "x": 0.06,
+          "y": 0.18,
+          "w": 0.22,
+          "h": 0.64
+        },
+        "shapes": [
+          {
+            "type": "rectangle",
+            "bbox_rel": {
+              "x": 0.08,
+              "y": 0.22,
+              "w": 0.18,
+              "h": 0.56
+            },
+            "style": {
+              "fill_color": "#F5F7FA",
+              "border_color": "#B8C4D1",
+              "border_width": 1.0,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "rectangle",
+            "bbox_rel": {
+              "x": 0.06,
+              "y": 0.2,
+              "w": 0.18,
+              "h": 0.56
+            },
+            "style": {
+              "fill_color": "#FFFFFF",
+              "border_color": "#B8C4D1",
+              "border_width": 1.0,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "rectangle",
+            "bbox_rel": {
+              "x": 0.04,
+              "y": 0.18,
+              "w": 0.18,
+              "h": 0.56
+            },
+            "style": {
+              "fill_color": "#FFFFFF",
+              "border_color": "#B8C4D1",
+              "border_width": 1.0,
+              "border_style": "solid"
+            }
+          }
+        ]
+      },
+      {
+        "name": "sa_columns",
+        "kind": "shape_group",
+        "anchor": "left",
+        "bbox_rel": {
+          "x": 0.3,
+          "y": 0.26,
+          "w": 0.2,
+          "h": 0.48
+        },
+        "shapes": [
+          {
+            "type": "line",
+            "from_rel": {
+              "x": 0.5,
+              "y": 0.05
+            },
+            "to_rel": {
+              "x": 0.5,
+              "y": 0.95
+            },
+            "style": {
+              "border_color": "#D3DCE6",
+              "border_width": 1.0,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "oval",
+            "bbox_rel": {
+              "x": 0.18,
+              "y": 0.18,
+              "w": 0.18,
+              "h": 0.18
+            },
+            "style": {
+              "fill_color": "#4A90D9",
+              "border_color": "#2E5A8C",
+              "border_width": 0.8,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "line",
+            "from_rel": {
+              "x": 0.64,
+              "y": 0.27
+            },
+            "to_rel": {
+              "x": 0.86,
+              "y": 0.27
+            },
+            "style": {
+              "border_color": "#4A90D9",
+              "border_width": 1.4,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "triangle",
+            "bbox_rel": {
+              "x": 0.82,
+              "y": 0.22,
+              "w": 0.1,
+              "h": 0.1
+            },
+            "rotation_deg": 90,
+            "style": {
+              "fill_color": "#4A90D9",
+              "border_style": "none",
+              "border_color": "#4A90D9",
+              "border_width": 0
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "n3": {
+    "element_type": "rounded_rectangle",
+    "text": "Initial LLM Policy π0",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 14,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#4A90D9",
+      "border_style": "solid",
+      "border_color": "#2E5A8C",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink",
+    "size": {
+      "w_px": 240,
+      "h_px": 80
+    },
+    "icon_specs": [
+      {
+        "name": "transformer_stack",
+        "kind": "shape_group",
+        "anchor": "top_right",
+        "bbox_rel": {
+          "x": 0.8,
+          "y": 0.18,
+          "w": 0.16,
+          "h": 0.56
+        },
+        "shapes": [
+          {
+            "type": "rounded_rectangle",
+            "bbox_rel": {
+              "x": 0.1,
+              "y": 0.08,
+              "w": 0.8,
+              "h": 0.22
+            },
+            "style": {
+              "fill_color": "#FFFFFF",
+              "border_color": "#DCE6F2",
+              "border_width": 0.6,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "rounded_rectangle",
+            "bbox_rel": {
+              "x": 0.1,
+              "y": 0.39,
+              "w": 0.8,
+              "h": 0.22
+            },
+            "style": {
+              "fill_color": "#FFFFFF",
+              "border_color": "#DCE6F2",
+              "border_width": 0.6,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "rounded_rectangle",
+            "bbox_rel": {
+              "x": 0.1,
+              "y": 0.7,
+              "w": 0.8,
+              "h": 0.22
+            },
+            "style": {
+              "fill_color": "#FFFFFF",
+              "border_color": "#DCE6F2",
+              "border_width": 0.6,
+              "border_style": "solid"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "n5": {
+    "element_type": "rounded_rectangle",
+    "text": "Environment\nSimulator",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 13,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#66C2A5",
+      "border_style": "solid",
+      "border_color": "#3A7F73",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink",
+    "size": {
+      "w_px": 230,
+      "h_px": 80
+    },
+    "icon_specs": [
+      {
+        "name": "env_cube_trajectory",
+        "kind": "shape_group",
+        "anchor": "left",
+        "bbox_rel": {
+          "x": 0.06,
+          "y": 0.22,
+          "w": 0.22,
+          "h": 0.56
+        },
+        "shapes": [
+          {
+            "type": "rectangle",
+            "bbox_rel": {
+              "x": 0.1,
+              "y": 0.2,
+              "w": 0.42,
+              "h": 0.42
+            },
+            "style": {
+              "fill_color": "#E9F6F1",
+              "border_color": "#3A7F73",
+              "border_width": 1.0,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "line",
+            "from_rel": {
+              "x": 0.52,
+              "y": 0.2
+            },
+            "to_rel": {
+              "x": 0.7,
+              "y": 0.08
+            },
+            "style": {
+              "border_color": "#3A7F73",
+              "border_width": 1.0,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "line",
+            "from_rel": {
+              "x": 0.52,
+              "y": 0.62
+            },
+            "to_rel": {
+              "x": 0.7,
+              "y": 0.5
+            },
+            "style": {
+              "border_color": "#3A7F73",
+              "border_width": 1.0,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "curve",
+            "points_rel": [
+              {
+                "x": 0.1,
+                "y": 0.8
+              },
+              {
+                "x": 0.45,
+                "y": 0.7
+              },
+              {
+                "x": 0.8,
+                "y": 0.92
+              }
+            ],
+            "style": {
+              "border_color": "#FFFFFF",
+              "border_width": 1.6,
+              "border_style": "solid"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "n8": {
+    "element_type": "rounded_rectangle",
+    "text": "Rollout Dataset\nD_rollout",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 13,
+      "color": "#333333",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#FFFFFF",
+      "border_style": "solid",
+      "border_color": "#2E5A8C",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink",
+    "size": {
+      "w_px": 270,
+      "h_px": 90
+    },
+    "icon_specs": [
+      {
+        "name": "dataset_stack",
+        "kind": "shape_group",
+        "anchor": "left",
+        "bbox_rel": {
+          "x": 0.06,
+          "y": 0.18,
+          "w": 0.22,
+          "h": 0.64
+        },
+        "shapes": [
+          {
+            "type": "rectangle",
+            "bbox_rel": {
+              "x": 0.08,
+              "y": 0.22,
+              "w": 0.18,
+              "h": 0.56
+            },
+            "style": {
+              "fill_color": "#F5F7FA",
+              "border_color": "#B8C4D1",
+              "border_width": 1.0,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "rectangle",
+            "bbox_rel": {
+              "x": 0.06,
+              "y": 0.2,
+              "w": 0.18,
+              "h": 0.56
+            },
+            "style": {
+              "fill_color": "#FFFFFF",
+              "border_color": "#B8C4D1",
+              "border_width": 1.0,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "rectangle",
+            "bbox_rel": {
+              "x": 0.04,
+              "y": 0.18,
+              "w": 0.18,
+              "h": 0.56
+            },
+            "style": {
+              "fill_color": "#FFFFFF",
+              "border_color": "#B8C4D1",
+              "border_width": 1.0,
+              "border_style": "solid"
+            }
+          }
+        ]
+      },
+      {
+        "name": "s_a_sprime_columns",
+        "kind": "shape_group",
+        "anchor": "left",
+        "bbox_rel": {
+          "x": 0.3,
+          "y": 0.24,
+          "w": 0.26,
+          "h": 0.52
+        },
+        "shapes": [
+          {
+            "type": "line",
+            "from_rel": {
+              "x": 0.33,
+              "y": 0.06
+            },
+            "to_rel": {
+              "x": 0.33,
+              "y": 0.94
+            },
+            "style": {
+              "border_color": "#D3DCE6",
+              "border_width": 1.0,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "line",
+            "from_rel": {
+              "x": 0.66,
+              "y": 0.06
+            },
+            "to_rel": {
+              "x": 0.66,
+              "y": 0.94
+            },
+            "style": {
+              "border_color": "#D3DCE6",
+              "border_width": 1.0,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "oval",
+            "bbox_rel": {
+              "x": 0.1,
+              "y": 0.2,
+              "w": 0.16,
+              "h": 0.16
+            },
+            "style": {
+              "fill_color": "#4A90D9",
+              "border_color": "#2E5A8C",
+              "border_width": 0.8,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "line",
+            "from_rel": {
+              "x": 0.42,
+              "y": 0.28
+            },
+            "to_rel": {
+              "x": 0.56,
+              "y": 0.28
+            },
+            "style": {
+              "border_color": "#4A90D9",
+              "border_width": 1.4,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "triangle",
+            "bbox_rel": {
+              "x": 0.54,
+              "y": 0.23,
+              "w": 0.08,
+              "h": 0.1
+            },
+            "rotation_deg": 90,
+            "style": {
+              "fill_color": "#4A90D9",
+              "border_style": "none",
+              "border_color": "#4A90D9",
+              "border_width": 0
+            }
+          },
+          {
+            "type": "oval",
+            "bbox_rel": {
+              "x": 0.76,
+              "y": 0.2,
+              "w": 0.16,
+              "h": 0.16
+            },
+            "style": {
+              "fill_color": "#66C2A5",
+              "border_color": "#3A7F73",
+              "border_width": 0.8,
+              "border_style": "solid"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "n9": {
+    "element_type": "rounded_rectangle",
+    "text": "IWM (Implicit World\nModeling)",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 12,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#8DA0CB",
+      "border_style": "solid",
+      "border_color": "#5F6F9D",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink",
+    "size": {
+      "w_px": 280,
+      "h_px": 85
+    },
+    "icon_specs": [
+      {
+        "name": "s_to_a_to_sprime",
+        "kind": "shape_group",
+        "anchor": "bottom_left",
+        "bbox_rel": {
+          "x": 0.07,
+          "y": 0.62,
+          "w": 0.3,
+          "h": 0.26
+        },
+        "shapes": [
+          {
+            "type": "oval",
+            "bbox_rel": {
+              "x": 0.02,
+              "y": 0.22,
+              "w": 0.18,
+              "h": 0.56
+            },
+            "style": {
+              "fill_color": "#FFFFFF",
+              "border_color": "#E7ECF7",
+              "border_width": 0.8,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "line",
+            "from_rel": {
+              "x": 0.24,
+              "y": 0.5
+            },
+            "to_rel": {
+              "x": 0.58,
+              "y": 0.5
+            },
+            "style": {
+              "border_color": "#FFFFFF",
+              "border_width": 1.4,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "triangle",
+            "bbox_rel": {
+              "x": 0.54,
+              "y": 0.36,
+              "w": 0.1,
+              "h": 0.28
+            },
+            "rotation_deg": 90,
+            "style": {
+              "fill_color": "#FFFFFF",
+              "border_style": "none",
+              "border_color": "#FFFFFF",
+              "border_width": 0
+            }
+          },
+          {
+            "type": "oval",
+            "bbox_rel": {
+              "x": 0.72,
+              "y": 0.22,
+              "w": 0.18,
+              "h": 0.56
+            },
+            "style": {
+              "fill_color": "#FFFFFF",
+              "border_color": "#E7ECF7",
+              "border_width": 0.8,
+              "border_style": "solid"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "n11": {
+    "element_type": "rounded_rectangle",
+    "text": "NLL\nDynamics Loss",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 12,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#FC8D62",
+      "border_style": "solid",
+      "border_color": "#C46543",
+      "border_width": 1.4
+    },
+    "auto_fit": "shrink",
+    "size": {
+      "w_px": 190,
+      "h_px": 70
+    },
+    "icon_specs": [
+      {
+        "name": "loss_curve",
+        "kind": "shape_group",
+        "anchor": "left",
+        "bbox_rel": {
+          "x": 0.07,
+          "y": 0.24,
+          "w": 0.22,
+          "h": 0.52
+        },
+        "shapes": [
+          {
+            "type": "polyline",
+            "points_rel": [
+              {
+                "x": 0.08,
+                "y": 0.78
+              },
+              {
+                "x": 0.35,
+                "y": 0.55
+              },
+              {
+                "x": 0.6,
+                "y": 0.45
+              },
+              {
+                "x": 0.86,
+                "y": 0.22
+              }
+            ],
+            "style": {
+              "border_color": "#FFFFFF",
+              "border_width": 1.8,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "line",
+            "from_rel": {
+              "x": 0.08,
+              "y": 0.82
+            },
+            "to_rel": {
+              "x": 0.9,
+              "y": 0.82
+            },
+            "style": {
+              "border_color": "#FFD9CB",
+              "border_width": 1.0,
+              "border_style": "solid"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "n12": {
+    "element_type": "rounded_rectangle",
+    "text": "SR (Self-Reflection)",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 13,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#4A90D9",
+      "border_style": "solid",
+      "border_color": "#2E5A8C",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink",
+    "size": {
+      "w_px": 280,
+      "h_px": 85
+    },
+    "icon_specs": [
+      {
+        "name": "compare_to_text",
+        "kind": "shape_group",
+        "anchor": "left",
+        "bbox_rel": {
+          "x": 0.06,
+          "y": 0.22,
+          "w": 0.3,
+          "h": 0.56
+        },
+        "shapes": [
+          {
+            "type": "polyline",
+            "points_rel": [
+              {
+                "x": 0.05,
+                "y": 0.25
+              },
+              {
+                "x": 0.3,
+                "y": 0.35
+              },
+              {
+                "x": 0.52,
+                "y": 0.2
+              }
+            ],
+            "style": {
+              "border_color": "#FFFFFF",
+              "border_width": 1.4,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "polyline",
+            "points_rel": [
+              {
+                "x": 0.05,
+                "y": 0.7
+              },
+              {
+                "x": 0.3,
+                "y": 0.6
+              },
+              {
+                "x": 0.52,
+                "y": 0.75
+              }
+            ],
+            "style": {
+              "border_color": "#DCE6F2",
+              "border_width": 1.4,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "rounded_rectangle",
+            "bbox_rel": {
+              "x": 0.62,
+              "y": 0.28,
+              "w": 0.33,
+              "h": 0.44
+            },
+            "style": {
+              "fill_color": "#FFFFFF",
+              "border_color": "#DCE6F2",
+              "border_width": 0.8,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "triangle",
+            "bbox_rel": {
+              "x": 0.58,
+              "y": 0.46,
+              "w": 0.08,
+              "h": 0.1
+            },
+            "rotation_deg": 270,
+            "style": {
+              "fill_color": "#FFFFFF",
+              "border_style": "none",
+              "border_color": "#FFFFFF",
+              "border_width": 0
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "n14": {
+    "element_type": "rounded_rectangle",
+    "text": "Reflection Dataset\nD_refl",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 13,
+      "color": "#333333",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#FFFFFF",
+      "border_style": "solid",
+      "border_color": "#2E5A8C",
+      "border_width": 1.5
+    },
+    "auto_fit": "shrink",
+    "size": {
+      "w_px": 280,
+      "h_px": 90
+    },
+    "icon_specs": [
+      {
+        "name": "dataset_stack",
+        "kind": "shape_group",
+        "anchor": "left",
+        "bbox_rel": {
+          "x": 0.06,
+          "y": 0.18,
+          "w": 0.22,
+          "h": 0.64
+        },
+        "shapes": [
+          {
+            "type": "rectangle",
+            "bbox_rel": {
+              "x": 0.08,
+              "y": 0.22,
+              "w": 0.18,
+              "h": 0.56
+            },
+            "style": {
+              "fill_color": "#F5F7FA",
+              "border_color": "#B8C4D1",
+              "border_width": 1.0,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "rectangle",
+            "bbox_rel": {
+              "x": 0.06,
+              "y": 0.2,
+              "w": 0.18,
+              "h": 0.56
+            },
+            "style": {
+              "fill_color": "#FFFFFF",
+              "border_color": "#B8C4D1",
+              "border_width": 1.0,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "rectangle",
+            "bbox_rel": {
+              "x": 0.04,
+              "y": 0.18,
+              "w": 0.18,
+              "h": 0.56
+            },
+            "style": {
+              "fill_color": "#FFFFFF",
+              "border_color": "#B8C4D1",
+              "border_width": 1.0,
+              "border_style": "solid"
+            }
+          }
+        ]
+      },
+      {
+        "name": "s_a_bubble_columns",
+        "kind": "shape_group",
+        "anchor": "left",
+        "bbox_rel": {
+          "x": 0.3,
+          "y": 0.24,
+          "w": 0.28,
+          "h": 0.52
+        },
+        "shapes": [
+          {
+            "type": "line",
+            "from_rel": {
+              "x": 0.33,
+              "y": 0.06
+            },
+            "to_rel": {
+              "x": 0.33,
+              "y": 0.94
+            },
+            "style": {
+              "border_color": "#D3DCE6",
+              "border_width": 1.0,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "line",
+            "from_rel": {
+              "x": 0.66,
+              "y": 0.06
+            },
+            "to_rel": {
+              "x": 0.66,
+              "y": 0.94
+            },
+            "style": {
+              "border_color": "#D3DCE6",
+              "border_width": 1.0,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "oval",
+            "bbox_rel": {
+              "x": 0.1,
+              "y": 0.2,
+              "w": 0.16,
+              "h": 0.16
+            },
+            "style": {
+              "fill_color": "#4A90D9",
+              "border_color": "#2E5A8C",
+              "border_width": 0.8,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "line",
+            "from_rel": {
+              "x": 0.42,
+              "y": 0.28
+            },
+            "to_rel": {
+              "x": 0.56,
+              "y": 0.28
+            },
+            "style": {
+              "border_color": "#4A90D9",
+              "border_width": 1.4,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "triangle",
+            "bbox_rel": {
+              "x": 0.54,
+              "y": 0.23,
+              "w": 0.08,
+              "h": 0.1
+            },
+            "rotation_deg": 90,
+            "style": {
+              "fill_color": "#4A90D9",
+              "border_style": "none",
+              "border_color": "#4A90D9",
+              "border_width": 0
+            }
+          },
+          {
+            "type": "rounded_rectangle",
+            "bbox_rel": {
+              "x": 0.74,
+              "y": 0.18,
+              "w": 0.22,
+              "h": 0.22
+            },
+            "style": {
+              "fill_color": "#FFFFFF",
+              "border_color": "#B8C4D1",
+              "border_width": 0.8,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "triangle",
+            "bbox_rel": {
+              "x": 0.72,
+              "y": 0.3,
+              "w": 0.06,
+              "h": 0.06
+            },
+            "rotation_deg": 270,
+            "style": {
+              "fill_color": "#FFFFFF",
+              "border_style": "none",
+              "border_color": "#FFFFFF",
+              "border_width": 0
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "n15": {
+    "element_type": "rounded_rectangle",
+    "text": "Joint Training\n(IL + SR)",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 14,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#4A90D9",
+      "border_style": "solid",
+      "border_color": "#1F4E7A",
+      "border_width": 2.0
+    },
+    "auto_fit": "shrink",
+    "size": {
+      "w_px": 320,
+      "h_px": 100
+    },
+    "icon_specs": [
+      {
+        "name": "inside_action_and_reflection",
+        "kind": "shape_group",
+        "anchor": "top_left",
+        "bbox_rel": {
+          "x": 0.08,
+          "y": 0.2,
+          "w": 0.28,
+          "h": 0.3
+        },
+        "shapes": [
+          {
+            "type": "line",
+            "from_rel": {
+              "x": 0.06,
+              "y": 0.35
+            },
+            "to_rel": {
+              "x": 0.36,
+              "y": 0.35
+            },
+            "style": {
+              "border_color": "#FFFFFF",
+              "border_width": 1.6,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "triangle",
+            "bbox_rel": {
+              "x": 0.32,
+              "y": 0.24,
+              "w": 0.1,
+              "h": 0.22
+            },
+            "rotation_deg": 90,
+            "style": {
+              "fill_color": "#FFFFFF",
+              "border_style": "none",
+              "border_color": "#FFFFFF",
+              "border_width": 0
+            }
+          },
+          {
+            "type": "rounded_rectangle",
+            "bbox_rel": {
+              "x": 0.52,
+              "y": 0.18,
+              "w": 0.4,
+              "h": 0.34
+            },
+            "style": {
+              "fill_color": "#FFFFFF",
+              "border_color": "#DCE6F2",
+              "border_width": 0.8,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "triangle",
+            "bbox_rel": {
+              "x": 0.48,
+              "y": 0.3,
+              "w": 0.08,
+              "h": 0.1
+            },
+            "rotation_deg": 270,
+            "style": {
+              "fill_color": "#FFFFFF",
+              "border_style": "none",
+              "border_color": "#FFFFFF",
+              "border_width": 0
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "n16": {
+    "element_type": "rounded_rectangle",
+    "text": "Updated LLM Policy π",
+    "text_style": {
+      "font_family": "Arial",
+      "font_size": 14,
+      "color": "#FFFFFF",
+      "alignment": "center",
+      "bold": true,
+      "italic": false
+    },
+    "shape_style": {
+      "fill_color": "#4A90D9",
+      "border_style": "solid",
+      "border_color": "#1F4E7A",
+      "border_width": 2.2
+    },
+    "auto_fit": "shrink",
+    "size": {
+      "w_px": 260,
+      "h_px": 80
+    },
+    "icon_specs": [
+      {
+        "name": "check_badge",
+        "kind": "shape_group",
+        "anchor": "top_right",
+        "bbox_rel": {
+          "x": 0.86,
+          "y": 0.1,
+          "w": 0.12,
+          "h": 0.4
+        },
+        "shapes": [
+          {
+            "type": "oval",
+            "bbox_rel": {
+              "x": 0.08,
+              "y": 0.1,
+              "w": 0.84,
+              "h": 0.84
+            },
+            "style": {
+              "fill_color": "#FFFFFF",
+              "border_color": "#DCE6F2",
+              "border_width": 0.8,
+              "border_style": "solid"
+            }
+          },
+          {
+            "type": "polyline",
+            "points_rel": [
+              {
+                "x": 0.28,
+                "y": 0.55
+              },
+              {
+                "x": 0.42,
+                "y": 0.7
+              },
+              {
+                "x": 0.7,
+                "y": 0.4
+              }
+            ],
+            "style": {
+              "border_color": "#4A90D9",
+              "border_width": 2.0,
+              "border_style": "solid"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

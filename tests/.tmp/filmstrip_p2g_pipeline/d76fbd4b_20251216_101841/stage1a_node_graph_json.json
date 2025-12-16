@@ -1,0 +1,164 @@
+{
+  "title": "Early Experience：从模仿学习到强化学习的双分支训练范式",
+  "global_style": {
+    "theme": "scientific_diagram",
+    "palette": {
+      "primary": "#4A90D9",
+      "accent": "#fc8d62",
+      "text": "#333333"
+    }
+  },
+  "nodes": [
+    {
+      "node_id": "n1",
+      "label": "Expert Dataset D_expert",
+      "role": "input",
+      "semantic_desc": "Expert demonstrations consisting of state-action pairs {(s_i, a_i)}; provides expert states s_i and corresponding expert actions a_i for data construction and supervised policy training.",
+      "visual_desc": "A dataset cylinder icon labeled 'D_expert' with a small two-column table sketch inside: left column s_i, right column a_i.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n2",
+      "label": "Initial LLM Policy",
+      "role": "process",
+      "semantic_desc": "Initial language-model policy used as a proposal distribution; takes state s_i (as prompt/representation) and outputs sampled candidate actions {a_i^1..a_i^K}.",
+      "visual_desc": "A rounded rectangle module with subtle transformer-block glyphs (stacked layers) and centered text 'Initial LLM Policy'.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n3",
+      "label": "K Candidate Actions",
+      "role": "output",
+      "semantic_desc": "Non-expert alternative actions sampled for each expert state; outputs an action set {a_i^1, a_i^2, ..., a_i^K} used for environment rollouts and comparisons.",
+      "visual_desc": "A fan-out list icon showing K small action tokens/cards labeled a^1, a^2, ..., a^K arranged in a row.",
+      "constraints": {
+        "no_text_inside": true
+      }
+    },
+    {
+      "node_id": "n4",
+      "label": "Environment Rollout",
+      "role": "process",
+      "semantic_desc": "Simulation/execution module; takes (s_i, action) and outputs the resulting next/ भविष्य state s'. Used for executing both expert action a_i and candidate actions a_i^j.",
+      "visual_desc": "A rounded rectangle labeled 'Environment' with a simple trajectory arrow icon entering and exiting (state → action → next state).",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n5",
+      "label": "Expert Next State s_{i+1}",
+      "role": "output",
+      "semantic_desc": "Next state obtained by executing expert action a_i from s_i; serves as reference outcome for self-reflection comparisons.",
+      "visual_desc": "A single state node (small circle) with a bold arrow from 'a_i' tag; rendered as a clean glyph (no heavy text).",
+      "constraints": {
+        "no_text_inside": true
+      }
+    },
+    {
+      "node_id": "n6",
+      "label": "Candidate Next States s_i^j",
+      "role": "output",
+      "semantic_desc": "Next states obtained by executing each sampled candidate action a_i^j from s_i; provides outcome supervision for IWM and contrast targets for SR.",
+      "visual_desc": "A set of small state circles (j=1..K) arranged as multiple branches from the same origin, indicating different futures.",
+      "constraints": {
+        "no_text_inside": true
+      }
+    },
+    {
+      "node_id": "n7",
+      "label": "Rollout Triples D_rollout",
+      "role": "input",
+      "semantic_desc": "Constructed rollout dataset containing triples {(s_i, a_i^j, s_i^j)}; feeds the implicit world modeling branch as supervised training data without rewards.",
+      "visual_desc": "A dataset cylinder labeled 'D_rollout' with a tiny 3-field tuple sketch: (s, a^j, s^j).",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n8",
+      "label": "Future State Supervision",
+      "role": "aux",
+      "semantic_desc": "Reward-free supervision signal using predicted-vs-actual future state; takes target s_i^j and defines the learning signal for dynamics internalization.",
+      "visual_desc": "A target/bullseye icon over a small state glyph, suggesting 'predict next state' supervision (no reward icon).",
+      "constraints": {
+        "no_text_inside": true
+      }
+    },
+    {
+      "node_id": "n9",
+      "label": "Implicit World Modeling (IWM)",
+      "role": "process",
+      "semantic_desc": "World-modeling training branch; takes (s_i, a_i^j) from D_rollout and outputs predicted future state tokens \\hat{s}_i^j via next-token prediction to internalize environment dynamics.",
+      "visual_desc": "A rounded rectangle with label 'IWM' and a small 's,a → s'' schematic inside (minimal glyph).",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n10",
+      "label": "NLL Loss (IWM)",
+      "role": "aux",
+      "semantic_desc": "Negative log-likelihood objective; takes predicted future-state token distribution and target future state tokens s_i^j, outputs a scalar loss for IWM optimization.",
+      "visual_desc": "A small loss box with '−log p(·)' math glyph and a downward arrow indicating minimization.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n11",
+      "label": "Self-Reflection (SR)",
+      "role": "process",
+      "semantic_desc": "Reflection generation branch; takes s_i along with outcomes from expert action (s_{i+1}) and candidate actions (s_i^j) and outputs natural-language critiques/explanations c_i^j stating why the expert action is better.",
+      "visual_desc": "A rounded rectangle labeled 'SR' with a speech-bubble icon and a tiny comparison glyph (two futures side-by-side).",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n12",
+      "label": "Reflection Text c_i^j",
+      "role": "output",
+      "semantic_desc": "Natural language explanations produced per candidate action; describes preference for expert action over a_i^j, used as supervised targets in reflection finetuning.",
+      "visual_desc": "A speech bubble containing 2–3 short gray lines (placeholder text strokes) to indicate generated explanation text.",
+      "constraints": {
+        "no_text_inside": true
+      }
+    },
+    {
+      "node_id": "n13",
+      "label": "Reflection Dataset D_refl",
+      "role": "input",
+      "semantic_desc": "Constructed dataset of tuples {(s_i, a_i^j, c_i^j)}; provides supervised pairs for training the policy to generate reflections conditioned on state and candidate action.",
+      "visual_desc": "A dataset cylinder labeled 'D_refl' with a small tuple sketch: (s, a^j, c).",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n14",
+      "label": "Joint Policy Training",
+      "role": "process",
+      "semantic_desc": "Unified finetuning stage; takes D_expert and D_refl (and optionally IWM-updated parameters) and trains a single LLM policy to predict expert actions a_i and reflection texts c_i^j.",
+      "visual_desc": "A larger rounded rectangle with two small input icons (dataset cylinders) feeding into it; centered text 'Joint Training'.",
+      "constraints": {
+        "no_text_inside": false
+      }
+    },
+    {
+      "node_id": "n15",
+      "label": "Trained LLM Policy",
+      "role": "output",
+      "semantic_desc": "Final policy after Early Experience training; outputs both action decisions (imitating expert) and reflection/explanation tokens, serving as the IL→RL bridging policy.",
+      "visual_desc": "A transformer-style module icon with a checkmark badge; two output ports labeled as small glyphs: 'action token' and 'text bubble'.",
+      "constraints": {
+        "no_text_inside": true
+      }
+    }
+  ],
+  "edges": []
+}

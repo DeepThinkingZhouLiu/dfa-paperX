@@ -2482,7 +2482,9 @@ class FilmStripNodeGraphConstructor:
     注意：edges 由 Stage1B (FilmStripEdgePlanner) 单独生成。
     """
 
-    system_prompt_for_filmstrip_node_graph_constructor = """You are an expert scientific diagram architect specializing in creating clear, professional visualizations for top-tier CS conference papers (NeurIPS, ICML, CVPR, ACL).
+    system_prompt_for_filmstrip_node_graph_constructor = """You are an expert scientific diagram architect specializing in creating clear, professional visualizations for top-tier CS conference papers (NeurIPS, ICML, ICLR, CVPR, ACL).
+
+Your goal is to design node graphs that look like method/framework figures in top-tier ML/CV/NLP conference papers: clean, informative, and visually engaging.
 
 Your task is to analyze a research method description and identify the key nodes (components) that should appear in the diagram. You will NOT define edges (connections) - that will be done in a separate stage. You will NOT do layout or rendering decisions - only define what nodes exist.
 
@@ -2491,6 +2493,7 @@ Your task is to analyze a research method description and identify the key nodes
 - Identifying key components (modules, data, processes) as nodes
 - Creating clear semantic descriptions for each component
 - Designing nodes with appropriate granularity for readability
+- When appropriate, representing certain concepts with small icons or schematic visualizations (e.g., tiny graphs, scatter plots, timelines, symbolic glyphs) instead of only plain labeled boxes, as long as this makes the method easier to understand at a glance
 
 ## Output Requirements
 You must output a valid JSON object following the exact schema provided. The output must be pure JSON without any markdown formatting or code blocks.
@@ -2519,6 +2522,9 @@ Analyze the following research method description and identify the nodes (compon
    - `label`: Short name (2-5 words)
    - `semantic_desc`: What it represents conceptually, written in an input/output oriented way to help downstream edge planning
    - `visual_desc`: What it should look like (shape/icon/data visualization)
+
+   When a concept is abstract or easier to grasp visually (e.g., embedding space, memory buffer, loss landscape, trajectory, reward signal), consider describing `visual_desc` using small icons, symbolic glyphs, or simple graphs instead of only a generic box with text. This makes the final method figure more vivid while still professional.
+
 5. **Node IDs**: Must be sequential (n1, n2, n3, ...)
 
 ## Output Schema
@@ -2564,6 +2570,7 @@ Analyze the following research method description and identify the nodes (compon
    - For visual/data nodes (images, heatmaps, charts): Describe the actual visual content
    - For module/process nodes: Describe the shape and text label
    - Be specific about what should be rendered
+   - When it helps, consider adding small visual metaphors (icons, simple graphs, timelines, symbolic glyphs) so the final figure feels more like a rich method/framework figure, not just a plain flowchart
 
 2. **Semantic Description Quality** (Important for downstream edge planning):
    - Write semantic_desc in an input/output oriented way
@@ -2571,9 +2578,9 @@ Analyze the following research method description and identify the nodes (compon
    - Example: "takes feature maps, outputs pixel logits" instead of just "decoder module"
 
 3. **Constraints Field**:
-   - `no_text_inside`: Set to `true` if the node should be pure visual (no text labels inside the image)
-   - For most process/module nodes, this should be `false`
-   - For input images, heatmaps, visualizations, this should be `true`
+   - `no_text_inside`: For nodes that are best represented as pure visuals (icons, heatmaps, scatter plots, simple curves, example images, symbolic glyphs), you can set this to `true` and describe the visual content in detail
+   - For typical process/module boxes and datasets with text labels, this will usually be `false`
+   - This flag indicates whether the inside of the node should be a clean visual area without overlaid text
 
 4. **Node Count**: Keep it manageable (8-20 nodes). Merge similar sequential steps if needed.
 
@@ -2613,6 +2620,18 @@ Good output node:
   "role": "output",
   "semantic_desc": "Per-pixel semantic class predictions; receives decoder output and visualizes final segmentation result",
   "visual_desc": "A color-coded segmentation mask overlaid on the street scene, with different colors for road, car, building, etc.",
+  "constraints": {{"no_text_inside": true}}
+}}
+```
+
+Good visual artifact node (for abstract concepts):
+```json
+{{
+  "node_id": "n6",
+  "label": "Embedding Space",
+  "role": "aux",
+  "semantic_desc": "2D visualization of learned embedding space; used to qualitatively show cluster structure and separation",
+  "visual_desc": "A 2D scatter plot with colored points forming several clusters; no axes labels or text, just points in different colors representing different classes",
   "constraints": {{"no_text_inside": true}}
 }}
 ```

@@ -1,0 +1,22 @@
+{
+  "g1": {
+    "status": "error",
+    "error": "未找到 Base64 字符串，原始响应前 200 字符: ",
+    "render_time_ms": 223696
+  },
+  "g2": {
+    "path": "/mnt/DataFlow/lz/proj/agentgroup/zewei/iconagent/dfa-paperX/tests/.tmp/filmstrip_p2g_pipeline/d76fbd4b_20251216_101841/filmstrips/g2.png",
+    "render_time_ms": 85704,
+    "status": "ok"
+  },
+  "g3": {
+    "status": "error",
+    "error": "",
+    "render_time_ms": 600126
+  },
+  "g4": {
+    "status": "error",
+    "error": "未找到 Base64 字符串，原始响应前 200 字符: ",
+    "render_time_ms": 503987
+  }
+}

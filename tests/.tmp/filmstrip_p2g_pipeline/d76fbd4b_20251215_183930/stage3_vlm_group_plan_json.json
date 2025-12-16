@@ -1,0 +1,30 @@
+{
+  "groups": [
+    {
+      "group_id": "g1",
+      "node_ids": [
+        "n2",
+        "n5",
+        "n8"
+      ],
+      "subject": "Abstract representation of state and action sampling in a reinforcement learning environment",
+      "prompt": "You are a scientific illustrator generating images for an academic paper figure.\n\nGenerate ONE single image composed of 3 EQUAL-SIZED sub-panels arranged horizontally (side-by-side) with clear white gaps (about 20-30 pixels) between them.\n\nSubject: Abstract representation of state and action sampling in a reinforcement learning environment\n\nPanel 1 (Left): A small rounded rectangle tile containing a minimal abstract state glyph: a tiny grid/world icon on the left and a short horizontal strip of small token-like blocks on the right; clean scientific flat style, soft gray background, thin dark border; no readable text.\nPanel 2 (Middle): A fan-out arrangement of multiple small token pills (about 5–7) laid out in an arc to suggest many samples; each pill is a small rounded capsule with minimal markings (non-readable), consistent flat style, light fill with thin outline; no text.\nPanel 3 (Right): A grouped row/stack of several small state glyph tiles (about 5–7), each a tiny rounded rectangle containing an abstract grid/world glyph; arranged horizontally with slight overlap or spacing to imply a set; faint connector stubs suggesting pairing to actions; clean flat scientific style; no readable text.\n\nCRITICAL Constraints:\n- All panels MUST depict the EXACT SAME scene/subject for visual consistency (same viewpoint, same objects, same composition).\n- Each panel MUST be a SQUARE or near-square frame of EQUAL size.\n- Content within each panel should be CENTERED and NOT stretched. If the natural aspect ratio differs, add white padding (letterbox/pillarbox) to maintain the square frame without distortion.\n- Do NOT add any text, labels, numbers, legends, watermarks, or captions inside the image.\n- Pure visual data only - no annotations.\n- Use solid pure white (#FFFFFF) background and pure white gaps between panels.\n- The white gaps between panels must be clearly visible and consistent width."
+    },
+    {
+      "group_id": "g2",
+      "node_ids": [
+        "n11"
+      ],
+      "subject": "Abstract representation of future-state prediction in reinforcement learning",
+      "prompt": "You are a scientific illustrator generating images for an academic paper figure.\n\nGenerate ONE single image showing: A horizontal strip of small rectangular token blocks (like a sequence), ending in a small arrow pointing to a minimal abstract state glyph tile; flat vector style, neutral colors, thin outlines; no readable text.\n\nCRITICAL Constraints:\n- The image should be SQUARE or near-square.\n- Content should be CENTERED with white padding if needed to maintain aspect ratio without distortion.\n- Do NOT add any text, labels, numbers, legends, watermarks, or captions inside the image.\n- Use solid pure white (#FFFFFF) background.\n- Clean, minimal scientific illustration style."
+    },
+    {
+      "group_id": "g3",
+      "node_ids": [
+        "n14"
+      ],
+      "subject": "Abstract representation of reflection text generation in reinforcement learning",
+      "prompt": "You are a scientific illustrator generating images for an academic paper figure.\n\nGenerate ONE single image showing: A speech bubble containing several short pseudo-text lines (abstract strokes) to indicate generated text, plus a small comparison marker icon in a corner; flat vector style, light fill, thin outline; no readable words.\n\nCRITICAL Constraints:\n- The image should be SQUARE or near-square.\n- Content should be CENTERED with white padding if needed to maintain aspect ratio without distortion.\n- Do NOT add any text, labels, numbers, legends, watermarks, or captions inside the image.\n- Use solid pure white (#FFFFFF) background.\n- Clean, minimal scientific illustration style."
+    }
+  ]
+}

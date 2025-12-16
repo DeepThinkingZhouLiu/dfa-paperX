@@ -1,0 +1,31 @@
+{
+  "groups": [
+    {
+      "group_id": "g1",
+      "node_ids": [
+        "n2",
+        "n4",
+        "n6",
+        "n7"
+      ],
+      "subject": "Sequential transformation of state and action representations",
+      "prompt": "You are a scientific illustrator generating images for an academic paper figure.\n\nGenerate ONE single image composed of 4 EQUAL-SIZED sub-panels arranged horizontally (side-by-side) with clear white gaps (about 20-30 pixels) between them.\n\nSubject: Sequential transformation of state and action representations\n\nPanel 1 (Far Left): A small rounded card showing a generic state representation: a short row of tiny square tokens and a single prominent circle glyph indicating a state; minimal, clean scientific style, flat colors (light gray card, blue accent), no text.\nPanel 2 (Middle Left): A minimalist fan-out of multiple small arrow tokens arranged horizontally, suggesting multiple candidate actions; uniform small arrows with slight spacing and subtle variation, clean flat design with blue/gray palette, no text.\nPanel 3 (Middle Right): A single state card with a prominent circle glyph and a short dotted trajectory segment approaching it (implying next state); clean rounded card, light gray background with blue accent elements, no text.\nPanel 4 (Far Right): A bundle of several small state cards or circle glyphs grouped together, with diverging tiny trajectory lines indicating different rollouts; compact cluster, flat design, blue/gray palette, no text.\n\nCRITICAL Constraints:\n- All panels MUST depict the EXACT SAME scene/subject for visual consistency (same viewpoint, same objects, same composition).\n- Each panel MUST be a SQUARE or near-square frame of EQUAL size.\n- Content within each panel should be CENTERED and NOT stretched. If the natural aspect ratio differs, add white padding (letterbox/pillarbox) to maintain the square frame without distortion.\n- Do NOT add any text, labels, numbers, legends, watermarks, or captions inside the image.\n- Pure visual data only - no annotations.\n- Use solid pure white (#FFFFFF) background and pure white gaps between panels.\n- The white gaps between panels must be clearly visible and consistent width."
+    },
+    {
+      "group_id": "g2",
+      "node_ids": [
+        "n10"
+      ],
+      "subject": "Tokenized representation of predicted future state",
+      "prompt": "You are a scientific illustrator generating images for an academic paper figure.\n\nGenerate ONE single image showing: A short strip of discrete square tokens in a row, with the final token visually highlighted (slightly brighter or accented) to suggest next-token prediction; minimal flat style, no text.\n\nCRITICAL Constraints:\n- The image should be SQUARE or near-square.\n- Content should be CENTERED with white padding if needed to maintain aspect ratio without distortion.\n- Do NOT add any text, labels, numbers, legends, watermarks, or captions inside the image.\n- Use solid pure white (#FFFFFF) background.\n- Clean, minimal scientific illustration style."
+    },
+    {
+      "group_id": "g3",
+      "node_ids": [
+        "n13"
+      ],
+      "subject": "Natural-language critique/explanation for alternative actions",
+      "prompt": "You are a scientific illustrator generating images for an academic paper figure.\n\nGenerate ONE single image showing: A speech bubble containing 2–3 gray horizontal lines representing text (unreadable), plus small judgment glyphs like a checkmark and a warning/triangle near the bubble edge; clean flat style, no real text.\n\nCRITICAL Constraints:\n- The image should be SQUARE or near-square.\n- Content should be CENTERED with white padding if needed to maintain aspect ratio without distortion.\n- Do NOT add any text, labels, numbers, legends, watermarks, or captions inside the image.\n- Use solid pure white (#FFFFFF) background.\n- Clean, minimal scientific illustration style."
+    }
+  ]
+}

@@ -1,0 +1,166 @@
+{
+  "vlm_nodes": [
+    "n2",
+    "n5",
+    "n8",
+    "n11",
+    "n14"
+  ],
+  "pptx_nodes": [
+    "n1",
+    "n3",
+    "n4",
+    "n6",
+    "n7",
+    "n9",
+    "n10",
+    "n12",
+    "n13",
+    "n15",
+    "n16",
+    "n17"
+  ],
+  "by_node": {
+    "n1": {
+      "render_method": "pptx",
+      "pptx_intent": "Dataset card/table shape (rounded rectangle with light fill) containing the text 'Expert Dataset D_expert' and a simple two-column mini-table labeled 's' and 'a' with a few short row lines to imply tuples; scientific diagram style with subtle border.",
+      "size_hint": {
+        "w_px": 320,
+        "h_px": 180
+      }
+    },
+    "n2": {
+      "render_method": "vlm",
+      "vlm_desc": "A small rounded rectangle tile containing a minimal abstract state glyph: a tiny grid/world icon on the left and a short horizontal strip of small token-like blocks on the right; clean scientific flat style, soft gray background, thin dark border; no readable text.",
+      "size_hint": {
+        "w_px": 160,
+        "h_px": 90,
+        "aspect_ratio": "16:9"
+      }
+    },
+    "n3": {
+      "render_method": "pptx",
+      "pptx_intent": "Small pill/chip (rounded rectangle with full rounding) with centered text 'Expert Action a_i'; neutral/light fill with thin border; token-like appearance.",
+      "size_hint": {
+        "w_px": 170,
+        "h_px": 55
+      }
+    },
+    "n4": {
+      "render_method": "pptx",
+      "pptx_intent": "Process module rounded rectangle with solid primary blue fill (#4A90D9), white centered text 'Initial LLM Policy π0'; add a small simple transformer icon (stacked blocks) at one side if desired; subtle shadow or darker outline.",
+      "size_hint": {
+        "w_px": 260,
+        "h_px": 90
+      }
+    },
+    "n5": {
+      "render_method": "vlm",
+      "vlm_desc": "A fan-out arrangement of multiple small token pills (about 5–7) laid out in an arc to suggest many samples; each pill is a small rounded capsule with minimal markings (non-readable), consistent flat style, light fill with thin outline; no text.",
+      "size_hint": {
+        "w_px": 240,
+        "h_px": 140,
+        "aspect_ratio": "12:7"
+      }
+    },
+    "n6": {
+      "render_method": "pptx",
+      "pptx_intent": "Rounded rectangle labeled 'Environment Simulator' (or 'Environment') with a small simple gridworld/maze icon and a right-pointing step arrow inside; light fill, thin border; editable text.",
+      "size_hint": {
+        "w_px": 240,
+        "h_px": 90
+      }
+    },
+    "n7": {
+      "render_method": "pptx",
+      "pptx_intent": "Small rounded rectangle output tile with text 'Expert Next State s_{i+1}'; include a small star marker icon to denote expert outcome; light fill with thin border.",
+      "size_hint": {
+        "w_px": 220,
+        "h_px": 70
+      }
+    },
+    "n8": {
+      "render_method": "vlm",
+      "vlm_desc": "A grouped row/stack of several small state glyph tiles (about 5–7), each a tiny rounded rectangle containing an abstract grid/world glyph; arranged horizontally with slight overlap or spacing to imply a set; faint connector stubs suggesting pairing to actions; clean flat scientific style; no readable text.",
+      "size_hint": {
+        "w_px": 320,
+        "h_px": 120,
+        "aspect_ratio": "8:3"
+      }
+    },
+    "n9": {
+      "render_method": "pptx",
+      "pptx_intent": "Dataset table card (rounded rectangle) with title text 'Rollout Triples D_rollout' and a 3-column mini-table labeled 's', 'a^j', 's^j'; include a tiny arrow glyph from (s,a) toward s^j; light fill, thin border.",
+      "size_hint": {
+        "w_px": 340,
+        "h_px": 190
+      }
+    },
+    "n10": {
+      "render_method": "pptx",
+      "pptx_intent": "Process module rounded rectangle with text 'Implicit World Modeling (IWM)'; include a small crystal-ball/trajectory icon and a simple transformer glyph; standard module styling (light fill or subtle tint), thin border.",
+      "size_hint": {
+        "w_px": 280,
+        "h_px": 90
+      }
+    },
+    "n11": {
+      "render_method": "vlm",
+      "vlm_desc": "A horizontal strip of small rectangular token blocks (like a sequence), ending in a small arrow pointing to a minimal abstract state glyph tile; flat vector style, neutral colors, thin outlines; no readable text.",
+      "size_hint": {
+        "w_px": 300,
+        "h_px": 90,
+        "aspect_ratio": "10:3"
+      }
+    },
+    "n12": {
+      "render_method": "pptx",
+      "pptx_intent": "Aux loss node: small circle or rounded square with orange accent fill (#fc8d62) containing text 'NLL Loss (IWM)' or 'ℒ_NLL'; add a small downward arrow indicator for minimization; editable text.",
+      "size_hint": {
+        "w_px": 160,
+        "h_px": 80
+      }
+    },
+    "n13": {
+      "render_method": "pptx",
+      "pptx_intent": "Process module rounded rectangle with text 'Self-Reflection (SR)'; include a small speech-bubble icon and a compare symbol (≻) as a small icon; standard module styling with thin border.",
+      "size_hint": {
+        "w_px": 250,
+        "h_px": 90
+      }
+    },
+    "n14": {
+      "render_method": "vlm",
+      "vlm_desc": "A speech bubble containing several short pseudo-text lines (abstract strokes) to indicate generated text, plus a small comparison marker icon in a corner; flat vector style, light fill, thin outline; no readable words.",
+      "size_hint": {
+        "w_px": 220,
+        "h_px": 140,
+        "aspect_ratio": "11:7"
+      }
+    },
+    "n15": {
+      "render_method": "pptx",
+      "pptx_intent": "Dataset card/table (rounded rectangle) with title text 'Reflection Dataset D_refl' and columns labeled 's', 'a^j', 'c'; represent the 'c' column with small speech-bubble glyphs; light fill, thin border.",
+      "size_hint": {
+        "w_px": 340,
+        "h_px": 190
+      }
+    },
+    "n16": {
+      "render_method": "pptx",
+      "pptx_intent": "Large process module rounded rectangle with text 'Joint Training (IL + SR)'; two small input port markers on the left/top edges and a central transformer icon; subtle emphasis (slightly thicker border).",
+      "size_hint": {
+        "w_px": 360,
+        "h_px": 120
+      }
+    },
+    "n17": {
+      "render_method": "pptx",
+      "pptx_intent": "Prominent rounded rectangle output module with centered text 'Updated LLM Policy π'; darker primary border, light/white fill; include a small upward arrow glyph to indicate improvement.",
+      "size_hint": {
+        "w_px": 260,
+        "h_px": 90
+      }
+    }
+  }
+}

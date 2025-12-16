@@ -1,0 +1,158 @@
+{
+  "vlm_nodes": [
+    "n2",
+    "n4",
+    "n6",
+    "n7",
+    "n10",
+    "n13"
+  ],
+  "pptx_nodes": [
+    "n1",
+    "n3",
+    "n5",
+    "n8",
+    "n9",
+    "n11",
+    "n12",
+    "n14",
+    "n15",
+    "n16"
+  ],
+  "by_node": {
+    "n1": {
+      "render_method": "pptx",
+      "pptx_intent": "Rounded_rectangle (or rectangle) representing a dataset container with text 'Expert Dataset D_expert'. Add simple internal glyphs via PPTX icons/shapes: two narrow columns with a small circle (state) and a small arrow (action). Style: scientific diagram, light fill (white) with primary blue (#4A90D9) outline, dark text (#333).",
+      "size_hint": {
+        "w_px": 260,
+        "h_px": 90
+      }
+    },
+    "n2": {
+      "render_method": "vlm",
+      "vlm_desc": "A small rounded card showing a generic state representation: a short row of tiny square tokens and a single prominent circle glyph indicating a state; minimal, clean scientific style, flat colors (light gray card, blue accent), no text.",
+      "size_hint": {
+        "w_px": 220,
+        "h_px": 140,
+        "aspect_ratio": "11:7"
+      }
+    },
+    "n3": {
+      "render_method": "pptx",
+      "pptx_intent": "Rounded_rectangle module with text 'Initial LLM Policy π0'. Optionally add a tiny transformer-stack icon in a corner using simple stacked rectangles. Style: primary blue outline, white fill, dark text.",
+      "size_hint": {
+        "w_px": 240,
+        "h_px": 80
+      }
+    },
+    "n4": {
+      "render_method": "vlm",
+      "vlm_desc": "A minimalist fan-out of multiple small arrow tokens arranged horizontally, suggesting multiple candidate actions; uniform small arrows with slight spacing and subtle variation, clean flat design with blue/gray palette, no text.",
+      "size_hint": {
+        "w_px": 300,
+        "h_px": 120,
+        "aspect_ratio": "5:2"
+      }
+    },
+    "n5": {
+      "render_method": "pptx",
+      "pptx_intent": "Rounded_rectangle module with text 'Environment Simulator' (or 'Env'). Add a simple internal icon using PPTX shapes: a small cube/block plus a curved trajectory line. Style consistent with theme.",
+      "size_hint": {
+        "w_px": 230,
+        "h_px": 80
+      }
+    },
+    "n6": {
+      "render_method": "vlm",
+      "vlm_desc": "A single state card with a prominent circle glyph and a short dotted trajectory segment approaching it (implying next state); clean rounded card, light gray background with blue accent elements, no text.",
+      "size_hint": {
+        "w_px": 220,
+        "h_px": 140,
+        "aspect_ratio": "11:7"
+      }
+    },
+    "n7": {
+      "render_method": "vlm",
+      "vlm_desc": "A bundle of several small state cards or circle glyphs grouped together, with diverging tiny trajectory lines indicating different rollouts; compact cluster, flat design, blue/gray palette, no text.",
+      "size_hint": {
+        "w_px": 300,
+        "h_px": 160,
+        "aspect_ratio": "15:8"
+      }
+    },
+    "n8": {
+      "render_method": "pptx",
+      "pptx_intent": "Dataset container (rounded_rectangle) with text 'Rollout Dataset D_rollout'. Inside, depict three small column glyphs using PPTX shapes: circle (state), arrow (action), circle (future state). Style: white fill, blue outline.",
+      "size_hint": {
+        "w_px": 270,
+        "h_px": 90
+      }
+    },
+    "n9": {
+      "render_method": "pptx",
+      "pptx_intent": "Rounded_rectangle module with text 'IWM Branch' or 'IWM (Implicit World Modeling)'. Add a tiny transition icon inside using PPTX shapes: circle → arrow → circle (s→a→s').",
+      "size_hint": {
+        "w_px": 280,
+        "h_px": 85
+      }
+    },
+    "n10": {
+      "render_method": "vlm",
+      "vlm_desc": "A short strip of discrete square tokens in a row, with the final token visually highlighted (slightly brighter or accented) to suggest next-token prediction; minimal flat style, no text.",
+      "size_hint": {
+        "w_px": 260,
+        "h_px": 110,
+        "aspect_ratio": "26:11"
+      }
+    },
+    "n11": {
+      "render_method": "pptx",
+      "pptx_intent": "Small pill/rounded_rectangle loss node with text 'NLL Dynamics Loss' (or 'NLL'). Include a tiny decreasing line-chart icon using a polyline. Style: accent color (#fc8d62) outline or small accent highlight, white fill.",
+      "size_hint": {
+        "w_px": 190,
+        "h_px": 70
+      }
+    },
+    "n12": {
+      "render_method": "pptx",
+      "pptx_intent": "Rounded_rectangle module with text 'SR Branch' or 'SR (Self-Reflection)'. Add a small compare-to-text icon: two short diverging/parallel trajectory lines leading into a speech bubble, built from simple shapes.",
+      "size_hint": {
+        "w_px": 280,
+        "h_px": 85
+      }
+    },
+    "n13": {
+      "render_method": "vlm",
+      "vlm_desc": "A speech bubble containing 2–3 gray horizontal lines representing text (unreadable), plus small judgment glyphs like a checkmark and a warning/triangle near the bubble edge; clean flat style, no real text.",
+      "size_hint": {
+        "w_px": 260,
+        "h_px": 150,
+        "aspect_ratio": "26:15"
+      }
+    },
+    "n14": {
+      "render_method": "pptx",
+      "pptx_intent": "Dataset container (rounded_rectangle) with text 'Reflection Dataset D_refl'. Inside, three glyph-columns using PPTX shapes: circle (state), arrow (action), speech bubble (reflection).",
+      "size_hint": {
+        "w_px": 280,
+        "h_px": 90
+      }
+    },
+    "n15": {
+      "render_method": "pptx",
+      "pptx_intent": "Large rounded_rectangle module with text 'Joint Policy Training' or 'Joint Training (IL + SR)'. Add two small incoming mini-icons inside: an action arrow and a speech bubble. Style: slightly thicker primary outline to emphasize stage.",
+      "size_hint": {
+        "w_px": 320,
+        "h_px": 100
+      }
+    },
+    "n16": {
+      "render_method": "pptx",
+      "pptx_intent": "Rounded_rectangle module with text 'Updated LLM Policy π'. Use bold/thicker border and add a small checkmark badge (small circle with check) at a corner using PPTX shapes. Style: primary blue emphasis.",
+      "size_hint": {
+        "w_px": 260,
+        "h_px": 80
+      }
+    }
+  }
+}
